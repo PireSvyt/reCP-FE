@@ -1,33 +1,55 @@
 const axios = require("axios");
+const config = require("../../config/config");
 
-const url = "https://oesepd.sse.codesandbox.io";
-
-exports.createRecipe = (id, newRecipe) => {
-  axios.post(url + "/api/recipe/" + id, newRecipe).then((res) => {
-    return res.status;
-  });
+exports.createRecipe = async (newRecipe) => {
+  try {
+    const res = await axios.post(config.serverUrl + "/api/recipe", newRecipe);
+    return res;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.getRecipe = (id) => {
-  axios.get(url + "/api/recipe/" + id).then((res) => {
+exports.getRecipe = async (id) => {
+  try {
+    const res = await axios.get(config.serverUrl + "/api/recipe/" + id);
     return res.data;
-  });
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.deleteRecipe = (id) => {
-  axios.delete(url + "/api/recipe/" + id).then((res) => {
+exports.deleteRecipe = async (id) => {
+  try {
+    const res = await axios.delete(config.serverUrl + "/api/recipe/" + id);
     return res.status;
-  });
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.modifyRecipe = (id, newRecipe) => {
-  axios.put(url + "/api/recipe/" + id, newRecipe).then((res) => {
+exports.modifyRecipe = async (id, newRecipe) => {
+  try {
+    const res = await axios.put(
+      config.serverUrl + "/api/recipe/" + id,
+      newRecipe
+    );
     return res.status;
-  });
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.getRecipes = () => {
-  axios.get(url + "/api/recipe").then((res) => {
+exports.getRecipes = async () => {
+  try {
+    const res = await axios.get(config.serverUrl + "/api/recipe");
     return res.data;
-  });
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };

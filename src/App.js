@@ -1,9 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "./styles.css";
 
+import navigation from "./app/navigation";
 import recipeview from "./app/recipeview";
+import recipeedit from "./app/recipeedit";
 import myrecipies from "./app/myrecipies";
+import myingredients from "./app/myingredients";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -13,18 +15,18 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div id="myrecipies" />
-        <div id="recipieedit" />
-        <div id="recipeview" />
-        <div id="thisweek" />
-        <div id="fridge" />
-        <div id="shopping" />
-        <div id="ingredients" />
+        {navigation.pages.map((page) => (
+          <div id={`${page.code}`} />
+        ))}
       </React.Fragment>
     );
   }
   componentDidMount() {
     myrecipies.render();
+    myingredients.render();
     recipeview.render();
+    recipeedit.render();
+    myrecipies.update();
+    myingredients.update();
   }
 }

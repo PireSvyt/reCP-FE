@@ -1,33 +1,58 @@
 const axios = require("axios");
+const config = require("../../config/config");
 
-const url = "https://kqulqn.sse.codesandbox.io";
-
-exports.createIngredient = (id, newIngredient) => {
-  axios.post(url + "/api/ingredient/" + id, newIngredient).then((res) => {
-    return res.status;
-  });
+exports.createIngredient = async (id, newIngredient) => {
+  try {
+    const res = await axios.post(
+      config.serverUrl + "/api/ingredient/" + id,
+      newIngredient
+    );
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.getIngredient = (id) => {
-  axios.get(url + "/api/ingredient/" + id).then((res) => {
-    return res;
-  });
+exports.getIngredient = async (id) => {
+  try {
+    const res = await axios.get(config.serverUrl + "/api/ingredient/" + id);
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.deleteIngredient = (id) => {
-  axios.delete(url + "/api/ingredient/" + id).then((res) => {
-    return res.status;
-  });
+exports.deleteIngredient = async (id) => {
+  try {
+    const res = await axios.delete(config.serverUrl + "/api/ingredient/" + id);
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.modifyIngredient = (id, newIngredient) => {
-  axios.put(url + "/api/ingredient/" + id, newIngredient).then((res) => {
-    return res.status;
-  });
+exports.modifyIngredient = async (id, newIngredient) => {
+  try {
+    const res = await axios.put(
+      config.serverUrl + "/api/ingredient/" + id,
+      newIngredient
+    );
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
 
-exports.getIngredients = () => {
-  axios.get(url + "/api/ingredient").then((res) => {
-    return res;
-  });
+exports.getIngredients = async () => {
+  try {
+    const res = await axios.get(config.serverUrl + "/api/ingredient");
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
 };
