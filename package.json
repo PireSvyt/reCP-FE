@@ -1,7 +1,7 @@
 {
-  "name": "react",
+  "name": "recp-fe",
   "version": "1.0.0",
-  "description": "Dummy app",
+  "description": "",
   "main": "src/index.js",
   "dependencies": {
     "@emotion/react": "11.4.1",
@@ -11,5 +11,6 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "4.0.0"
-  }
+  },
+  "keywords": []
 }
