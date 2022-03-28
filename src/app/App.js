@@ -1,13 +1,13 @@
 import React from "react";
 
-import navigation from "./app/navigation";
-import recipeview from "./app/recipeview";
-import recipeedit from "./app/recipeedit";
-import myrecipies from "./app/myrecipies";
-import thisweek from "./app/thisweek";
-import myfridge from "./app/myfridge";
-import shopping from "./app/shopping";
-import myingredients from "./app/myingredients";
+import navigation from "./navigation";
+import recipeview from "./recipeview";
+import recipeedit from "./recipeedit";
+import myrecipies from "./myrecipies";
+import thisweek from "./thisweek";
+import myfridge from "./myfridge";
+import shopping from "./shopping";
+import myingredients from "./myingredients";
 
 export default class App extends React.Component {
   constructor(props) {
