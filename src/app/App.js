@@ -1,5 +1,7 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
+import Menu from "./menu";
 import navigation from "./navigation";
 import recipeview from "./recipeview";
 import recipeedit from "./recipeedit";
@@ -27,6 +29,7 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     // Render sub components
+    ReactDOM.render(<Menu />, document.getElementById("menu"));
     myrecipies.render();
     myingredients.render();
     recipeview.render();

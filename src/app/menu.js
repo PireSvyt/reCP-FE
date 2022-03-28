@@ -6,7 +6,6 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 
 export default function MenuListComposition() {
   const [open, setOpen] = React.useState(false);
@@ -53,7 +52,7 @@ export default function MenuListComposition() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        Dashboard
+        Menu
       </Button>
       <Popper
         open={open}
@@ -79,9 +78,8 @@ export default function MenuListComposition() {
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  <MenuItem onClick={handleClose}>Mes ingrédients</MenuItem>
+                  <MenuItem onClick={handleClose}>Application</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
