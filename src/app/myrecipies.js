@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {
+  Paper,
   Button,
   List,
   ListItem,
@@ -18,12 +19,12 @@ exports.render = () => {
   ReactDOM.render(
     <div>
       <h2>Mes recettes</h2>
-      <div>
-        <Button variant="text" onClick={clickNew}>
-          New
-        </Button>
-      </div>
-      <div id="myrecipies_list" />
+      <Button variant="text" onClick={clickNew}>
+        New
+      </Button>
+      <Paper elevation={3}>
+        <div id="myrecipies_list" />
+      </Paper>
     </div>,
     container
   );

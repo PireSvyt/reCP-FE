@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { Paper, ButtonGroup, Button } from "@mui/material";
 
 import myrecipies from "./myrecipies";
 
@@ -7,48 +8,91 @@ const pages = [
   {
     label: "Mes recettes",
     code: "myrecipies",
-    appbar: true,
+    navbar: true,
     updateOnNav: true
   },
   {
     label: "Préparer ma recette",
     code: "recipeview",
-    appbar: false,
+    navbar: false,
     updateOnNav: false
   },
   {
     label: "Editer ma recette",
     code: "recipeedit",
-    appbar: false,
+    navbar: false,
     updateOnNav: false
   },
   {
     label: "Cette semaine",
     code: "thisweek",
-    appbar: true,
+    navbar: true,
     updateOnNav: false
   },
-  { label: "Mon frigo", code: "fridge", appbar: true, updateOnNav: false },
-  { label: "Mes courses", code: "shopping", appbar: true, updateOnNav: false },
+  { label: "Mon frigo", code: "myfridge", navbar: true, updateOnNav: false },
+  {
+    label: "Mes courses",
+    code: "myshopping",
+    navbar: true,
+    updateOnNav: false
+  },
   {
     label: "Mes ingrédients",
     code: "myingredients",
-    appbar: false,
+    navbar: false,
     updateOnNav: false
   }
 ];
 exports.pages = pages;
 
-exports.navigates = (page) => {
+exports.render = () => {
+  const container = document.getElementById("navbar");
+  ReactDOM.render(
+    <Paper
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      elevation={3}
+    >
+      <ButtonGroup variant="text" aria-label="text button group">
+        {pages.map((page) => {
+          if (page.navbar === true) {
+            return (
+              <Button
+                size="small"
+                onClick={() => {
+                  console.log("Navbar click");
+                  navigates(page.code);
+                }}
+              >{`${page.label}`}</Button>
+            );
+          } else {
+            return "";
+          }
+        })}
+      </ButtonGroup>
+    </Paper>,
+    container
+  );
+};
+
+function navigates(gotopage) {
+  console.log("navigates to " + gotopage);
   if (pages.updateOnNav) {
-    switch (page) {
+    switch (gotopage) {
       case "myrecipies":
         myrecipies.update();
         break;
       default:
-        console.log("Info : update requested without match with " + page);
+        console.log("Info : update requested without match with " + gotopage);
     }
   }
-  const container = document.getElementById(page);
-  container.scrollIntoView();
+  pages.forEach((page) => {
+    if (gotopage === page.code) {
+      document.getElementById(page.code).style.display = "block";
+    } else {
+      document.getElementById(page.code).style.display = "none";
+    }
+  });
+}
+exports.navigates = (page) => {
+  navigates(page);
 };
