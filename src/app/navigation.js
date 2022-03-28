@@ -45,37 +45,8 @@ const pages = [
 ];
 exports.pages = pages;
 
-exports.render = () => {
-  const container = document.getElementById("navbar");
-  ReactDOM.render(
-    <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      elevation={3}
-    >
-      <ButtonGroup variant="text" aria-label="text button group">
-        {pages.map((page) => {
-          if (page.navbar === true) {
-            return (
-              <Button
-                size="small"
-                onClick={() => {
-                  console.log("Navbar click");
-                  navigates(page.code);
-                }}
-              >{`${page.label}`}</Button>
-            );
-          } else {
-            return "";
-          }
-        })}
-      </ButtonGroup>
-    </Paper>,
-    container
-  );
-};
-
 function navigates(gotopage) {
-  console.log("navigates to " + gotopage);
+  //console.log("navigates to " + gotopage);
   if (pages.updateOnNav) {
     switch (gotopage) {
       case "myrecipies":

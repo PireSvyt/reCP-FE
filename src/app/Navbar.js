@@ -24,7 +24,10 @@ export default function FixedBottomNavigation() {
               <BottomNavigationAction
                 id={`${page.code}`}
                 label={`${page.label}`}
-                onClick={navigation.navigates(page.code)}
+                onClick={() => {
+                  //console.log("Navbar clicked " + page.label);
+                  navigation.navigates(page.code);
+                }}
               />
             );
           } else {

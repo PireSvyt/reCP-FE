@@ -65,6 +65,6 @@ export default class App extends React.Component {
     myingredients.update();
 
     // Navigate to landing page
-    //navigation.navigates("thisweek");
+    navigation.navigates("thisweek");
   }
 }
