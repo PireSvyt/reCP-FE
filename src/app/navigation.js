@@ -1,7 +1,3 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import { Paper, ButtonGroup, Button } from "@mui/material";
-
 import myrecipies from "./myrecipies";
 
 const pages = [
@@ -40,6 +36,12 @@ const pages = [
     label: "Mes ingrédients",
     code: "myingredients",
     navbar: false,
+    updateOnNav: false
+  },
+  {
+    label: "Ma balance",
+    code: "mybalance",
+    navbar: true,
     updateOnNav: false
   }
 ];
