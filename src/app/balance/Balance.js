@@ -16,7 +16,9 @@ import {
   ListItemButton
 } from "@mui/material";
 
-import basicdatepicker from "./basicdatepicker";
+import { snack } from "../App";
+
+//import basicdatepicker from "./basicdatepicker";
 
 import transactionsAPI from "./api/transactions";
 import balanceAPI from "./api/balance";
@@ -61,7 +63,12 @@ export default class Balance extends React.Component {
                 variant="standard"
                 onChange={handleChange()}
               />
-              <div id="transaction_datepicker"></div>
+              <TextField
+                id="transaction_date"
+                label="Date"
+                variant="standard"
+                onChange={handleChange()}
+              />
               <TextField
                 id="transaction_amount"
                 label="Montant"
@@ -128,12 +135,6 @@ export default class Balance extends React.Component {
     document.getElementById("balance_stats").style.display = "none";
     document.getElementById("balance_transaction").style.display = "none";
     document.getElementById("balance_transactions").style.display = "none";
-    // Finish
-    ReactDOM.render(
-      basicdatepicker.setupDatePicker(),
-      document.getElementById("transaction_datepicker")
-    );
-    console.log(document.getElementById("transaction_datepicker"));
     // Bind
     document.getElementById("balance_newtransaction").onclick = function () {
       console.log("Balance click : Nouvelle transaction");
