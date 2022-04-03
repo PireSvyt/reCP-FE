@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Paper, BottomNavigation, BottomNavigationAction } from "@mui/material";
 
 import Navbar from "./Navbar";
+import Balance from "./balance/Balance";
 
 import Menu from "./menu";
 import navigation from "./navigation";
@@ -35,6 +35,8 @@ export default class App extends React.Component {
     // Render sub components
     ReactDOM.render(<Menu />, document.getElementById("menu"));
     ReactDOM.render(<Navbar />, document.getElementById("navbar"));
+
+    ReactDOM.render(<Balance />, document.getElementById("mybalance"));
 
     myrecipies.render();
     myingredients.render();
