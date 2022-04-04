@@ -16,6 +16,8 @@ import {
   ListItemButton
 } from "@mui/material";
 
+import config from "../../../config/config";
+import appcopy from "../Appcopy";
 import { snack } from "../App";
 
 //import basicdatepicker from "./basicdatepicker";
@@ -34,48 +36,51 @@ export default class Balance extends React.Component {
       console.log(event);
     }
 
+    console.log(config);
     return (
       <React.Fragment>
         <div>
-          <h2>Ma balance</h2>
+          <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
           <div>
             <Button variant="text" id="balance_newtransaction">
-              Nouvelle dépense
+              {appcopy["button.add"][config.app.language]}
             </Button>
             <Button variant="text" id="balance_updatesummary">
-              Balance
+              {appcopy["button.renew"][config.app.language]}
             </Button>
             <Button variant="text" id="balance_updatetransactions">
-              Transactions
+              {appcopy["button.transactions"][config.app.language]}
             </Button>
           </div>
           <div id="balance_summary"></div>
           <div id="balance_stats"></div>
           <div id="balance_transaction">
             <Paper>
-              <h3>Transaction</h3>
+              <h3>
+                {appcopy["title.subsection_transaction"][config.app.language]}
+              </h3>
               <Button id="balance_savetransaction" variant="text">
-                Sauver
+                {appcopy["button.save"][config.app.language]}
               </Button>
               <TextField
                 id="transaction_name"
-                label="Nom"
+                label={appcopy["input.name"][config.app.language]}
                 variant="standard"
                 onChange={handleChange()}
               />
               <TextField
                 id="transaction_date"
-                label="Date"
+                label={appcopy["input.date"][config.app.language]}
                 variant="standard"
                 onChange={handleChange()}
               />
               <TextField
                 id="transaction_amount"
-                label="Montant"
+                label={appcopy["input.amount"][config.app.language]}
                 variant="standard"
                 onChange={handleChange()}
               />
-              <h4>Payé par</h4>
+              <h4>{appcopy["text.by"][config.app.language]}</h4>
               <RadioGroup row>
                 <FormControlLabel
                   id="transaction_by_Alice"
@@ -92,7 +97,7 @@ export default class Balance extends React.Component {
                   label="Pierre"
                 />
               </RadioGroup>
-              <h4>Pour</h4>
+              <h4>{appcopy["text.for"][config.app.language]}</h4>
               <FormGroup row>
                 <FormControlLabel
                   control={
@@ -119,7 +124,7 @@ export default class Balance extends React.Component {
               </FormGroup>
               <TextField
                 id="transaction_category"
-                label="Category"
+                label={appcopy["input.category"][config.app.language]}
                 variant="standard"
                 onChange={handleChange()}
               />
@@ -170,7 +175,7 @@ function updateBalance() {
     ReactDOM.render(
       <div>
         <Paper>
-          <h3>Balance</h3>
+          <h3>{appcopy["title.subsection_balance"][config.app.language]}</h3>
           <List>
             <ListItem key={"Alice"}>
               <ListItemText
