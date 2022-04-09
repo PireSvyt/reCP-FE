@@ -288,6 +288,7 @@ function saveTransaction() {
 function updateTransactions() {
   // List items
   function transactionListItem(value) {
+    console.log(value);
     return (
       <ListItem key={`${value._id}`} id={`${value._id}`}>
         <ListItemButton onClick={() => openTransaction(value._id)}>
@@ -310,9 +311,14 @@ function updateTransactions() {
   //
   Moment.locale("en");
   getTransactions().then((res) => {
+    console.log(res);
     const container = document.getElementById("balance_transactions");
     ReactDOM.render(
-      <List>{res.map((value) => transactionListItem(value))}</List>,
+      <List>
+        {res.forEach((value) => {
+          transactionListItem(value);
+        })}
+      </List>,
       container
     );
   });
