@@ -1,7 +1,7 @@
 import React from "react";
 
 //import Navbar from "./Navbar";
-import Balance from "./balance/Balance";
+import Balance from "./app/balance/Balance";
 
 /*import Menu from "./menu";
 import Snackbar from "./Snackbar";

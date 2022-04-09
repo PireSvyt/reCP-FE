@@ -10,16 +10,16 @@ import {
   TextField,
   ListItemButton
 } from "@mui/material";
-import appcopy from "../Appcopy";
+import appcopy from "./Appcopy";
 
 import {
   TransactionDate,
   TransactionBy,
   TransactionFor
-} from "./balancecomponents";
+} from "./balance/balancecomponents";
 
-import { getTransaction, getTransactions } from "./api/transactions";
-import { getBalance } from "./api/balance";
+import { getTransaction, getTransactions } from "./balance/api/transactions";
+import { getBalance } from "./balance/api/balance";
 
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";

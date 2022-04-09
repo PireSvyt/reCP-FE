@@ -1,13 +1,6 @@
-import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 
-import App from "./app/App";
+import Balance from "./app/Balance";
 
 const rootElement = document.getElementById("root");
-
-ReactDOM.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  rootElement
-);
+ReactDOM.render(<Balance />, rootElement);
