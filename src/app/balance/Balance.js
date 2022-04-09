@@ -19,7 +19,7 @@ import {
 } from "./balancecomponents";
 
 import { getTransaction, getTransactions } from "./api/transactions";
-import { getBalance } from "./api/balance";
+import getBalance from "./api/balance";
 
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
