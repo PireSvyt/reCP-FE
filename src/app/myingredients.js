@@ -29,21 +29,25 @@ exports.render = () => {
 function update() {
   ingredientsAPI.getIngredients().then((res) => {
     const container = document.getElementById("myingreidents_list");
-    ReactDOM.render(
-      <List>
-        {res.map((value) => (
-          <ListItem key={`${value._id}`}>
-            <ListItemButton onClick={() => clickIngredient(value._id)}>
-              <ListItemText
-                primary={`${value.name} ${value.unit}`}
-                secondary={`${value._id}`}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>,
-      container
-    );
+    function getListItem(value) {
+      return (
+        <ListItem key={`${value._id}`}>
+          <ListItemButton onClick={() => clickIngredient(value._id)}>
+            <ListItemText
+              primary={`${value.name} ${value.unit}`}
+              secondary={`${value._id}`}
+            />
+          </ListItemButton>
+        </ListItem>
+      );
+    }
+
+    if (Array.isArray(res)) {
+      ReactDOM.render(
+        <List>{res.forEach((value) => getListItem(value))}</List>,
+        container
+      );
+    }
   });
 }
 exports.update = update;

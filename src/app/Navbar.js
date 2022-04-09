@@ -28,6 +28,7 @@ export default function FixedBottomNavigation() {
                   //console.log("Navbar clicked " + page.label);
                   navigation.navigates(page.code);
                 }}
+                key={page.code}
               />
             );
           } else {

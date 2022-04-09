@@ -1,10 +1,10 @@
 const axios = require("axios");
-const config = require("../../config/config");
+const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
 
 exports.createIngredient = async (id, newIngredient) => {
   try {
     const res = await axios.post(
-      config.serverUrl + "/api/ingredient/" + id,
+      SERVER_URL + "/api/ingredient/" + id,
       newIngredient
     );
     return res.data;
@@ -16,7 +16,7 @@ exports.createIngredient = async (id, newIngredient) => {
 
 exports.getIngredient = async (id) => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/ingredient/" + id);
+    const res = await axios.get(SERVER_URL + "/api/ingredient/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -26,7 +26,7 @@ exports.getIngredient = async (id) => {
 
 exports.deleteIngredient = async (id) => {
   try {
-    const res = await axios.delete(config.serverUrl + "/api/ingredient/" + id);
+    const res = await axios.delete(SERVER_URL + "/api/ingredient/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -37,7 +37,7 @@ exports.deleteIngredient = async (id) => {
 exports.modifyIngredient = async (id, newIngredient) => {
   try {
     const res = await axios.put(
-      config.serverUrl + "/api/ingredient/" + id,
+      SERVER_URL + "/api/ingredient/" + id,
       newIngredient
     );
     return res.data;
@@ -49,7 +49,7 @@ exports.modifyIngredient = async (id, newIngredient) => {
 
 exports.getIngredients = async () => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/ingredient");
+    const res = await axios.get(SERVER_URL + "/api/ingredient");
     return res.data;
   } catch (err) {
     // Handle Error Here

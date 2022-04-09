@@ -1,10 +1,10 @@
 const axios = require("axios");
-const config = require("../../../../config/config");
+const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
 
 exports.createTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.post(
-      config.serverUrl + "/api/transaction/" + id,
+      SERVER_URL + "/api/transaction/" + id,
       newTransaction
     );
     return res.data;
@@ -16,7 +16,7 @@ exports.createTransaction = async (id, newTransaction) => {
 
 exports.getTransaction = async (id) => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/transaction/" + id);
+    const res = await axios.get(SERVER_URL + "/api/transaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -26,7 +26,7 @@ exports.getTransaction = async (id) => {
 
 exports.deleteTransaction = async (id) => {
   try {
-    const res = await axios.delete(config.serverUrl + "/api/transaction/" + id);
+    const res = await axios.delete(SERVER_URL + "/api/transaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -37,7 +37,7 @@ exports.deleteTransaction = async (id) => {
 exports.modifyTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.put(
-      config.serverUrl + "/api/transaction/" + id,
+      SERVER_URL + "/api/transaction/" + id,
       newTransaction
     );
     return res.data;
@@ -49,7 +49,7 @@ exports.modifyTransaction = async (id, newTransaction) => {
 
 exports.getTransactions = async () => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/transaction");
+    const res = await axios.get(SERVER_URL + "/api/transaction");
     return res.data;
   } catch (err) {
     // Handle Error Here

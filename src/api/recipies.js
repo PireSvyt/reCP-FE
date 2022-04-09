@@ -1,9 +1,9 @@
 const axios = require("axios");
-const config = require("../../config/config");
+const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
 
 exports.createRecipe = async (newRecipe) => {
   try {
-    const res = await axios.post(config.serverUrl + "/api/recipe", newRecipe);
+    const res = await axios.post(SERVER_URL + "/api/recipe", newRecipe);
     return res;
   } catch (err) {
     // Handle Error Here
@@ -13,7 +13,7 @@ exports.createRecipe = async (newRecipe) => {
 
 exports.getRecipe = async (id) => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/recipe/" + id);
+    const res = await axios.get(SERVER_URL + "/api/recipe/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -23,7 +23,7 @@ exports.getRecipe = async (id) => {
 
 exports.deleteRecipe = async (id) => {
   try {
-    const res = await axios.delete(config.serverUrl + "/api/recipe/" + id);
+    const res = await axios.delete(SERVER_URL + "/api/recipe/" + id);
     return res.status;
   } catch (err) {
     // Handle Error Here
@@ -33,10 +33,7 @@ exports.deleteRecipe = async (id) => {
 
 exports.modifyRecipe = async (id, newRecipe) => {
   try {
-    const res = await axios.put(
-      config.serverUrl + "/api/recipe/" + id,
-      newRecipe
-    );
+    const res = await axios.put(SERVER_URL + "/api/recipe/" + id, newRecipe);
     return res.status;
   } catch (err) {
     // Handle Error Here
@@ -46,7 +43,7 @@ exports.modifyRecipe = async (id, newRecipe) => {
 
 exports.getRecipes = async () => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/recipe");
+    const res = await axios.get(SERVER_URL + "/api/recipe");
     return res.data;
   } catch (err) {
     // Handle Error Here

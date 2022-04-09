@@ -26,7 +26,7 @@ export default class App extends React.Component {
         <Menu />
         <div id="menu_placeholder" />
         {navigation.pages.map((page) => (
-          <div id={`${page.code}`} />
+          <div id={`${page.code}`} key={page.code} />
         ))}
         <Navbar />
         <Snackbar />

@@ -1,9 +1,9 @@
 const axios = require("axios");
-const config = require("../../../../config/config");
+const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
 
 exports.getBalance = async () => {
   try {
-    const res = await axios.get(config.serverUrl + "/api/balance");
+    const res = await axios.get(SERVER_URL + "/api/balance");
     return res.data;
   } catch (err) {
     // Handle Error Here

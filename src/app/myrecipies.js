@@ -33,21 +33,26 @@ exports.render = () => {
 function update() {
   recipiesAPI.getRecipes().then((res) => {
     const container = document.getElementById("myrecipies_list");
-    ReactDOM.render(
-      <List>
-        {res.map((value) => (
-          <ListItem key={`${value._id}`} id={`${value._id}`}>
-            <ListItemButton onClick={() => clickRecipe(value._id)}>
-              <ListItemText
-                primary={`${value.name}`}
-                secondary={`${value.portions} portions`}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>,
-      container
-    );
+
+    function getListItem(value) {
+      return (
+        <ListItem key={`${value._id}`} id={`${value._id}`}>
+          <ListItemButton onClick={() => clickRecipe(value._id)}>
+            <ListItemText
+              primary={`${value.name}`}
+              secondary={`${value.portions} portions`}
+            />
+          </ListItemButton>
+        </ListItem>
+      );
+    }
+
+    if (Array.isArray(res)) {
+      ReactDOM.render(
+        <List>{res.forEach((value) => getListItem(value))}</List>,
+        container
+      );
+    }
   });
 }
 exports.update = update;
