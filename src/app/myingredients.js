@@ -8,7 +8,13 @@ import {
   ListItemButton
 } from "@mui/material";
 
-import ingredientsAPI from "../api/ingredients";
+import {
+  createIngredient,
+  getIngredient,
+  deleteIngredient,
+  modifyIngredient,
+  getIngredients
+} from "../api/ingredients";
 
 exports.render = () => {
   const container = document.getElementById("myingredients");
@@ -27,7 +33,7 @@ exports.render = () => {
 };
 
 function update() {
-  ingredientsAPI.getIngredients().then((res) => {
+  getIngredients().then((res) => {
     const container = document.getElementById("myingreidents_list");
     function getListItem(value) {
       return (

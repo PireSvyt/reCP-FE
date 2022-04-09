@@ -18,8 +18,14 @@ import {
   TransactionFor
 } from "./balancecomponents";
 
-import transactionsAPI from "./api/transactions";
-import balanceAPI from "./api/balance";
+import {
+  createTransaction,
+  getTransaction,
+  deleteTransaction,
+  modifyTransaction,
+  getTransactions
+} from "./api/transactions";
+import { getBalance } from "./api/balance";
 
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
@@ -118,7 +124,7 @@ function updateBalance() {
   // Display
   document.getElementById("balance_summary").style.display = "block";
   //
-  balanceAPI()
+  getBalance()
     .then((res) => {
       ReactDOM.render(
         <div>
@@ -192,7 +198,7 @@ function openTransaction(id) {
 
   if (id !== "") {
     // Load
-    transactionsAPI.getTransaction(id).then((res) => {
+    getTransaction(id).then((res) => {
       selectedTransaction = res._id;
       console.log("SET selectedTransaction : " + selectedTransaction);
       openTransactionUpdate(res);
@@ -313,8 +319,7 @@ function updateTransactions() {
   document.getElementById("balance_transactions").style.display = "block";
   //
   Moment.locale("en");
-  transactionsAPI
-    .getTransactions()
+  getTransactions()
     .then((res) => {
       const container = document.getElementById("balance_transactions");
       ReactDOM.render(

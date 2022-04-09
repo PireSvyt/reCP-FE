@@ -13,7 +13,13 @@ import {
 import recipeview from "./recipeview";
 import navigation from "./navigation";
 import recipiesAPI from "../api/recipies";
-import ingredientsAPI from "../api/ingredients";
+import {
+  createIngredient,
+  getIngredient,
+  deleteIngredient,
+  modifyIngredient,
+  getIngredients
+} from "../api/ingredients";
 
 exports.render = () => {
   const container = document.getElementById("recipeedit");
@@ -37,7 +43,7 @@ exports.render = () => {
   );
 };
 exports.new = () => {
-  ingredientsAPI.ingredientListRehydrate();
+  //ingredientsAPI.ingredientListRehydrate();
 
   // Name
   const container_name = document.getElementById("recipeedit_name");

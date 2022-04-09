@@ -12,7 +12,13 @@ import {
 import navigation from "./navigation";
 import recipeview from "./recipeview";
 import recipeedit from "./recipeedit";
-import recipiesAPI from "../api/recipies";
+import {
+  createRecipe,
+  getRecipe,
+  deleteRecipe,
+  modifyRecipe,
+  getRecipes
+} from "../api/recipies";
 
 exports.render = () => {
   const container = document.getElementById("myrecipies");
@@ -31,7 +37,7 @@ exports.render = () => {
 };
 
 function update() {
-  recipiesAPI.getRecipes().then((res) => {
+  getRecipes().then((res) => {
     const container = document.getElementById("myrecipies_list");
 
     function getListItem(value) {

@@ -13,7 +13,13 @@ import navigation from "./navigation";
 import recipeedit from "./recipeedit";
 import myrecipies from "./myrecipies";
 import recipiesAPI from "../api/recipies";
-import ingredientsAPI from "../api/ingredients";
+import {
+  createIngredient,
+  getIngredient,
+  deleteIngredient,
+  modifyIngredient,
+  getIngredients
+} from "../api/ingredients";
 
 let currentRecipe = "";
 
@@ -60,18 +66,16 @@ exports.populate = (id) => {
     let recipeIngredients = recipe_res.ingredients;
     console.log(recipeIngredients);
     recipeIngredients.forEach((recipe_ingredient) => {
-      ingredientsAPI
-        .getIngredient(recipe_ingredient.id)
-        .then(async (list_ingredient) => {
-          try {
-            console.log(list_ingredient);
-            recipe_ingredient.name = list_ingredient.name;
-            recipe_ingredient.unit = list_ingredient.unit;
-          } catch (err) {
-            // Handle Error Here
-            console.error(err);
-          }
-        });
+      getIngredient(recipe_ingredient.id).then(async (list_ingredient) => {
+        try {
+          console.log(list_ingredient);
+          recipe_ingredient.name = list_ingredient.name;
+          recipe_ingredient.unit = list_ingredient.unit;
+        } catch (err) {
+          // Handle Error Here
+          console.error(err);
+        }
+      });
     });
     console.log(recipeIngredients);
     ReactDOM.render(
@@ -107,7 +111,7 @@ exports.populate = (id) => {
 };
 async function ingredientFragment(recipe_ing) {
   console.log(recipe_ing);
-  ingredientsAPI.getIngredient(recipe_ing.id).then((ingredient) => {
+  getIngredient(recipe_ing.id).then((ingredient) => {
     console.log(ingredient);
     return (
       <React.Fragment>
