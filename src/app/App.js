@@ -21,22 +21,27 @@ export default class App extends React.Component {
     this.state = { focus: "thisweek" };
   }
   render() {
-    return (
-      <React.Fragment>
+    /*
+
         <Menu />
-        <div id="menu_placeholder" />
+    <div id="menu_placeholder" />
         {navigation.pages.map((page) => (
           <div id={`${page.code}`} key={page.code} />
+        <Balance />
         ))}
-        <Navbar />
-        <Snackbar />
+    
+    
+    */
+    return (
+      <React.Fragment>
+        <Balance />
       </React.Fragment>
     );
   }
   componentDidMount() {
     // Render sub components
-    ReactDOM.render(<Balance />, document.getElementById("mybalance"));
-
+    //ReactDOM.render(<Balance />, document.getElementById("mybalance"));
+    /*
     myrecipies.render();
     myingredients.render();
     recipeview.render();
@@ -44,12 +49,12 @@ export default class App extends React.Component {
     thisweek.render();
     myfridge.render();
     shopping.render();
-
     // Update sub component content
     myrecipies.update();
     myingredients.update();
 
     // Navigate to landing page
     navigation.navigates("thisweek");
+    */
   }
 }

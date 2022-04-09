@@ -124,30 +124,28 @@ function updateBalance() {
   // Display
   document.getElementById("balance_summary").style.display = "block";
   //
-  getBalance()
-    .then((res) => {
-      ReactDOM.render(
-        <div>
-          <Paper>
-            <h3>{appcopy["title.subsection_balance"][LANGUAGE]}</h3>
-            <List>
-              <ListItem key={"Alice"}>
-                <ListItemText
-                  primary={`Alice : ${Math.round(res.Alice * 100) / 100} €`}
-                />
-              </ListItem>
-              <ListItem key={"Pierre"}>
-                <ListItemText
-                  primary={`Pierre : ${Math.round(res.Pierre * 100) / 100} €`}
-                />
-              </ListItem>
-            </List>
-          </Paper>
-        </div>,
-        document.getElementById("balance_summary")
-      );
-    })
-    .catch((e) => console.log(e));
+  getBalance().then((res) => {
+    ReactDOM.render(
+      <div>
+        <Paper>
+          <h3>{appcopy["title.subsection_balance"][LANGUAGE]}</h3>
+          <List>
+            <ListItem key={"Alice"}>
+              <ListItemText
+                primary={`Alice : ${Math.round(res.Alice * 100) / 100} €`}
+              />
+            </ListItem>
+            <ListItem key={"Pierre"}>
+              <ListItemText
+                primary={`Pierre : ${Math.round(res.Pierre * 100) / 100} €`}
+              />
+            </ListItem>
+          </List>
+        </Paper>
+      </div>,
+      document.getElementById("balance_summary")
+    );
+  });
 }
 
 function openTransaction(id) {
@@ -200,7 +198,6 @@ function openTransaction(id) {
     // Load
     getTransaction(id).then((res) => {
       selectedTransaction = res._id;
-      console.log("SET selectedTransaction : " + selectedTransaction);
       openTransactionUpdate(res);
     });
   } else {
@@ -219,7 +216,6 @@ function openTransaction(id) {
 
 function saveTransaction() {
   // Retrieve inputs
-  console.log("GET selectedTransaction : " + selectedTransaction);
   var transaction = {
     _id: selectedTransaction,
     name: "",
@@ -319,15 +315,13 @@ function updateTransactions() {
   document.getElementById("balance_transactions").style.display = "block";
   //
   Moment.locale("en");
-  getTransactions()
-    .then((res) => {
-      const container = document.getElementById("balance_transactions");
-      ReactDOM.render(
-        <List>{res.map((value) => transactionListItem(value))}</List>,
-        container
-      );
-    })
-    .catch((e) => console.log(e));
+  getTransactions().then((res) => {
+    const container = document.getElementById("balance_transactions");
+    ReactDOM.render(
+      <List>{res.map((value) => transactionListItem(value))}</List>,
+      container
+    );
+  });
 }
 function transactionDateToInputFormat(date) {
   let internalDate = new Date(date);
