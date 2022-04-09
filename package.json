@@ -1,6 +1,6 @@
 {
   "name": "recp-fe",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "src/index.js",
   "dependencies": {
@@ -18,5 +18,8 @@
     "react-scripts": "4.0.0",
     "vercel": "24.0.1"
   },
-  "keywords": []
+  "keywords": [],
+  "scripts": {
+    "build": "yarn run"
+  }
 }
