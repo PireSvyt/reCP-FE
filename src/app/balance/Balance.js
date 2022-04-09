@@ -118,8 +118,7 @@ function updateBalance() {
   // Display
   document.getElementById("balance_summary").style.display = "block";
   //
-  balanceAPI
-    .getBalance()
+  balanceAPI()
     .then((res) => {
       ReactDOM.render(
         <div>
