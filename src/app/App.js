@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Balance from "./balance/Balance";
 
 import Menu from "./menu";
+import Snackbar from "./Snackbar";
 import navigation from "./navigation";
 import recipeview from "./recipeview";
 import recipeedit from "./recipeedit";
@@ -22,20 +23,18 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div id="menu" />
+        <Menu />
         <div id="menu_placeholder" />
         {navigation.pages.map((page) => (
           <div id={`${page.code}`} />
         ))}
-        <div id="navbar" />
+        <Navbar />
+        <Snackbar />
       </React.Fragment>
     );
   }
   componentDidMount() {
     // Render sub components
-    ReactDOM.render(<Menu />, document.getElementById("menu"));
-    ReactDOM.render(<Navbar />, document.getElementById("navbar"));
-
     ReactDOM.render(<Balance />, document.getElementById("mybalance"));
 
     myrecipies.render();

@@ -15,124 +15,114 @@ import {
   TextField,
   ListItemButton
 } from "@mui/material";
-
 import config from "../../../config/config";
 import appcopy from "../Appcopy";
-import { snack } from "../App";
 
-//import basicdatepicker from "./basicdatepicker";
+import TransactionDatePicker from "./transactiondatepicker";
 
+import Snackbar from "../Snackbar";
 import transactionsAPI from "./api/transactions";
 import balanceAPI from "./api/balance";
 
 export default class Balance extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { focus: "summary", transaction: "" };
+    this.state = {
+      focus: "summary",
+      transaction: "",
+      date: Date()
+    };
   }
   render() {
-    function handleChange(event) {
-      console.log("handleChange event :");
-      console.log(event);
-    }
-
-    console.log(config);
     return (
-      <React.Fragment>
+      <div>
+        <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
         <div>
-          <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
-          <div>
-            <Button variant="text" id="balance_newtransaction">
-              {appcopy["button.add"][config.app.language]}
-            </Button>
-            <Button variant="text" id="balance_updatesummary">
-              {appcopy["button.renew"][config.app.language]}
-            </Button>
-            <Button variant="text" id="balance_updatetransactions">
-              {appcopy["button.transactions"][config.app.language]}
-            </Button>
-          </div>
-          <div id="balance_summary"></div>
-          <div id="balance_stats"></div>
-          <div id="balance_transaction">
-            <Paper>
-              <h3>
-                {appcopy["title.subsection_transaction"][config.app.language]}
-              </h3>
-              <Button id="balance_savetransaction" variant="text">
-                {appcopy["button.save"][config.app.language]}
-              </Button>
-              <TextField
-                id="transaction_name"
-                label={appcopy["input.name"][config.app.language]}
-                variant="standard"
-                onChange={handleChange()}
-              />
-              <TextField
-                id="transaction_date"
-                label={appcopy["input.date"][config.app.language]}
-                variant="standard"
-                onChange={handleChange()}
-              />
-              <TextField
-                id="transaction_amount"
-                label={appcopy["input.amount"][config.app.language]}
-                variant="standard"
-                onChange={handleChange()}
-              />
-              <h4>{appcopy["text.by"][config.app.language]}</h4>
-              <RadioGroup row>
-                <FormControlLabel
-                  id="transaction_by_Alice"
-                  value="Alice"
-                  name="transaction_by"
-                  control={<Radio />}
-                  label="Alice"
-                />
-                <FormControlLabel
-                  id="transaction_by_Pierre"
-                  value="Pierre"
-                  name="transaction_by"
-                  control={<Radio />}
-                  label="Pierre"
-                />
-              </RadioGroup>
-              <h4>{appcopy["text.for"][config.app.language]}</h4>
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="Alice"
-                      defaultChecked={true}
-                      name="transaction_for"
-                      id="transaction_for_Alice"
-                    />
-                  }
-                  label="Alice"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="Pierre"
-                      defaultChecked={true}
-                      name="transaction_for"
-                      id="transaction_for_Pierre"
-                    />
-                  }
-                  label="Pierre"
-                />
-              </FormGroup>
-              <TextField
-                id="transaction_category"
-                label={appcopy["input.category"][config.app.language]}
-                variant="standard"
-                onChange={handleChange()}
-              />
-            </Paper>
-          </div>
-          <div id="balance_transactions"></div>
+          <Button variant="text" id="balance_newtransaction">
+            {appcopy["button.add"][config.app.language]}
+          </Button>
+          <Button variant="text" id="balance_updatesummary">
+            {appcopy["button.renew"][config.app.language]}
+          </Button>
+          <Button variant="text" id="balance_updatetransactions">
+            {appcopy["button.transactions"][config.app.language]}
+          </Button>
         </div>
-      </React.Fragment>
+        <div id="balance_summary"></div>
+        <div id="balance_stats"></div>
+        <div id="balance_transaction">
+          <Paper>
+            <h3>
+              {appcopy["title.subsection_transaction"][config.app.language]}
+            </h3>
+            <Button id="balance_savetransaction" variant="text">
+              {appcopy["button.save"][config.app.language]}
+            </Button>
+            <TextField
+              id="transaction_name"
+              label={appcopy["input.name"][config.app.language]}
+              variant="standard"
+            />
+            <TransactionDatePicker />
+            <TextField
+              id="transaction_amount"
+              label={appcopy["input.amount"][config.app.language]}
+              variant="standard"
+            />
+            <h4>{appcopy["text.by"][config.app.language]}</h4>
+            <RadioGroup row>
+              <FormControlLabel
+                id="transaction_by_Alice"
+                value="Alice"
+                name="transaction_by"
+                control={<Radio />}
+                defaultChecked={false}
+                label="Alice"
+              />
+              <FormControlLabel
+                id="transaction_by_Pierre"
+                value="Pierre"
+                name="transaction_by"
+                control={<Radio />}
+                defaultChecked={false}
+                label="Pierre"
+              />
+            </RadioGroup>
+            <h4>{appcopy["text.for"][config.app.language]}</h4>
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="Alice"
+                    defaultChecked={true}
+                    name="transaction_for"
+                    id="transaction_for_Alice"
+                  />
+                }
+                label="Alice"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="Pierre"
+                    defaultChecked={true}
+                    name="transaction_for"
+                    id="transaction_for_Pierre"
+                  />
+                }
+                label="Pierre"
+              />
+            </FormGroup>
+            <TextField
+              id="transaction_category"
+              label={appcopy["input.category"][config.app.language]}
+              variant="standard"
+            />
+          </Paper>
+        </div>
+        <div id="balance_transactions"></div>
+        <div id="balance_snackbar_div"></div>
+      </div>
     );
   }
   componentDidMount() {
@@ -194,6 +184,7 @@ function updateBalance() {
     );
   });
 }
+
 function openTransaction(id) {
   // Hide
   document.getElementById("balance_summary").style.display = "none";
@@ -203,21 +194,22 @@ function openTransaction(id) {
   document.getElementById("balance_transaction").style.display = "block";
   // Load
   function openTransactionUpdate(transaction) {
+    console.log("OPEN TRANSACTION");
+    console.log(transaction);
     document.getElementById("transaction_name").value = transaction.name;
-    //document.getElementById("transaction_date").value = transaction.date;
+    document.getElementById(
+      "transaction_date"
+    ).value = transactionDateToInputFormat(transaction.date);
     document.getElementById("transaction_amount").value = transaction.amount;
-
-    if (transaction.by === "Alice") {
-      document.getElementById("transaction_by_Alice").checked = true;
-    } else {
-      document.getElementById("transaction_by_Alice").checked = false;
+    for (const radioButton of document.querySelectorAll(
+      '[name="transaction_by"]'
+    )) {
+      if (radioButton.value === transaction.by) {
+        radioButton.checked = true;
+      } else {
+        radioButton.checked = false;
+      }
     }
-    if (transaction.by === "Pierre") {
-      document.getElementById("transaction_by_Pierre").checked = true;
-    } else {
-      document.getElementById("transaction_by_Pierre").checked = false;
-    }
-
     if (transaction.for.includes("Alice")) {
       document.getElementById("transaction_for_Alice").checked = true;
     } else {
@@ -228,7 +220,6 @@ function openTransaction(id) {
     } else {
       document.getElementById("transaction_for_Pierre").checked = false;
     }
-
     document.getElementById("transaction_category").value =
       transaction.category;
   }
@@ -238,9 +229,10 @@ function openTransaction(id) {
     });
   } else {
     openTransactionUpdate({
+      _id: "",
       name: "",
       date: Date(),
-      amount: 0,
+      amount: "",
       by: "",
       for: ["Alice", "Pierre"],
       category: ""
@@ -250,16 +242,19 @@ function openTransaction(id) {
 function saveTransaction() {
   // Retrieve inputs
   var transaction = {
+    _id: "",
     name: "",
     date: null,
-    amount: null,
+    amount: "",
     by: "",
     for: [],
     category: ""
   };
+  //transaction._id = this.state.transaction;
   transaction.name = document.getElementById("transaction_name").value;
-  console.log(document.getElementById("transaction_date"));
-  //transaction.date = document.getElementById("transaction_date").value;
+  transaction.date = transactionDateFromInputFormat(
+    document.getElementById("transaction_date").value
+  );
   transaction.amount = document.getElementById("transaction_amount").value;
   for (const radioButton of document.querySelectorAll(
     '[name="transaction_by"]'
@@ -288,7 +283,7 @@ function saveTransaction() {
     save = false;
     errors.push("Date vide");
   }
-  if (transaction.amount === null) {
+  if (transaction.amount === "") {
     save = false;
     errors.push("Montant vide");
   }
@@ -300,10 +295,25 @@ function saveTransaction() {
     save = false;
     errors.push("Payé pour vide");
   }
+
+  // TODO : Sncakbar
+
   // Save or not?
   console.log("Save TRANSACTION ? : " + save);
   console.log(transaction);
   console.log(errors);
+
+  // Post or publish
+  if (save === true) {
+    if (transaction._id === "") {
+      // POST
+      console.log("POST");
+    } else {
+      // PUT
+      console.log("PUT");
+    }
+    updateBalance();
+  }
 }
 
 function updateTransactions() {
@@ -337,4 +347,28 @@ function updateTransactions() {
       container
     );
   });
+}
+function transactionDateToInputFormat(date) {
+  //console.log(date);
+  let internalDate = new Date(date);
+  var textDate = {
+    year: internalDate.getFullYear(),
+    month: internalDate.getMonth() + 1,
+    day: internalDate.getDate()
+  };
+  if (textDate.month < 10) {
+    textDate.month = "0" + textDate.month;
+  }
+  if (textDate.day < 10) {
+    textDate.day = "0" + textDate.day;
+  }
+  textDate.final = textDate.year + "-" + textDate.month + "-" + textDate.day;
+  //console.log(textDate.final);
+  return textDate.final;
+}
+function transactionDateFromInputFormat(date) {
+  //console.log(date);
+  let internalDate = new Date(date);
+  //console.log(internalDate);
+  return internalDate;
 }
