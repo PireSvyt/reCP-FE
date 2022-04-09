@@ -10,3 +10,12 @@ exports.getBalance = async () => {
     console.error(err);
   }
 };
+exports.dummyBalance = async () => {
+  try {
+    const res = await axios.get(SERVER_URL + "/api/balance");
+    return res.data;
+  } catch (err) {
+    // Handle Error Here
+    console.error(err);
+  }
+};
