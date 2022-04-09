@@ -10,16 +10,16 @@ import {
   TextField,
   ListItemButton
 } from "@mui/material";
-import appcopy from "./Appcopy";
+import appcopy from "./copy";
 
 import {
   TransactionDate,
   TransactionBy,
   TransactionFor
-} from "./balance/balancecomponents";
+} from "./balancecomponents";
 
-import { getTransaction, getTransactions } from "./balance/api/transactions";
-import { getBalance } from "./balance/api/balance";
+import { getTransaction, getTransactions } from "./api/transactions";
+import { getBalance } from "./api/balance";
 
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
@@ -317,6 +317,7 @@ function updateTransactions() {
     );
   });
 }
+
 function transactionDateToInputFormat(date) {
   let internalDate = new Date(date);
   var textDate = {

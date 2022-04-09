@@ -15,10 +15,6 @@ import shopping from "./shopping";
 import myingredients from "./myingredients";*/
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { focus: "thisweek" };
-  }
   render() {
     /*
 
