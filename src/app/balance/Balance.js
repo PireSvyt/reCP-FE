@@ -39,7 +39,7 @@ export default class Balance extends React.Component {
         <h2>{appcopy["title.section_mybalance"][LANGUAGE]}</h2>
         <div>
           <Button variant="text" id="balance_newtransaction">
-            {appcopy["button.add"][LANGUAGE]}
+            ADD
           </Button>
           <Button variant="text" id="balance_updatesummary">
             {appcopy["button.renew"][LANGUAGE]}
