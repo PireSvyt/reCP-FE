@@ -3,11 +3,11 @@ const axios = require("axios");
 //const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
 const SERVER_URL = "https://re-cp-be.vercel.app";
 
-export async function createTransaction(id, newTransaction) {
+export async function createTransaction(newTransaction) {
   //exports.createTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.post(
-      SERVER_URL + "/api/transaction/" + id,
+      SERVER_URL + "/api/transaction/",
       newTransaction
     );
     return res.data;

@@ -18,7 +18,12 @@ import {
   TransactionFor
 } from "./balancecomponents";
 
-import { getTransaction, getTransactions } from "./api/transactions";
+import {
+  getTransaction,
+  getTransactions,
+  createTransaction,
+  modifyTransaction
+} from "./api/transactions";
 import getBalance from "./api/balance";
 
 require("dotenv").config();
@@ -283,31 +288,16 @@ function saveTransaction() {
     if (transaction._id === "") {
       // POST
       console.log("POST");
+      createTransaction(transaction).then(updateBalance());
     } else {
       // PUT
       console.log("PUT");
+      modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
-    updateBalance();
   }
 }
 
 function updateTransactions() {
-  // List items
-  function transactionListItem(value) {
-    console.log(value);
-    return (
-      <ListItem key={`${value._id}`} id={`${value._id}`}>
-        <ListItemButton onClick={() => openTransaction(value._id)}>
-          <ListItemText
-            primary={`${value.name}`}
-            secondary={`${value.amount} €, le ${Moment(value.date).format(
-              "DD/MM/YYYY"
-            )}`}
-          />
-        </ListItemButton>
-      </ListItem>
-    );
-  }
   // Hide
   document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transaction").style.display = "none";
@@ -317,13 +307,21 @@ function updateTransactions() {
   //
   Moment.locale("en");
   getTransactions().then((res) => {
-    console.log(res);
     const container = document.getElementById("balance_transactions");
     ReactDOM.render(
       <List>
-        {res.forEach((value) => {
-          transactionListItem(value);
-        })}
+        {res.map((value) => (
+          <ListItem key={`${value._id}`} id={`${value._id}`}>
+            <ListItemButton onClick={() => openTransaction(value._id)}>
+              <ListItemText
+                primary={`${value.name}`}
+                secondary={`${value.amount} €, le ${Moment(value.date).format(
+                  "DD/MM/YYYY"
+                )}`}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>,
       container
     );
