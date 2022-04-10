@@ -21,6 +21,8 @@ import {
 import { getTransaction, getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 
+require("dotenv").config();
+
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
 
