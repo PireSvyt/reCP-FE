@@ -25,6 +25,7 @@ const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
 
 console.log("LANGUAGE : " + LANGUAGE);
+console.log("VERCEL_ENV : " + process.env.VERCEL_ENV);
 
 export default class Balance extends React.Component {
   constructor(props) {
