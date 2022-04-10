@@ -24,6 +24,8 @@ import getBalance from "./api/balance";
 const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
 
+console.log("LANGUAGE : " + LANGUAGE);
+
 export default class Balance extends React.Component {
   constructor(props) {
     super(props);
