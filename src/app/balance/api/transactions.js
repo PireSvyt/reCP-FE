@@ -1,5 +1,7 @@
 const axios = require("axios");
-const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
+
+//const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
+const SERVER_URL = "https://re-cp-be.vercel.app";
 
 export async function createTransaction(id, newTransaction) {
   //exports.createTransaction = async (id, newTransaction) => {

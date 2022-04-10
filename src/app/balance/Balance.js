@@ -23,7 +23,8 @@ import getBalance from "./api/balance";
 
 require("dotenv").config();
 
-const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
+//const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
+const LANGUAGE = "FR";
 var selectedTransaction = "";
 
 console.log("LANGUAGE : " + LANGUAGE);
