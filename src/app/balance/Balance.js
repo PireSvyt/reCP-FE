@@ -8,7 +8,8 @@ import {
   ListItem,
   ListItemText,
   TextField,
-  ListItemButton
+  ListItemButton,
+  Box
 } from "@mui/material";
 import appcopy from "./copy";
 
@@ -17,7 +18,6 @@ import {
   TransactionBy,
   TransactionFor
 } from "./balancecomponents";
-
 import {
   getTransaction,
   getTransactions,
@@ -39,7 +39,6 @@ export default class Balance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      focus: "summary",
       transaction: "",
       date: Date()
     };
@@ -47,49 +46,86 @@ export default class Balance extends React.Component {
   render() {
     return (
       <div>
-        <h2>{appcopy["title.section_mybalance"][LANGUAGE]}</h2>
-        <div>
-          <Button variant="text" id="balance_newtransaction">
-            ADD
-          </Button>
-          <Button variant="text" id="balance_updatesummary">
-            {appcopy["button.renew"][LANGUAGE]}
-          </Button>
-          <Button variant="text" id="balance_updatetransactions">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly"
+          }}
+        >
+          <Button
+            variant="outlined"
+            id="balance_updatetransactions"
+            sx={{
+              width: 2 / 7
+            }}
+          >
             {appcopy["button.transactions"][LANGUAGE]}
           </Button>
-        </div>
+          <Button
+            variant="outlined"
+            id="balance_updatesummary"
+            sx={{
+              width: 2 / 7
+            }}
+          >
+            {appcopy["button.renew"][LANGUAGE]}
+          </Button>
+          <Button
+            variant="contained"
+            id="balance_newtransaction"
+            sx={{
+              width: 2 / 7
+            }}
+          >
+            ADD
+          </Button>
+        </Box>
         <div id="balance_summary"></div>
         <div id="balance_stats"></div>
         <div id="balance_transaction">
           <Paper>
             <h3>{appcopy["title.subsection_transaction"][LANGUAGE]}</h3>
-            <Button id="balance_savetransaction" variant="text">
-              {appcopy["button.save"][LANGUAGE]}
-            </Button>
-            <TextField
-              id="transaction_name"
-              label={appcopy["input.name"][LANGUAGE]}
-              variant="standard"
-            />
-            <TransactionDate />
-            <TextField
-              id="transaction_amount"
-              label={appcopy["input.amount"][LANGUAGE]}
-              variant="standard"
-            />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                ml: 5,
+                mr: 5
+              }}
+            >
+              <TextField
+                id="transaction_name"
+                label={appcopy["input.name"][LANGUAGE]}
+                variant="standard"
+              />
+              <TransactionDate />
+              <TextField
+                id="transaction_amount"
+                label={appcopy["input.amount"][LANGUAGE]}
+                variant="standard"
+              />
 
-            <h4>{appcopy["text.by"][LANGUAGE]}</h4>
-            <TransactionBy />
+              <h4>{appcopy["text.by"][LANGUAGE]}</h4>
+              <TransactionBy />
 
-            <h4>{appcopy["text.for"][LANGUAGE]}</h4>
-            <TransactionFor />
+              <h4>{appcopy["text.for"][LANGUAGE]}</h4>
+              <TransactionFor />
 
-            <TextField
-              id="transaction_category"
-              label={appcopy["input.category"][LANGUAGE]}
-              variant="standard"
-            />
+              <TextField
+                id="transaction_category"
+                label={appcopy["input.category"][LANGUAGE]}
+                variant="standard"
+              />
+
+              <Button
+                id="balance_savetransaction"
+                variant="contained"
+                sx={{ m: 5, bgcolor: "" }}
+              >
+                {appcopy["button.save"][LANGUAGE]}
+              </Button>
+            </Box>
           </Paper>
         </div>
         <div id="balance_transactions"></div>
@@ -309,20 +345,23 @@ function updateTransactions() {
   getTransactions().then((res) => {
     const container = document.getElementById("balance_transactions");
     ReactDOM.render(
-      <List>
-        {res.map((value) => (
-          <ListItem key={`${value._id}`} id={`${value._id}`}>
-            <ListItemButton onClick={() => openTransaction(value._id)}>
-              <ListItemText
-                primary={`${value.name}`}
-                secondary={`${value.amount} €, le ${Moment(value.date).format(
-                  "DD/MM/YYYY"
-                )}`}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>,
+      <Paper>
+        <h3>{appcopy["title.subsection_transactions"][LANGUAGE]}</h3>
+        <List>
+          {res.map((value) => (
+            <ListItem key={`${value._id}`} id={`${value._id}`}>
+              <ListItemButton onClick={() => openTransaction(value._id)}>
+                <ListItemText
+                  primary={`${value.name}`}
+                  secondary={`${value.amount} €, le ${Moment(value.date).format(
+                    "DD/MM/YYYY"
+                  )}`}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>,
       container
     );
   });

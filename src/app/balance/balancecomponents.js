@@ -15,6 +15,7 @@ export function TransactionDate() {
       id="transaction_date"
       type="date"
       value={value}
+      style={{ marginTop: 10, marginBottom: 10 }}
       onChange={(e) => setValue(e.target.value)}
     />
   );
