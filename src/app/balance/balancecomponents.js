@@ -25,7 +25,14 @@ export function TransactionBy() {
   const [value, setValue] = useState("");
 
   return (
-    <RadioGroup row>
+    <RadioGroup
+      row
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+      }}
+    >
       <FormControlLabel
         id="transaction_by_Alice"
         value="Alice"
@@ -66,7 +73,14 @@ export function TransactionFor(props) {
   const [valuePierre, setValuePierre] = useState(true);
 
   return (
-    <FormGroup row>
+    <FormGroup
+      row
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+      }}
+    >
       <FormControlLabel
         control={
           <Checkbox
