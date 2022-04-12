@@ -9,8 +9,10 @@ import {
   ListItemText,
   TextField,
   ListItemButton,
-  Box
+  Box,
+  Fab
 } from "@mui/material";
+import { AddIcon } from "@mui/icons-material/Add";
 import appcopy from "./copy";
 
 import {
@@ -54,32 +56,30 @@ export default class Balance extends React.Component {
           }}
         >
           <Button
-            variant="outlined"
+            variant="contained"
             id="balance_updatetransactions"
             sx={{
-              width: 2 / 7
+              width: 3 / 7
             }}
           >
-            {appcopy["button.transactions"][LANGUAGE]}
-          </Button>
-          <Button
-            variant="outlined"
-            id="balance_updatesummary"
-            sx={{
-              width: 2 / 7
-            }}
-          >
-            {appcopy["button.renew"][LANGUAGE]}
+            {appcopy["title.subsection_transactions"][LANGUAGE]}
           </Button>
           <Button
             variant="contained"
-            id="balance_newtransaction"
+            id="balance_updatesummary"
             sx={{
-              width: 2 / 7
+              width: 3 / 7
             }}
           >
-            ADD
+            {appcopy["title.subsection_balance"][LANGUAGE]}
           </Button>
+          <Fab
+            id="balance_newtransaction"
+            color="primary"
+            sx={{ position: "fixed", bottom: 20, right: 20 }}
+          >
+            +
+          </Fab>
         </Box>
         <div id="balance_summary"></div>
         <div id="balance_stats"></div>
@@ -164,6 +164,7 @@ function updateBalance() {
   document.getElementById("balance_transactions").style.display = "none";
   // Display
   document.getElementById("balance_summary").style.display = "block";
+  document.getElementById("balance_newtransaction").style.display = "block";
   //
   getBalance().then((res) => {
     ReactDOM.render(
@@ -232,6 +233,7 @@ function openTransaction(id) {
   document.getElementById("balance_summary").style.display = "none";
   document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transactions").style.display = "none";
+  document.getElementById("balance_newtransaction").style.display = "none";
   // Display
   document.getElementById("balance_transaction").style.display = "block";
 
@@ -340,6 +342,7 @@ function updateTransactions() {
   document.getElementById("balance_summary").style.display = "none";
   // Display
   document.getElementById("balance_transactions").style.display = "block";
+  document.getElementById("balance_newtransaction").style.display = "block";
   //
   Moment.locale("en");
   getTransactions().then((res) => {
