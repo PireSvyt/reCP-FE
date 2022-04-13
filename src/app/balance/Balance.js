@@ -13,8 +13,10 @@ import {
   Fab
 } from "@mui/material";
 import { AddIcon } from "@mui/icons-material/Add";
-import appcopy from "./copy";
+import { ThemeProvider } from "@mui/material/styles";
 
+import appcopy from "./copy";
+import { theme } from "../theme";
 import {
   TransactionDate,
   TransactionBy,
@@ -34,9 +36,6 @@ require("dotenv").config();
 const LANGUAGE = "FR";
 var selectedTransaction = "";
 
-console.log("LANGUAGE : " + LANGUAGE);
-console.log("VERCEL_ENV : " + process.env.VERCEL_ENV);
-
 export default class Balance extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +46,7 @@ export default class Balance extends React.Component {
   }
   render() {
     return (
-      <div>
+      <ThemeProvider theme={theme}>
         <Box
           sx={{
             display: "flex",
@@ -130,7 +129,7 @@ export default class Balance extends React.Component {
         </div>
         <div id="balance_transactions"></div>
         <div id="balance_snackbar_div"></div>
-      </div>
+      </ThemeProvider>
     );
   }
   componentDidMount() {
