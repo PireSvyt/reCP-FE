@@ -1,9 +1,7 @@
-//import myrecipies from "./myrecipies";
-
 import config from "../config";
 import appcopy from "./copy";
 
-const pages = [
+export const pages = [
   {
     label: appcopy["title.section_myrecipies"][config.app.language],
     code: "myrecipies",
@@ -52,9 +50,8 @@ const pages = [
     updateOnNav: false
   }
 ];
-exports.pages = pages;
 
-function navigates(gotopage) {
+export function navigates(gotopage) {
   //console.log("navigates to " + gotopage);
   if (pages.updateOnNav) {
     switch (gotopage) {
@@ -73,6 +70,3 @@ function navigates(gotopage) {
     }
   });
 }
-exports.navigates = (page) => {
-  navigates(page);
-};

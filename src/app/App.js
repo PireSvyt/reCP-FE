@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Balance from "./balance/Balance";
-
+import { navigates, pages } from "./navigation";
 import Navbar from "./Navbar";
-import navigation from "./navigation";
 import Myrecipies from "./Myrecipies";
 import Recipeview from "./Recipeview";
 import Recipeedit from "./Recipeedit";
+import Balance from "./balance/Balance";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,7 +16,7 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {navigation.pages.map((page) => (
+        {pages.map((page) => (
           <div id={`${page.code}`} key={`${page.code}`} />
         ))}
         <Navbar />
@@ -31,6 +30,6 @@ export default class App extends React.Component {
     ReactDOM.render(<Recipeview />, document.getElementById("recipeview"));
     ReactDOM.render(<Recipeedit />, document.getElementById("recipeedit"));
     // Navigate to landing page
-    navigation.navigates("thisweek");
+    navigates("thisweek");
   }
 }

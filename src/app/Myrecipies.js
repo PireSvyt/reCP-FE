@@ -15,7 +15,7 @@ import config from "../config";
 import appcopy from "./copy";
 import { getRecipes } from "./api/recipies";
 
-import { navigates } from "./navigation";
+import { navigates } from "./Navbar_2";
 import { recipeview_updateRecipe } from "./Recipeview";
 import { recipeedit_updateRecipe } from "./Recipeedit";
 

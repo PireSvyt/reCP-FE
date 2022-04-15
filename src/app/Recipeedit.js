@@ -7,7 +7,7 @@ import appcopy from "./copy";
 import { createRecipe, getRecipe, modifyRecipe } from "./api/recipies";
 import { getIngredient } from "./api/ingredients";
 import { recipeview_updateRecipe } from "./Recipeview";
-import { navigates } from "./navigation";
+import { navigates } from "./Navbar_2";
 
 let selectedRecipe = "";
 
