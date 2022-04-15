@@ -24,7 +24,7 @@ export default function FixedBottomNavigation() {
               <BottomNavigationAction
                 id={`${page.code}`}
                 key={`${page.code}`}
-                label={`${page.label}`}
+                icon={<page.icon />}
                 onClick={() => {
                   //console.log("Navbar clicked " + page.label);
                   navigates(page.code);

@@ -15,7 +15,7 @@ import { getRecipe, deleteRecipe } from "./api/recipies";
 import { getIngredient } from "./api/ingredients";
 import { updateMyrecipies } from "./Myrecipies";
 import { recipeedit_updateRecipe } from "./Recipeedit";
-import { navigates } from "./Navbar_2";
+import { navigates } from "./navigation";
 
 let selectedRecipe = "";
 

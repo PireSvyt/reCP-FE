@@ -1,3 +1,9 @@
+import BalanceIcon from "@mui/icons-material/Balance";
+import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
+import KitchenIcon from "@mui/icons-material/Kitchen";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import BookIcon from "@mui/icons-material/Book";
+
 import config from "../config";
 import appcopy from "./copy";
 
@@ -6,7 +12,8 @@ export const pages = [
     label: appcopy["title.section_myrecipies"][config.app.language],
     code: "myrecipies",
     navbar: true,
-    updateOnNav: true
+    updateOnNav: true,
+    icon: BookIcon
   },
   {
     label: appcopy["title.section_recipeview"][config.app.language],
@@ -24,19 +31,22 @@ export const pages = [
     label: appcopy["title.section_thisweek"][config.app.language],
     code: "thisweek",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: CalendarTodayIcon
   },
   {
     label: appcopy["title.section_myfridge"][config.app.language],
     code: "myfridge",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: KitchenIcon
   },
   {
     label: appcopy["title.section_myshopping"][config.app.language],
     code: "myshopping",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: LocalGroceryStoreIcon
   },
   {
     code: "myingredients",
@@ -47,7 +57,8 @@ export const pages = [
     label: appcopy["title.section_mybalance"][config.app.language],
     code: "mybalance",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: BalanceIcon
   }
 ];
 
