@@ -47,7 +47,7 @@ export default class Balance extends React.Component {
   render() {
     //<ThemeProvider theme={theme}>
     return (
-      <div>
+      <React.Fragment>
         <Box
           sx={{
             display: "flex",
@@ -130,7 +130,7 @@ export default class Balance extends React.Component {
         </div>
         <div id="balance_transactions"></div>
         <div id="balance_snackbar_div"></div>
-      </div>
+      </React.Fragment>
     );
   }
   componentDidMount() {
