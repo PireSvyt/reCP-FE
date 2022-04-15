@@ -12,11 +12,11 @@ import {
   Box,
   Fab
 } from "@mui/material";
-import { AddIcon } from "@mui/icons-material/Add";
+//import { AddIcon } from "@mui/icons-material/Add";
 //import { ThemeProvider } from "@mui/material/styles";
 
 import appcopy from "./copy";
-import { theme } from "../theme";
+//import { theme } from "../theme";
 import {
   TransactionDate,
   TransactionBy,
@@ -29,11 +29,8 @@ import {
   modifyTransaction
 } from "./api/transactions";
 import getBalance from "./api/balance";
+import config from "../../config";
 
-require("dotenv").config();
-
-//const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
-const LANGUAGE = "FR";
 var selectedTransaction = "";
 
 export default class Balance extends React.Component {
@@ -47,7 +44,7 @@ export default class Balance extends React.Component {
   render() {
     //<ThemeProvider theme={theme}>
     return (
-      <React.Fragment>
+      <div>
         <Box
           sx={{
             display: "flex",
@@ -62,7 +59,7 @@ export default class Balance extends React.Component {
               width: 3 / 7
             }}
           >
-            {appcopy["title.subsection_transactions"][LANGUAGE]}
+            {appcopy["title.subsection_transactions"][config.app.language]}
           </Button>
           <Button
             variant="contained"
@@ -71,7 +68,7 @@ export default class Balance extends React.Component {
               width: 3 / 7
             }}
           >
-            {appcopy["title.subsection_balance"][LANGUAGE]}
+            {appcopy["title.subsection_balance"][config.app.language]}
           </Button>
           <Fab
             id="balance_newtransaction"
@@ -85,7 +82,9 @@ export default class Balance extends React.Component {
         <div id="balance_stats"></div>
         <div id="balance_transaction">
           <Paper>
-            <h3>{appcopy["title.subsection_transaction"][LANGUAGE]}</h3>
+            <h3>
+              {appcopy["title.subsection_transaction"][config.app.language]}
+            </h3>
             <Box
               sx={{
                 display: "flex",
@@ -96,25 +95,25 @@ export default class Balance extends React.Component {
             >
               <TextField
                 id="transaction_name"
-                label={appcopy["input.name"][LANGUAGE]}
+                label={appcopy["input.name"][config.app.language]}
                 variant="standard"
               />
               <TransactionDate />
               <TextField
                 id="transaction_amount"
-                label={appcopy["input.amount"][LANGUAGE]}
+                label={appcopy["input.amount"][config.app.language]}
                 variant="standard"
               />
 
-              <h4>{appcopy["text.by"][LANGUAGE]}</h4>
+              <h4>{appcopy["text.by"][config.app.language]}</h4>
               <TransactionBy />
 
-              <h4>{appcopy["text.for"][LANGUAGE]}</h4>
+              <h4>{appcopy["text.for"][config.app.language]}</h4>
               <TransactionFor />
 
               <TextField
                 id="transaction_category"
-                label={appcopy["input.category"][LANGUAGE]}
+                label={appcopy["input.category"][config.app.language]}
                 variant="standard"
               />
 
@@ -123,14 +122,14 @@ export default class Balance extends React.Component {
                 variant="contained"
                 sx={{ m: 5, bgcolor: "" }}
               >
-                {appcopy["button.save"][LANGUAGE]}
+                {appcopy["button.save"][config.app.language]}
               </Button>
             </Box>
           </Paper>
         </div>
         <div id="balance_transactions"></div>
         <div id="balance_snackbar_div"></div>
-      </React.Fragment>
+      </div>
     );
   }
   componentDidMount() {
@@ -170,7 +169,7 @@ function updateBalance() {
     ReactDOM.render(
       <div>
         <Paper>
-          <h3>{appcopy["title.subsection_balance"][LANGUAGE]}</h3>
+          <h3>{appcopy["title.subsection_balance"][config.app.language]}</h3>
           <List>
             <ListItem key={"Alice"}>
               <ListItemText
@@ -349,7 +348,7 @@ function updateTransactions() {
     const container = document.getElementById("balance_transactions");
     ReactDOM.render(
       <Paper>
-        <h3>{appcopy["title.subsection_transactions"][LANGUAGE]}</h3>
+        <h3>{appcopy["title.subsection_transactions"][config.app.language]}</h3>
         <List>
           {res.map((value) => (
             <ListItem key={`${value._id}`} id={`${value._id}`}>

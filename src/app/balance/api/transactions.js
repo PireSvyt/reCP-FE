@@ -1,13 +1,11 @@
+import config from "../../../config";
 const axios = require("axios");
-
-//const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
-const SERVER_URL = "https://re-cp-be.vercel.app";
 
 export async function createTransaction(newTransaction) {
   //exports.createTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.post(
-      SERVER_URL + "/api/transaction/",
+      config.serverUrl + "/api/transaction/",
       newTransaction
     );
     return res.data;
@@ -20,7 +18,7 @@ export async function createTransaction(newTransaction) {
 export async function getTransaction(id) {
   //exports.getTransaction = async (id) => {
   try {
-    const res = await axios.get(SERVER_URL + "/api/transaction/" + id);
+    const res = await axios.get(config.serverUrl + "/api/transaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -31,7 +29,7 @@ export async function getTransaction(id) {
 export async function deleteTransaction(id) {
   //exports.deleteTransaction = async (id) => {
   try {
-    const res = await axios.delete(SERVER_URL + "/api/transaction/" + id);
+    const res = await axios.delete(config.serverUrl + "/api/transaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -43,7 +41,7 @@ export async function modifyTransaction(id, newTransaction) {
   //exports.modifyTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.put(
-      SERVER_URL + "/api/transaction/" + id,
+      config.serverUrl + "/api/transaction/" + id,
       newTransaction
     );
     return res.data;
@@ -56,7 +54,7 @@ export async function modifyTransaction(id, newTransaction) {
 export async function getTransactions() {
   //exports.getTransactions = async () => {
   try {
-    const res = await axios.get(SERVER_URL + "/api/transaction");
+    const res = await axios.get(config.serverUrl + "/api/transaction");
     return res.data;
   } catch (err) {
     // Handle Error Here
