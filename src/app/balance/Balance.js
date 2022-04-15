@@ -13,7 +13,7 @@ import {
   Fab
 } from "@mui/material";
 import { AddIcon } from "@mui/icons-material/Add";
-import { ThemeProvider } from "@mui/material/styles";
+//import { ThemeProvider } from "@mui/material/styles";
 
 import appcopy from "./copy";
 import { theme } from "../theme";
@@ -45,8 +45,9 @@ export default class Balance extends React.Component {
     };
   }
   render() {
+    //<ThemeProvider theme={theme}>
     return (
-      <ThemeProvider theme={theme}>
+      <div>
         <Box
           sx={{
             display: "flex",
@@ -129,7 +130,7 @@ export default class Balance extends React.Component {
         </div>
         <div id="balance_transactions"></div>
         <div id="balance_snackbar_div"></div>
-      </ThemeProvider>
+      </div>
     );
   }
   componentDidMount() {
