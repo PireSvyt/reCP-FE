@@ -2,8 +2,5 @@ body {
   font-family: "Arial Narrow", Arial, sans-serif;
 }
 h3 {
-  color: #008080;
-}
-buttonPrimary {
-  background-color: #008080;
+  color: grey;
 }

@@ -15,6 +15,7 @@ import {
 //import { AddIcon } from "@mui/icons-material/Add";
 //import { ThemeProvider } from "@mui/material/styles";
 
+import config from "../../config";
 import appcopy from "./copy";
 //import { theme } from "../theme";
 import {
@@ -29,7 +30,6 @@ import {
   modifyTransaction
 } from "./api/transactions";
 import getBalance from "./api/balance";
-import config from "../../config";
 
 var selectedTransaction = "";
 
@@ -73,7 +73,7 @@ export default class Balance extends React.Component {
           <Fab
             id="balance_newtransaction"
             color="primary"
-            sx={{ position: "fixed", bottom: 20, right: 20 }}
+            sx={{ position: "fixed", bottom: 70, right: 20 }}
           >
             +
           </Fab>

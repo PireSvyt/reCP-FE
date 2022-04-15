@@ -92,13 +92,13 @@
     "EN": "For"
   },
   "snack.balance_summary_uptodate": {
-    color: "lightblue",
+    "color": "lightblue",
     "FR": "Balance à jour",
     "EN": "Balance up to date"
   },
   "snack.saving": {
-    color: "lightblue",
+    "color": "lightblue",
     "FR": "Sauvergarde en cours",
     "EN": "Saving in progress"
   }
-};
+}
