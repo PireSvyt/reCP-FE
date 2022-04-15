@@ -5,9 +5,9 @@ import Balance from "./balance/Balance";
 
 import Navbar from "./Navbar";
 import navigation from "./navigation";
-import Myrecipies from "./myrecipies/Myrecipies";
-import Recipeview from "./recipeview/Recipeview";
-import Recipeedit from "./recipeedit/Recipeedit";
+import Myrecipies from "./Myrecipies";
+import Recipeview from "./Recipeview";
+import Recipeedit from "./Recipeedit";
 
 export default class App extends React.Component {
   constructor(props) {

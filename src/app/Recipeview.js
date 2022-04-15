@@ -9,14 +9,13 @@ import {
   ListItemButton
 } from "@mui/material";
 
-import config from "../../config";
-import appcopy from "../copy";
-import { getRecipe, deleteRecipe } from "../api/recipies";
-import { getIngredient } from "../api/ingredients";
-import { updateMyrecipies } from "../myrecipies/Myrecipies";
-import { recipeedit_updateRecipe } from "../recipeedit/Recipeedit";
-
-import navigation from "../navigation";
+import config from "../config";
+import appcopy from "./copy";
+import { getRecipe, deleteRecipe } from "./api/recipies";
+import { getIngredient } from "./api/ingredients";
+import { updateMyrecipies } from "./Myrecipies";
+import { recipeedit_updateRecipe } from "./Recipeedit";
+import { navigates } from "./navigation";
 
 let selectedRecipe = "";
 
@@ -45,7 +44,7 @@ export default class Myrecipies extends React.Component {
             variant="text"
             onClick={() => {
               recipeedit_updateRecipe(selectedRecipe);
-              navigation.navigates("recipeedit");
+              navigates("recipeedit");
             }}
           >
             {appcopy["button.edit"][config.app.language]}
@@ -80,7 +79,7 @@ function recipeview_deleteRecipe() {
   deleteRecipe(selectedRecipe).then((status) => {
     if (status === 200) {
       updateMyrecipies();
-      navigation.navigates("myrecipies");
+      navigates("myrecipies");
     } else {
       alert("Erreur lors de la suppression");
     }

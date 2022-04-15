@@ -2,13 +2,12 @@ import * as React from "react";
 import { Paper, TextField, Box, Fab } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 
-import config from "../../config";
-import appcopy from "../copy";
-import { createRecipe, getRecipe, modifyRecipe } from "../api/recipies";
-import { getIngredient } from "../api/ingredients";
-import { recipeview_updateRecipe } from "../recipeview/Recipeview";
-
-import navigation from "../navigation";
+import config from "../config";
+import appcopy from "./copy";
+import { createRecipe, getRecipe, modifyRecipe } from "./api/recipies";
+import { getIngredient } from "./api/ingredients";
+import { recipeview_updateRecipe } from "./Recipeview";
+import { navigates } from "./navigation";
 
 let selectedRecipe = "";
 
@@ -113,7 +112,7 @@ function save() {
       //modifyRecipe(recipe._id, recipe);
     }
     recipeview_updateRecipe(recipe._id);
-    navigation.navigates("recipeview");
+    navigates("recipeview");
   }
 }
 

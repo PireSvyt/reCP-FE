@@ -11,13 +11,13 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import CachedIcon from "@mui/icons-material/Cached";
 
-import config from "../../config";
-import appcopy from "../copy";
-import { getRecipes } from "../api/recipies";
+import config from "../config";
+import appcopy from "./copy";
+import { getRecipes } from "./api/recipies";
 
-import navigation from "../navigation";
-import { recipeview_updateRecipe } from "../recipeview/Recipeview";
-import { recipeedit_updateRecipe } from "../recipeedit/Recipeedit";
+import { navigates } from "./navigation";
+import { recipeview_updateRecipe } from "./Recipeview";
+import { recipeedit_updateRecipe } from "./Recipeedit";
 
 export default class Myrecipies extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ export default class Myrecipies extends React.Component {
           sx={{ position: "fixed", bottom: 70, right: 20 }}
           onClick={() => {
             recipeedit_updateRecipe("");
-            navigation.navigates("recipeedit");
+            navigates("recipeedit");
           }}
         >
           <AddIcon />
@@ -68,7 +68,7 @@ export function updateMyrecipies() {
             <ListItemButton
               onClick={() => {
                 recipeview_updateRecipe(value._id);
-                navigation.navigates("recipeview");
+                navigates("recipeview");
               }}
             >
               <ListItemText
