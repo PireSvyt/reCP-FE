@@ -1,7 +1,7 @@
 const axios = require("axios");
 const config = require("../../config");
 
-exports.createIngredient = async (id, newIngredient) => {
+export async function createIngredient(id, newIngredient) {
   try {
     const res = await axios.post(
       config.serverUrl + "/api/ingredient/" + id,
@@ -12,9 +12,9 @@ exports.createIngredient = async (id, newIngredient) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getIngredient = async (id) => {
+export async function getIngredient(id) {
   try {
     const res = await axios.get(config.serverUrl + "/api/ingredient/" + id);
     return res.data;
@@ -22,9 +22,9 @@ exports.getIngredient = async (id) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.deleteIngredient = async (id) => {
+export async function deleteIngredient(id) {
   try {
     const res = await axios.delete(config.serverUrl + "/api/ingredient/" + id);
     return res.data;
@@ -32,9 +32,9 @@ exports.deleteIngredient = async (id) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.modifyIngredient = async (id, newIngredient) => {
+export async function modifyIngredient(id, newIngredient) {
   try {
     const res = await axios.put(
       config.serverUrl + "/api/ingredient/" + id,
@@ -45,9 +45,9 @@ exports.modifyIngredient = async (id, newIngredient) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getIngredients = async () => {
+export async function getIngredients() {
   try {
     const res = await axios.get(config.serverUrl + "/api/ingredient");
     return res.data;
@@ -55,4 +55,4 @@ exports.getIngredients = async () => {
     // Handle Error Here
     console.error(err);
   }
-};
+}

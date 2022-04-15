@@ -11,7 +11,15 @@
     "FR": "Ma recette",
     "EN": "My recipe"
   },
-  "title.section_myweed": {
+  "title.subsection_ingredients": {
+    "FR": "Ingrédients",
+    "EN": "Ingredients"
+  },
+  "title.subsection_instructions": {
+    "FR": "Instructions",
+    "EN": "Instructions"
+  },
+  "title.section_thisweek": {
     "FR": "Ma semaine",
     "EN": "My week"
   },
@@ -26,18 +34,6 @@
   "title.section_mybalance": {
     "FR": "Ma balance",
     "EN": "My balance"
-  },
-  "title.subsection_balance": {
-    "FR": "Balance",
-    "EN": "Balance"
-  },
-  "title.subsection_transactions": {
-    "FR": "Transactions",
-    "EN": "Transactions"
-  },
-  "title.subsection_transaction": {
-    "FR": "Transaction",
-    "EN": "Transaction"
   },
   "button.add": {
     "FR": "Ajouter",

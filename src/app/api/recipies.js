@@ -1,7 +1,7 @@
 const axios = require("axios");
 const config = require("../../config");
 
-exports.createRecipe = async (newRecipe) => {
+export async function createRecipe(newRecipe) {
   try {
     const res = await axios.post(config.serverUrl + "/api/recipe", newRecipe);
     return res;
@@ -9,9 +9,9 @@ exports.createRecipe = async (newRecipe) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getRecipe = async (id) => {
+export async function getRecipe(id) {
   try {
     const res = await axios.get(config.serverUrl + "/api/recipe/" + id);
     return res.data;
@@ -19,9 +19,9 @@ exports.getRecipe = async (id) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.deleteRecipe = async (id) => {
+export async function deleteRecipe(id) {
   try {
     const res = await axios.delete(config.serverUrl + "/api/recipe/" + id);
     return res.status;
@@ -29,9 +29,9 @@ exports.deleteRecipe = async (id) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.modifyRecipe = async (id, newRecipe) => {
+export async function modifyRecipe(id, newRecipe) {
   try {
     const res = await axios.put(
       config.serverUrl + "/api/recipe/" + id,
@@ -42,9 +42,9 @@ exports.modifyRecipe = async (id, newRecipe) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getRecipes = async () => {
+export async function getRecipes() {
   try {
     const res = await axios.get(config.serverUrl + "/api/recipe");
     return res.data;
@@ -52,4 +52,4 @@ exports.getRecipes = async () => {
     // Handle Error Here
     console.error(err);
   }
-};
+}

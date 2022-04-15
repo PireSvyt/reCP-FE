@@ -39,9 +39,7 @@ export function TransactionBy() {
         name="transaction_by"
         control={<Radio />}
         label="Alice"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
       />
       <FormControlLabel
         id="transaction_by_Pierre"
@@ -49,9 +47,7 @@ export function TransactionBy() {
         name="transaction_by"
         control={<Radio />}
         label="Pierre"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
       />
       <FormControlLabel
         id="transaction_by_"
@@ -59,9 +55,7 @@ export function TransactionBy() {
         name="transaction_by"
         control={<Radio />}
         label="None"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
         sx={{ display: "none" }}
       />
     </RadioGroup>

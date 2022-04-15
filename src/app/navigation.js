@@ -1,45 +1,52 @@
 //import myrecipies from "./myrecipies";
 
+import config from "../config";
+import appcopy from "./copy";
+
 const pages = [
   {
-    label: "Mes recettes",
+    label: appcopy["title.section_myrecipies"][config.app.language],
     code: "myrecipies",
     navbar: true,
     updateOnNav: true
   },
   {
-    label: "Préparer ma recette",
+    label: appcopy["title.section_recipeview"][config.app.language],
     code: "recipeview",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Editer ma recette",
+    label: appcopy["title.section_recipeview"][config.app.language],
     code: "recipeedit",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Cette semaine",
+    label: appcopy["title.section_thisweek"][config.app.language],
     code: "thisweek",
     navbar: true,
     updateOnNav: false
   },
-  { label: "Mon frigo", code: "myfridge", navbar: true, updateOnNav: false },
   {
-    label: "Mes courses",
+    label: appcopy["title.section_myfridge"][config.app.language],
+    code: "myfridge",
+    navbar: true,
+    updateOnNav: false
+  },
+  {
+    label: appcopy["title.section_myshopping"][config.app.language],
     code: "myshopping",
     navbar: true,
     updateOnNav: false
   },
   {
-    label: "Mes ingrédients",
     code: "myingredients",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Ma balance",
+    label: appcopy["title.section_mybalance"][config.app.language],
     code: "mybalance",
     navbar: true,
     updateOnNav: false
