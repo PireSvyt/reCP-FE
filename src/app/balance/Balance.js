@@ -88,9 +88,7 @@ export default class Balance extends React.Component {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                ml: 5,
-                mr: 5
+                flexDirection: "column"
               }}
             >
               <TextField

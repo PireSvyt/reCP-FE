@@ -4,6 +4,8 @@ import KitchenIcon from "@mui/icons-material/Kitchen";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import BookIcon from "@mui/icons-material/Book";
 
+import updateMyrecipies from "./Myrecipies";
+
 import config from "../config";
 import appcopy from "./copy";
 
@@ -13,6 +15,7 @@ export const pages = [
     code: "myrecipies",
     navbar: true,
     updateOnNav: true,
+    updateFunction: updateMyrecipies,
     icon: BookIcon
   },
   {
@@ -63,16 +66,6 @@ export const pages = [
 ];
 
 export function navigates(gotopage) {
-  //console.log("navigates to " + gotopage);
-  if (pages.updateOnNav) {
-    switch (gotopage) {
-      //case "myrecipies":
-      //myrecipies.update();
-      //break;
-      default:
-        console.log("Info : update requested without match with " + gotopage);
-    }
-  }
   pages.forEach((page) => {
     if (gotopage === page.code) {
       document.getElementById(page.code).style.display = "block";
