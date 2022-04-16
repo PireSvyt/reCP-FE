@@ -4,7 +4,7 @@ import { Paper, BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { navigates, pages } from "./navigation";
 
 export default function FixedBottomNavigation() {
-  const [value, setValue] = React.useState(3);
+  const [value, setValue] = React.useState(7);
   //
   return (
     <Paper
@@ -22,6 +22,7 @@ export default function FixedBottomNavigation() {
           if (page.navbar === true) {
             return (
               <BottomNavigationAction
+                sx={{ ml: 0, mr: 0 }}
                 id={`${page.code}`}
                 key={`${page.code}`}
                 icon={<page.icon />}

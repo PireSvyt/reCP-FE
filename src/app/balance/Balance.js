@@ -12,6 +12,7 @@ import {
   Box,
   Fab
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 //import { AddIcon } from "@mui/icons-material/Add";
 //import { ThemeProvider } from "@mui/material/styles";
 
@@ -75,7 +76,7 @@ export default class Balance extends React.Component {
             color="primary"
             sx={{ position: "fixed", bottom: 70, right: 20 }}
           >
-            +
+            <AddIcon />
           </Fab>
         </Box>
         <div id="balance_summary"></div>

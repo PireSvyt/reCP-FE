@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import Myrecipies from "./Myrecipies";
 import Recipeview from "./Recipeview";
 import Recipeedit from "./Recipeedit";
+import Thisweek from "./Thisweek";
 import Balance from "./balance/Balance";
 
 export default class App extends React.Component {
@@ -29,7 +30,8 @@ export default class App extends React.Component {
     ReactDOM.render(<Myrecipies />, document.getElementById("myrecipies"));
     ReactDOM.render(<Recipeview />, document.getElementById("recipeview"));
     ReactDOM.render(<Recipeedit />, document.getElementById("recipeedit"));
+    ReactDOM.render(<Thisweek />, document.getElementById("thisweek"));
     // Navigate to landing page
-    navigates("thisweek");
+    navigates("mybalance");
   }
 }

@@ -100,9 +100,9 @@ export function recipeview_updateRecipe(recipe_req) {
     );
     let recipeIngredients = recipe_res.ingredients;
     recipeIngredients.forEach((recipe_ingredient) => {
-      getIngredient(recipe_ingredient._id).then(async (list_ingredient) => {
+      getIngredient(recipe_ingredient.id).then((list_ingredient) => {
         try {
-          recipe_ingredient.name = list_ingredient.name;
+          recipe_ingredient.name = list_ingredient._id;
           recipe_ingredient.unit = list_ingredient.unit;
         } catch (err) {
           // Handle Error Here
@@ -110,17 +110,29 @@ export function recipeview_updateRecipe(recipe_req) {
         }
       });
     });
-    console.log(recipeIngredients);
-    ReactDOM.render(
-      <List>
-        {recipeIngredients.map((recipe_ing) => (
-          <ListItem key={`${recipe_ing._id}`}>
+
+    function getIngredientItem(recipe_ing) {
+      getIngredient(recipe_ing.id).then((ingredient) => {
+        console.log("recipe_ing");
+        console.log(recipe_ing);
+        console.log("ingredient");
+        console.log(ingredient);
+        return (
+          <ListItem key={`${recipe_ing.id}`}>
             <ListItemText
-              primary={`${recipe_ing.name}`}
-              secondary={`${recipe_ing.quantity} ${recipe_ing.unit}`}
+              primary={`${ingredient.name}`}
+              secondary={`${recipe_ing.quantity} ${ingredient.unit}`}
             />
           </ListItem>
-        ))}
+        );
+      });
+    }
+
+    ReactDOM.render(
+      <List>
+        {recipeIngredients.map((recipe_ing) => {
+          getIngredientItem(recipe_ing);
+        })}
       </List>,
       container_ingredients
     );
