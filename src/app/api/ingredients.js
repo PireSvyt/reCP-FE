@@ -1,10 +1,10 @@
 const axios = require("axios");
-const SERVER_URL = process.env.REACT_ENV_SERVER_URL;
+const config = require("../../config");
 
-exports.createIngredient = async (id, newIngredient) => {
+export async function createIngredient(id, newIngredient) {
   try {
     const res = await axios.post(
-      SERVER_URL + "/api/ingredient/" + id,
+      config.serverUrl + "/api/ingredient/" + id,
       newIngredient
     );
     return res.data;
@@ -12,32 +12,32 @@ exports.createIngredient = async (id, newIngredient) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getIngredient = async (id) => {
+export async function getIngredient(id) {
   try {
-    const res = await axios.get(SERVER_URL + "/api/ingredient/" + id);
+    const res = await axios.get(config.serverUrl + "/api/ingredient/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.deleteIngredient = async (id) => {
+export async function deleteIngredient(id) {
   try {
-    const res = await axios.delete(SERVER_URL + "/api/ingredient/" + id);
+    const res = await axios.delete(config.serverUrl + "/api/ingredient/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.modifyIngredient = async (id, newIngredient) => {
+export async function modifyIngredient(id, newIngredient) {
   try {
     const res = await axios.put(
-      SERVER_URL + "/api/ingredient/" + id,
+      config.serverUrl + "/api/ingredient/" + id,
       newIngredient
     );
     return res.data;
@@ -45,14 +45,14 @@ exports.modifyIngredient = async (id, newIngredient) => {
     // Handle Error Here
     console.error(err);
   }
-};
+}
 
-exports.getIngredients = async () => {
+export async function getIngredients() {
   try {
-    const res = await axios.get(SERVER_URL + "/api/ingredient");
+    const res = await axios.get(config.serverUrl + "/api/ingredient");
     return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);
   }
-};
+}

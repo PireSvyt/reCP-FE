@@ -8,13 +8,7 @@ import {
   ListItemButton
 } from "@mui/material";
 
-import {
-  createIngredient,
-  getIngredient,
-  deleteIngredient,
-  modifyIngredient,
-  getIngredients
-} from "../api/ingredients";
+import ingredientsAPI from "./api/ingredients";
 
 exports.render = () => {
   const container = document.getElementById("myingredients");
@@ -33,27 +27,23 @@ exports.render = () => {
 };
 
 function update() {
-  getIngredients().then((res) => {
+  ingredientsAPI.getIngredients().then((res) => {
     const container = document.getElementById("myingreidents_list");
-    function getListItem(value) {
-      return (
-        <ListItem key={`${value._id}`}>
-          <ListItemButton onClick={() => clickIngredient(value._id)}>
-            <ListItemText
-              primary={`${value.name} ${value.unit}`}
-              secondary={`${value._id}`}
-            />
-          </ListItemButton>
-        </ListItem>
-      );
-    }
-
-    if (Array.isArray(res)) {
-      ReactDOM.render(
-        <List>{res.forEach((value) => getListItem(value))}</List>,
-        container
-      );
-    }
+    ReactDOM.render(
+      <List>
+        {res.map((value) => (
+          <ListItem key={`${value._id}`}>
+            <ListItemButton onClick={() => clickIngredient(value._id)}>
+              <ListItemText
+                primary={`${value.name} ${value.unit}`}
+                secondary={`${value._id}`}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>,
+      container
+    );
   });
 }
 exports.update = update;

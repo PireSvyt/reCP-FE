@@ -1,19 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { navigates, pages } from "./navigation";
 import Navbar from "./Navbar";
+import Myrecipies from "./Myrecipies";
+import Recipeview from "./Recipeview";
+import Recipeedit from "./Recipeedit";
+import Thisweek from "./Thisweek";
 import Balance from "./balance/Balance";
-
-import Menu from "./menu";
-import Snackbar from "./Snackbar";
-import navigation from "./navigation";
-import recipeview from "./recipeview";
-import recipeedit from "./recipeedit";
-import myrecipies from "./myrecipies";
-import thisweek from "./thisweek";
-import myfridge from "./myfridge";
-import shopping from "./shopping";
-import myingredients from "./myingredients";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -21,40 +15,23 @@ export default class App extends React.Component {
     this.state = { focus: "thisweek" };
   }
   render() {
-    /*
-
-        <Menu />
-    <div id="menu_placeholder" />
-        {navigation.pages.map((page) => (
-          <div id={`${page.code}`} key={page.code} />
-        <Balance />
-        ))}
-    
-    
-    */
     return (
       <React.Fragment>
-        <Balance />
+        {pages.map((page) => (
+          <div id={`${page.code}`} key={`${page.code}`} />
+        ))}
+        <Navbar />
       </React.Fragment>
     );
   }
   componentDidMount() {
     // Render sub components
-    //ReactDOM.render(<Balance />, document.getElementById("mybalance"));
-    /*
-    myrecipies.render();
-    myingredients.render();
-    recipeview.render();
-    recipeedit.render();
-    thisweek.render();
-    myfridge.render();
-    shopping.render();
-    // Update sub component content
-    myrecipies.update();
-    myingredients.update();
-
+    ReactDOM.render(<Balance />, document.getElementById("mybalance"));
+    ReactDOM.render(<Myrecipies />, document.getElementById("myrecipies"));
+    ReactDOM.render(<Recipeview />, document.getElementById("recipeview"));
+    ReactDOM.render(<Recipeedit />, document.getElementById("recipeedit"));
+    ReactDOM.render(<Thisweek />, document.getElementById("thisweek"));
     // Navigate to landing page
-    navigation.navigates("thisweek");
-    */
+    navigates("mybalance");
   }
 }

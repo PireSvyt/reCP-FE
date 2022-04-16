@@ -8,83 +8,122 @@ import {
   ListItem,
   ListItemText,
   TextField,
-  ListItemButton
+  ListItemButton,
+  Box,
+  Fab
 } from "@mui/material";
-import appcopy from "../Appcopy";
+import AddIcon from "@mui/icons-material/Add";
+//import { AddIcon } from "@mui/icons-material/Add";
+//import { ThemeProvider } from "@mui/material/styles";
 
+import config from "../../config";
+import appcopy from "./copy";
+//import { theme } from "../theme";
 import {
   TransactionDate,
   TransactionBy,
   TransactionFor
 } from "./balancecomponents";
-
 import {
-  createTransaction,
   getTransaction,
-  deleteTransaction,
-  modifyTransaction,
-  getTransactions
+  getTransactions,
+  createTransaction,
+  modifyTransaction
 } from "./api/transactions";
-import { getBalance } from "./api/balance";
+import getBalance from "./api/balance";
 
-const LANGUAGE = process.env.REACT_ENV_LANGUAGE;
 var selectedTransaction = "";
 
 export default class Balance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      focus: "summary",
       transaction: "",
       date: Date()
     };
   }
   render() {
+    //<ThemeProvider theme={theme}>
     return (
       <div>
-        <h2>{appcopy["title.section_mybalance"][LANGUAGE]}</h2>
-        <div>
-          <Button variant="text" id="balance_newtransaction">
-            {appcopy["button.add"][LANGUAGE]}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly"
+          }}
+        >
+          <Button
+            variant="contained"
+            id="balance_updatetransactions"
+            sx={{
+              width: 3 / 7
+            }}
+          >
+            {appcopy["title.subsection_transactions"][config.app.language]}
           </Button>
-          <Button variant="text" id="balance_updatesummary">
-            {appcopy["button.renew"][LANGUAGE]}
+          <Button
+            variant="contained"
+            id="balance_updatesummary"
+            sx={{
+              width: 3 / 7
+            }}
+          >
+            {appcopy["title.subsection_balance"][config.app.language]}
           </Button>
-          <Button variant="text" id="balance_updatetransactions">
-            {appcopy["button.transactions"][LANGUAGE]}
-          </Button>
-        </div>
+          <Fab
+            id="balance_newtransaction"
+            color="primary"
+            sx={{ position: "fixed", bottom: 70, right: 20 }}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
         <div id="balance_summary"></div>
         <div id="balance_stats"></div>
         <div id="balance_transaction">
           <Paper>
-            <h3>{appcopy["title.subsection_transaction"][LANGUAGE]}</h3>
-            <Button id="balance_savetransaction" variant="text">
-              {appcopy["button.save"][LANGUAGE]}
-            </Button>
-            <TextField
-              id="transaction_name"
-              label={appcopy["input.name"][LANGUAGE]}
-              variant="standard"
-            />
-            <TransactionDate />
-            <TextField
-              id="transaction_amount"
-              label={appcopy["input.amount"][LANGUAGE]}
-              variant="standard"
-            />
+            <h3>
+              {appcopy["title.subsection_transaction"][config.app.language]}
+            </h3>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column"
+              }}
+            >
+              <TextField
+                id="transaction_name"
+                label={appcopy["input.name"][config.app.language]}
+                variant="standard"
+              />
+              <TransactionDate />
+              <TextField
+                id="transaction_amount"
+                label={appcopy["input.amount"][config.app.language]}
+                variant="standard"
+              />
 
-            <h4>{appcopy["text.by"][LANGUAGE]}</h4>
-            <TransactionBy />
+              <h4>{appcopy["text.by"][config.app.language]}</h4>
+              <TransactionBy />
 
-            <h4>{appcopy["text.for"][LANGUAGE]}</h4>
-            <TransactionFor />
+              <h4>{appcopy["text.for"][config.app.language]}</h4>
+              <TransactionFor />
 
-            <TextField
-              id="transaction_category"
-              label={appcopy["input.category"][LANGUAGE]}
-              variant="standard"
-            />
+              <TextField
+                id="transaction_category"
+                label={appcopy["input.category"][config.app.language]}
+                variant="standard"
+              />
+
+              <Button
+                id="balance_savetransaction"
+                variant="contained"
+                sx={{ m: 5, bgcolor: "" }}
+              >
+                {appcopy["button.save"][config.app.language]}
+              </Button>
+            </Box>
           </Paper>
         </div>
         <div id="balance_transactions"></div>
@@ -123,12 +162,13 @@ function updateBalance() {
   document.getElementById("balance_transactions").style.display = "none";
   // Display
   document.getElementById("balance_summary").style.display = "block";
+  document.getElementById("balance_newtransaction").style.display = "block";
   //
   getBalance().then((res) => {
     ReactDOM.render(
       <div>
         <Paper>
-          <h3>{appcopy["title.subsection_balance"][LANGUAGE]}</h3>
+          <h3>{appcopy["title.subsection_balance"][config.app.language]}</h3>
           <List>
             <ListItem key={"Alice"}>
               <ListItemText
@@ -191,6 +231,7 @@ function openTransaction(id) {
   document.getElementById("balance_summary").style.display = "none";
   document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transactions").style.display = "none";
+  document.getElementById("balance_newtransaction").style.display = "none";
   // Display
   document.getElementById("balance_transaction").style.display = "block";
 
@@ -283,46 +324,50 @@ function saveTransaction() {
     if (transaction._id === "") {
       // POST
       console.log("POST");
+      createTransaction(transaction).then(updateBalance());
     } else {
       // PUT
       console.log("PUT");
+      modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
-    updateBalance();
   }
 }
 
 function updateTransactions() {
-  // List items
-  function transactionListItem(value) {
-    return (
-      <ListItem key={`${value._id}`} id={`${value._id}`}>
-        <ListItemButton onClick={() => openTransaction(value._id)}>
-          <ListItemText
-            primary={`${value.name}`}
-            secondary={`${value.amount} €, le ${Moment(value.date).format(
-              "DD/MM/YYYY"
-            )}`}
-          />
-        </ListItemButton>
-      </ListItem>
-    );
-  }
   // Hide
   document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transaction").style.display = "none";
   document.getElementById("balance_summary").style.display = "none";
   // Display
   document.getElementById("balance_transactions").style.display = "block";
+  document.getElementById("balance_newtransaction").style.display = "block";
   //
   Moment.locale("en");
   getTransactions().then((res) => {
     const container = document.getElementById("balance_transactions");
     ReactDOM.render(
-      <List>{res.map((value) => transactionListItem(value))}</List>,
+      <Paper>
+        <h3>{appcopy["title.subsection_transactions"][config.app.language]}</h3>
+        <List>
+          {res.map((value) => (
+            <ListItem key={`${value._id}`} id={`${value._id}`}>
+              <ListItemButton onClick={() => openTransaction(value._id)}>
+                <ListItemText
+                  primary={`${value.name}`}
+                  secondary={`${value.amount} €, le ${Moment(value.date).format(
+                    "DD/MM/YYYY"
+                  )}`}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>,
       container
     );
   });
 }
+
 function transactionDateToInputFormat(date) {
   let internalDate = new Date(date);
   var textDate = {

@@ -1,15 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
-  Paper
-} from "@mui/material";
-
-import navigation from "./navigation";
+import { Button, Paper } from "@mui/material";
 
 exports.render = () => {
   const container = document.getElementById("myfridge");

@@ -1,63 +1,71 @@
-import myrecipies from "./myrecipies";
+import BalanceIcon from "@mui/icons-material/Balance";
+import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
+import KitchenIcon from "@mui/icons-material/Kitchen";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import BookIcon from "@mui/icons-material/Book";
 
-const pages = [
+import updateMyrecipies from "./Myrecipies";
+
+import config from "../config";
+import appcopy from "./copy";
+
+export const pages = [
   {
-    label: "Mes recettes",
+    label: appcopy["title.section_myrecipies"][config.app.language],
     code: "myrecipies",
     navbar: true,
-    updateOnNav: true
+    updateOnNav: true,
+    updateFunction: updateMyrecipies,
+    icon: BookIcon
   },
   {
-    label: "Préparer ma recette",
+    label: appcopy["title.section_recipeview"][config.app.language],
     code: "recipeview",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Editer ma recette",
+    label: appcopy["title.section_recipeview"][config.app.language],
     code: "recipeedit",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Cette semaine",
+    label: appcopy["title.section_thisweek"][config.app.language],
     code: "thisweek",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: CalendarTodayIcon
   },
-  { label: "Mon frigo", code: "myfridge", navbar: true, updateOnNav: false },
   {
-    label: "Mes courses",
+    label: appcopy["title.section_myfridge"][config.app.language],
+    code: "myfridge",
+    navbar: true,
+    updateOnNav: false,
+    icon: KitchenIcon
+  },
+  {
+    label: appcopy["title.section_myshopping"][config.app.language],
     code: "myshopping",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: LocalGroceryStoreIcon
   },
   {
-    label: "Mes ingrédients",
     code: "myingredients",
     navbar: false,
     updateOnNav: false
   },
   {
-    label: "Ma balance",
+    label: appcopy["title.section_mybalance"][config.app.language],
     code: "mybalance",
     navbar: true,
-    updateOnNav: false
+    updateOnNav: false,
+    icon: BalanceIcon
   }
 ];
-exports.pages = pages;
 
-function navigates(gotopage) {
-  //console.log("navigates to " + gotopage);
-  if (pages.updateOnNav) {
-    switch (gotopage) {
-      case "myrecipies":
-        myrecipies.update();
-        break;
-      default:
-        console.log("Info : update requested without match with " + gotopage);
-    }
-  }
+export function navigates(gotopage) {
   pages.forEach((page) => {
     if (gotopage === page.code) {
       document.getElementById(page.code).style.display = "block";
@@ -66,6 +74,3 @@ function navigates(gotopage) {
     }
   });
 }
-exports.navigates = (page) => {
-  navigates(page);
-};

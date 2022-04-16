@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Paper, BottomNavigation, BottomNavigationAction } from "@mui/material";
 
-import navigation from "./navigation";
+import { navigates, pages } from "./navigation";
 
 export default function FixedBottomNavigation() {
-  const [value, setValue] = React.useState(3);
-
+  const [value, setValue] = React.useState(7);
+  //
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
       elevation={3}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
     >
       <BottomNavigation
         showLabels
@@ -18,17 +18,18 @@ export default function FixedBottomNavigation() {
           setValue(newValue);
         }}
       >
-        {navigation.pages.map((page) => {
+        {pages.map((page) => {
           if (page.navbar === true) {
             return (
               <BottomNavigationAction
+                sx={{ ml: 0, mr: 0 }}
                 id={`${page.code}`}
-                label={`${page.label}`}
+                key={`${page.code}`}
+                icon={<page.icon />}
                 onClick={() => {
                   //console.log("Navbar clicked " + page.label);
-                  navigation.navigates(page.code);
+                  navigates(page.code);
                 }}
-                key={page.code}
               />
             );
           } else {

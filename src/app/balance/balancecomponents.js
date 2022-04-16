@@ -15,6 +15,7 @@ export function TransactionDate() {
       id="transaction_date"
       type="date"
       value={value}
+      style={{ marginTop: 10, marginBottom: 10 }}
       onChange={(e) => setValue(e.target.value)}
     />
   );
@@ -24,16 +25,21 @@ export function TransactionBy() {
   const [value, setValue] = useState("");
 
   return (
-    <RadioGroup row>
+    <RadioGroup
+      row
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+      }}
+    >
       <FormControlLabel
         id="transaction_by_Alice"
         value="Alice"
         name="transaction_by"
         control={<Radio />}
         label="Alice"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
       />
       <FormControlLabel
         id="transaction_by_Pierre"
@@ -41,9 +47,7 @@ export function TransactionBy() {
         name="transaction_by"
         control={<Radio />}
         label="Pierre"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
       />
       <FormControlLabel
         id="transaction_by_"
@@ -51,9 +55,7 @@ export function TransactionBy() {
         name="transaction_by"
         control={<Radio />}
         label="None"
-        onChange={(e) => {
-          (e) => setValue(e.target.value);
-        }}
+        onChange={(e) => setValue(e.target.value)}
         sx={{ display: "none" }}
       />
     </RadioGroup>
@@ -65,7 +67,14 @@ export function TransactionFor(props) {
   const [valuePierre, setValuePierre] = useState(true);
 
   return (
-    <FormGroup row>
+    <FormGroup
+      row
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+      }}
+    >
       <FormControlLabel
         control={
           <Checkbox
