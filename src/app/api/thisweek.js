@@ -1,3 +1,5 @@
+import { getRecipe, modifyRecipe } from "./recipies";
+
 const axios = require("axios");
 const config = require("../../config");
 
@@ -23,7 +25,6 @@ export async function renewRecipeSelection() {
   let req = { type: "renewSelection" };
   try {
     const res = await axios.post(serverUrl + "/api/thisweek", req);
-    return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -34,7 +35,6 @@ export async function addRecipeToSelection() {
   let req = { type: "addRecipe" };
   try {
     const res = await axios.post(serverUrl + "/api/thisweek", req);
-    return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -45,7 +45,6 @@ export async function removeRecipeFromSelection(item) {
   let req = { type: "removeRecipe", id: item };
   try {
     const res = await axios.post(serverUrl + "/api/thisweek", req);
-    return res.data;
   } catch (err) {
     // Handle Error Here
     console.error(err);

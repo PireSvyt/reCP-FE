@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Paper, TextField, Box, Fab } from "@mui/material";
+import {
+  Paper,
+  TextField,
+  Box,
+  Fab,
+  List,
+  ListItem,
+  ListItemText
+} from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 
 import config from "../config";
@@ -8,8 +16,11 @@ import { createRecipe, getRecipe, modifyRecipe } from "./api/recipies";
 import { getIngredient } from "./api/ingredients";
 import { recipeview_updateRecipe } from "./Recipeview";
 import { navigates } from "./navigation";
+import { random_id } from "./toolkit";
 
 let selectedRecipe = "";
+let newIngredientInput = [random_id()];
+let newInstructionInput = [];
 
 export default class Myrecipies extends React.Component {
   constructor(props) {
@@ -20,7 +31,6 @@ export default class Myrecipies extends React.Component {
   }
 
   render() {
-    //<ThemeProvider theme={theme}>
     return (
       <div>
         <Box
@@ -49,7 +59,9 @@ export default class Myrecipies extends React.Component {
             <h3>
               {appcopy["title.subsection_instructions"][config.app.language]}
             </h3>
-            <div id="recipeedit_instructions" />
+            <List dense={true} id="recipeedit_instructions">
+              {getNewInstructionInput()}
+            </List>
           </Paper>
           <Fab
             color="primary"
@@ -62,7 +74,28 @@ export default class Myrecipies extends React.Component {
       </div>
     );
   }
-  componentDidMount() {}
+  componentDidMount() {
+    //setupNewInstructionInput();
+  }
+}
+
+function getNewIngredientInput() {}
+function getNewInstructionInput() {
+  let nextIngredientIID = random_id();
+  newInstructionInput.push(nextIngredientIID);
+  return (
+    <ListItem key={`${nextIngredientIID}`}>
+      <TextField
+        id={nextIngredientIID}
+        label="Instruction"
+        variant="standard"
+      />
+    </ListItem>
+  );
+}
+function setupNewInstructionInput() {
+  const instList = document.getElementById("recipeedit_instructions");
+  instList.append(getNewInstructionInput());
 }
 
 function save() {
@@ -81,6 +114,14 @@ function save() {
   };
   recipe._id = selectedRecipe;
   recipe.name = document.getElementById("recipeedit_name").value;
+  recipe.portions = document.getElementById("recipeedit_portions").value;
+  // Ingredients
+  // Instructions
+  newInstructionInput.forEach((instruction) => {
+    if (instruction !== "") {
+      recipe.instructions.push(document.getElementById(instruction).value);
+    }
+  });
 
   // Check inputs
   let save = true;
@@ -88,6 +129,10 @@ function save() {
   if (recipe.name === "") {
     save = false;
     errors.push("Nom vide");
+  }
+  if (recipe.portions === null) {
+    save = false;
+    errors.push("Portions vide");
   }
 
   // TODO : Sncakbar
@@ -103,11 +148,11 @@ function save() {
     if (recipe._id === "") {
       // POST
       console.log("POST");
-      //createRecipe(recipe);
+      createRecipe(recipe);
     } else {
       // PUT
       console.log("PUT");
-      //modifyRecipe(recipe._id, recipe);
+      modifyRecipe(recipe._id, recipe);
     }
     recipeview_updateRecipe(recipe._id);
     navigates("recipeview");
