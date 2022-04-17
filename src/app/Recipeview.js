@@ -12,7 +12,7 @@ import {
 import config from "../config";
 import appcopy from "./copy";
 import { getRecipe, deleteRecipe } from "./api/recipies";
-import { getIngredient } from "./api/ingredients";
+import { getIngredients } from "./api/ingredients";
 import { updateMyrecipies } from "./Myrecipies";
 import { recipeedit_updateRecipe } from "./Recipeedit";
 import { navigates } from "./navigation";
@@ -87,92 +87,100 @@ function recipeview_deleteRecipe() {
 }
 
 export function recipeview_updateRecipe(recipe_req) {
-  function openRecipeUpdate(recipe_res) {
-    // Name
-    const container_name = document.getElementById("recipeview_name");
-    ReactDOM.render(recipe_res.name, container_name);
-    // Portions
-    const container_portions = document.getElementById("recipeview_portions");
-    ReactDOM.render(recipe_res.portions + " portions", container_portions);
-    // Ingredients
-    const container_ingredients = document.getElementById(
-      "recipeview_ingredients"
-    );
-    let recipeIngredients = recipe_res.ingredients;
-    recipeIngredients.forEach((recipe_ingredient) => {
-      getIngredient(recipe_ingredient.id).then((list_ingredient) => {
-        try {
-          recipe_ingredient.name = list_ingredient._id;
-          recipe_ingredient.unit = list_ingredient.unit;
-        } catch (err) {
-          // Handle Error Here
-          console.error(err);
-        }
-      });
-    });
+  getIngredients().then((ingredients) => {
+    console.log("ingredients");
+    console.log(ingredients);
 
-    function getIngredientItem(recipe_ing) {
-      getIngredient(recipe_ing.id).then((ingredient) => {
+    function openRecipeUpdate(recipe_res) {
+      // Ingredient item constructor
+      async function getIngredientItem(recipe_ing) {
         console.log("recipe_ing");
         console.log(recipe_ing);
-        console.log("ingredient");
-        console.log(ingredient);
+        let ingredientData = ingredients.filter(function (value, index, arr) {
+          return value._id === recipe_ing._id;
+        });
+        ingredientData = ingredientData.pop();
+        console.log("ingredientData");
+        console.log(ingredientData);
         return (
-          <ListItem key={`${recipe_ing.id}`}>
+          <ListItem key={`${recipe_ing._id}`}>
             <ListItemText
-              primary={`${ingredient.name}`}
-              secondary={`${recipe_ing.quantity} ${ingredient.unit}`}
+              primary={`${ingredientData.name}`}
+              secondary={`${recipe_ing.quantity} ${ingredientData.unit}`}
             />
           </ListItem>
         );
+      }
+
+      // Name
+      const container_name = document.getElementById("recipeview_name");
+      ReactDOM.render(recipe_res.name, container_name);
+      // Portions
+      const container_portions = document.getElementById("recipeview_portions");
+      ReactDOM.render(recipe_res.portions + " portions", container_portions);
+      // Ingredients
+      const container_ingredients = document.getElementById(
+        "recipeview_ingredients"
+      );
+      let recipeIngredients = recipe_res.ingredients;
+      recipeIngredients.forEach((recipe_ing) => {
+        console.log("recipe_ing");
+        console.log(recipe_ing);
+        let ingredientData = ingredients.filter(function (value, index, arr) {
+          return value._id === recipe_ing._id;
+        });
+        ingredientData = ingredientData.pop();
+        console.log("ingredientData");
+        console.log(ingredientData);
+        recipe_ing.name = ingredientData.name;
+        recipe_ing.unit = ingredientData.unit;
       });
+      // Ingredient list construction
+      ReactDOM.render(
+        <List>
+          {recipeIngredients.map((recipe_ing) => {
+            return getIngredientItem(recipe_ing);
+          })}
+        </List>,
+        container_ingredients
+      );
+
+      // Instructions
+      const container_instructions = document.getElementById(
+        "recipeview_instructions"
+      );
+      ReactDOM.render(
+        <List>
+          {recipe_res.instructions.map((value) => (
+            <ListItem key={`${value._id}`}>
+              <ListItemText primary={`${value}`} />
+            </ListItem>
+          ))}
+        </List>,
+        container_instructions
+      );
     }
 
-    ReactDOM.render(
-      <List>
-        {recipeIngredients.map((recipe_ing) => {
-          getIngredientItem(recipe_ing);
-        })}
-      </List>,
-      container_ingredients
-    );
-    // Instructions
-    const container_instructions = document.getElementById(
-      "recipeview_instructions"
-    );
-    ReactDOM.render(
-      <List>
-        {recipe_res.instructions.map((value) => (
-          <ListItem key={`${value._id}`}>
-            <ListItemButton>
-              <ListItemText primary={`${value}`} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>,
-      container_instructions
-    );
-  }
-
-  if (recipe_req !== "") {
-    // Load
-    getRecipe(recipe_req).then((recipe_res) => {
-      selectedRecipe = recipe_res._id;
-      openRecipeUpdate(recipe_res);
-    });
-  } else {
-    selectedRecipe = "";
-    openRecipeUpdate({
-      _id: "",
-      name: "",
-      portions: null,
-      ingredients: [],
-      instructions: [],
-      scale: 1,
-      state: {
-        selected: false,
-        cooked: false
-      }
-    });
-  }
+    if (recipe_req !== "") {
+      // Load
+      getRecipe(recipe_req).then((recipe_res) => {
+        selectedRecipe = recipe_res._id;
+        openRecipeUpdate(recipe_res);
+      });
+    } else {
+      selectedRecipe = "";
+      openRecipeUpdate({
+        _id: "",
+        name: "",
+        portions: null,
+        ingredients: [],
+        instructions: [],
+        scale: null,
+        state: {
+          selected: false,
+          cooked: false
+        }
+      });
+    }
+  });
 }

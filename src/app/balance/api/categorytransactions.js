@@ -9,11 +9,11 @@ if (config.env === "DEV") {
   serverUrl = config.serverDevUrl;
 }
 
-export async function createTransaction(newTransaction) {
+export async function createCategoryTransaction(newTransaction) {
   //exports.createTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.post(
-      serverUrl + "/api/transaction/",
+      serverUrl + "/api/categorytransaction/",
       newTransaction
     );
     return res.data;
@@ -23,14 +23,10 @@ export async function createTransaction(newTransaction) {
   }
 }
 
-export async function getTransaction(id) {
+export async function getCategoryTransaction(id) {
   //exports.getTransaction = async (id) => {
   try {
-    console.log("getTransaction " + id);
-    const res = await axios.get(serverUrl + "/api/transaction/" + id);
-
-    console.log("res");
-    console.log(res);
+    const res = await axios.get(serverUrl + "/api/categorytransaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -38,10 +34,12 @@ export async function getTransaction(id) {
   }
 }
 
-export async function deleteTransaction(id) {
+export async function deleteCategoryTransaction(id) {
   //exports.deleteTransaction = async (id) => {
   try {
-    const res = await axios.delete(serverUrl + "/api/transaction/" + id);
+    const res = await axios.delete(
+      serverUrl + "/api/categorytransaction/" + id
+    );
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -49,11 +47,11 @@ export async function deleteTransaction(id) {
   }
 }
 
-export async function modifyTransaction(id, newTransaction) {
+export async function modifyCategoryTransaction(id, newTransaction) {
   //exports.modifyTransaction = async (id, newTransaction) => {
   try {
     const res = await axios.put(
-      serverUrl + "/api/transaction/" + id,
+      serverUrl + "/api/categorytransaction/" + id,
       newTransaction
     );
     return res.data;
@@ -63,10 +61,10 @@ export async function modifyTransaction(id, newTransaction) {
   }
 }
 
-export async function getTransactions() {
+export async function getCategoryTransactions() {
   //exports.getTransactions = async () => {
   try {
-    const res = await axios.get(serverUrl + "/api/transaction");
+    const res = await axios.get(serverUrl + "/api/categorytransaction");
     return res.data;
   } catch (err) {
     // Handle Error Here

@@ -11,9 +11,13 @@ import {
 
 import config from "../config";
 import appcopy from "./copy";
-import { getSelectedRecipes } from "./api/thisweek";
+import {
+  getSelectedRecipes,
+  renewRecipeSelection,
+  addRecipeToSelection,
+  removeRecipeFromSelection
+} from "./api/thisweek";
 import { recipeview_updateRecipe } from "./Recipeview";
-
 import { navigates } from "./navigation";
 
 export default class Thisweek extends React.Component {
@@ -54,7 +58,10 @@ export default class Thisweek extends React.Component {
 }
 
 export function updateThisweek() {
+  console.log("updateThisweek");
   getSelectedRecipes().then((res) => {
+    console.log("updateThisweek getSelectedRecipes :");
+    console.log(res);
     // Recipies
     const container = document.getElementById("thisweek_recipelist");
     ReactDOM.render(
@@ -78,20 +85,18 @@ export function updateThisweek() {
       container
     );
     // Ingredients
+    console.log("THIS WEEK UPDATED");
   });
 }
 
 function renewSelection() {
-  console.log("TODO RENEW SELECTION");
+  renewRecipeSelection().then(() => updateThisweek());
 }
-function addRecipe(item) {
-  console.log("TODO ADD RECIPE");
+function addRecipe() {
+  addRecipeToSelection().then(() => updateThisweek());
 }
 function removeRecipe(item) {
-  console.log("TODO REMOVE RECIPE");
-}
-function renewRecipe(item) {
-  console.log("TODO RENEW RECIPE");
+  removeRecipeFromSelection(item).then(() => updateThisweek());
 }
 /* TODO
  * feasible recipe

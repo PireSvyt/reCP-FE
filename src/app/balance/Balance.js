@@ -30,6 +30,7 @@ import {
   createTransaction,
   modifyTransaction
 } from "./api/transactions";
+import { getCategoryTransaction } from "./api/categorytransactions";
 import getBalance from "./api/balance";
 
 var selectedTransaction = "";
@@ -188,8 +189,35 @@ function updateBalance() {
   });
 }
 
-function openTransaction(id) {
-  function openTransactionUpdate(transaction) {
+async function openTransaction(id) {
+  // Hide
+  document.getElementById("balance_summary").style.display = "none";
+  document.getElementById("balance_stats").style.display = "none";
+  document.getElementById("balance_transactions").style.display = "none";
+  document.getElementById("balance_newtransaction").style.display = "none";
+  // Display
+  document.getElementById("balance_transaction").style.display = "block";
+
+  if (id !== "") {
+    // Load
+    getTransaction(id).then((res) => {
+      selectedTransaction = res._id;
+      openTransactionUpdate(res);
+    });
+  } else {
+    selectedTransaction = "";
+    openTransactionUpdate({
+      _id: "",
+      name: "",
+      date: Date(),
+      amount: "",
+      by: "",
+      for: ["Alice", "Pierre"],
+      category: ""
+    });
+  }
+
+  async function openTransactionUpdate(transaction) {
     // Name
     document.getElementById("transaction_name").value = transaction.name;
     // Date
@@ -225,33 +253,6 @@ function openTransaction(id) {
     // Category
     document.getElementById("transaction_category").value =
       transaction.category;
-  }
-
-  // Hide
-  document.getElementById("balance_summary").style.display = "none";
-  document.getElementById("balance_stats").style.display = "none";
-  document.getElementById("balance_transactions").style.display = "none";
-  document.getElementById("balance_newtransaction").style.display = "none";
-  // Display
-  document.getElementById("balance_transaction").style.display = "block";
-
-  if (id !== "") {
-    // Load
-    getTransaction(id).then((res) => {
-      selectedTransaction = res._id;
-      openTransactionUpdate(res);
-    });
-  } else {
-    selectedTransaction = "";
-    openTransactionUpdate({
-      _id: "",
-      name: "",
-      date: Date(),
-      amount: "",
-      by: "",
-      for: ["Alice", "Pierre"],
-      category: ""
-    });
   }
 }
 
@@ -320,14 +321,14 @@ function saveTransaction() {
 
   // Post or publish
   if (save === true) {
-    console.log(transaction);
+    //console.log(transaction);
     if (transaction._id === "") {
       // POST
-      console.log("POST");
+      //console.log("POST");
       createTransaction(transaction).then(updateBalance());
     } else {
       // PUT
-      console.log("PUT");
+      //console.log("PUT");
       modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
   }
@@ -348,7 +349,7 @@ function updateTransactions() {
     ReactDOM.render(
       <Paper>
         <h3>{appcopy["title.subsection_transactions"][config.app.language]}</h3>
-        <List>
+        <List dense={true}>
           {res.map((value) => (
             <ListItem key={`${value._id}`} id={`${value._id}`}>
               <ListItemButton onClick={() => openTransaction(value._id)}>

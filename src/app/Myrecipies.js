@@ -62,7 +62,7 @@ export function updateMyrecipies() {
   getRecipes().then((res) => {
     const container = document.getElementById("myrecipies_list");
     ReactDOM.render(
-      <List>
+      <List dense={true}>
         {res.map((value) => (
           <ListItem key={`${value._id}`} id={`${value._id}`}>
             <ListItemButton
