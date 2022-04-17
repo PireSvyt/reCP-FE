@@ -1,5 +1,5 @@
 {
-  "env": "DEV",
+  "env": "PROD",
   "serverProdUrl": "https://re-cp-be.vercel.app",
   "serverDevUrl": "https://df34s4-3001.sse.codesandbox.io",
   "app": {
