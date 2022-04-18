@@ -34,6 +34,7 @@ import {
 } from "./api/transactions";
 import { getCategoryTransaction } from "./api/categorytransactions";
 import getBalance from "./api/balance";
+import { DialogTransaction } from "./DialogTransaction";
 
 var selectedTransaction = "";
 
@@ -74,6 +75,7 @@ export default class Balance extends React.Component {
           >
             {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
+          <DialogTransaction />
           <Fab
             id="balance_newtransaction"
             color="primary"
