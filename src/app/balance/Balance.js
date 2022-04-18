@@ -13,7 +13,8 @@ import {
   Fab
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-//import { AddIcon } from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import Swipeable from "react-mui-swipeable";
 //import { ThemeProvider } from "@mui/material/styles";
 
 import config from "../../config";
@@ -28,7 +29,8 @@ import {
   getTransaction,
   getTransactions,
   createTransaction,
-  modifyTransaction
+  modifyTransaction,
+  deleteTransaction
 } from "./api/transactions";
 import { getCategoryTransaction } from "./api/categorytransactions";
 import getBalance from "./api/balance";
@@ -70,7 +72,7 @@ export default class Balance extends React.Component {
               width: 3 / 7
             }}
           >
-            {appcopy["title.subsection_balance"][config.app.language]}
+            {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
           <Fab
             id="balance_newtransaction"
@@ -81,7 +83,6 @@ export default class Balance extends React.Component {
           </Fab>
         </Box>
         <div id="balance_summary"></div>
-        <div id="balance_stats"></div>
         <div id="balance_transaction">
           <Paper>
             <h3>
@@ -134,7 +135,6 @@ export default class Balance extends React.Component {
   }
   componentDidMount() {
     // Hide
-    document.getElementById("balance_stats").style.display = "none";
     document.getElementById("balance_transaction").style.display = "none";
     document.getElementById("balance_transactions").style.display = "none";
     // Bind
@@ -158,7 +158,6 @@ export default class Balance extends React.Component {
 }
 function updateBalance() {
   // Hide
-  document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transaction").style.display = "none";
   document.getElementById("balance_transactions").style.display = "none";
   // Display
@@ -169,18 +168,48 @@ function updateBalance() {
     ReactDOM.render(
       <div>
         <Paper>
-          <h3>{appcopy["title.subsection_balance"][config.app.language]}</h3>
+          <h3>
+            {appcopy["title.subsection_balanceperuser"][config.app.language]}
+          </h3>
           <List>
             <ListItem key={"Alice"}>
               <ListItemText
-                primary={`Alice : ${Math.round(res.Alice * 100) / 100} €`}
+                primary={`Alice : ${Math.round(res.users.Alice * 100) / 100} €`}
               />
             </ListItem>
             <ListItem key={"Pierre"}>
               <ListItemText
-                primary={`Pierre : ${Math.round(res.Pierre * 100) / 100} €`}
+                primary={`Pierre : ${
+                  Math.round(res.users.Pierre * 100) / 100
+                } €`}
               />
             </ListItem>
+          </List>
+        </Paper>
+        <Paper>
+          <h3>
+            {
+              appcopy["title.subsection_balancepercategory"][
+                config.app.language
+              ]
+            }
+          </h3>
+          <List dense={true}>
+            {Object.keys(res.categories).map((value) => (
+              <ListItem
+                key={`${res.categories[value]._id}`}
+                id={`${res.categories[value]._id}`}
+              >
+                <ListItemText
+                  sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                  primary={`${res.categories[value].total} €`}
+                />
+                <ListItemText
+                  sx={{ width: 5 / 7 }}
+                  primary={`${res.categories[value].name}`}
+                />
+              </ListItem>
+            ))}
           </List>
         </Paper>
       </div>,
@@ -192,7 +221,6 @@ function updateBalance() {
 async function openTransaction(id) {
   // Hide
   document.getElementById("balance_summary").style.display = "none";
-  document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transactions").style.display = "none";
   document.getElementById("balance_newtransaction").style.display = "none";
   // Display
@@ -336,12 +364,19 @@ function saveTransaction() {
 
 function updateTransactions() {
   // Hide
-  document.getElementById("balance_stats").style.display = "none";
   document.getElementById("balance_transaction").style.display = "none";
   document.getElementById("balance_summary").style.display = "none";
   // Display
   document.getElementById("balance_transactions").style.display = "block";
   document.getElementById("balance_newtransaction").style.display = "block";
+  // Handles
+  function handleClick(id) {
+    openTransaction(id);
+  }
+  //<Swipeable onSwipeLeft={() => handleSwipeLeft(value._id)}>
+  function handleSwipeLeft(id) {
+    console.log("handleSwipeLeft " + id);
+  }
   //
   Moment.locale("en");
   getTransactions().then((res) => {
@@ -352,14 +387,22 @@ function updateTransactions() {
         <List dense={true}>
           {res.map((value) => (
             <ListItem key={`${value._id}`} id={`${value._id}`}>
-              <ListItemButton onClick={() => openTransaction(value._id)}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row"
+                }}
+              >
+                <ListItemButton onClick={() => handleClick(value._id)}>
+                  <EditIcon />
+                </ListItemButton>
                 <ListItemText
                   primary={`${value.name}`}
                   secondary={`${value.amount} €, le ${Moment(value.date).format(
                     "DD/MM/YYYY"
                   )}`}
                 />
-              </ListItemButton>
+              </Box>
             </ListItem>
           ))}
         </List>

@@ -3,9 +3,13 @@
     "FR": "Ma balance",
     "EN": "My balance"
   },
-  "title.subsection_balance": {
-    "FR": "Balance",
-    "EN": "Balance"
+  "title.subsection_balanceperuser": {
+    "FR": "Balance par utilisateur",
+    "EN": "Balance per user"
+  },
+  "title.subsection_balancepercategory": {
+    "FR": "Balance par catégorie",
+    "EN": "Balance per category"
   },
   "title.subsection_transactions": {
     "FR": "Transactions",

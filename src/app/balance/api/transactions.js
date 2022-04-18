@@ -28,9 +28,6 @@ export async function getTransaction(id) {
   try {
     console.log("getTransaction " + id);
     const res = await axios.get(serverUrl + "/api/transaction/" + id);
-
-    console.log("res");
-    console.log(res);
     return res.data;
   } catch (err) {
     // Handle Error Here

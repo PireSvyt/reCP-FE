@@ -58,10 +58,7 @@ export default class Thisweek extends React.Component {
 }
 
 export function updateThisweek() {
-  console.log("updateThisweek");
   getSelectedRecipes().then((res) => {
-    console.log("updateThisweek getSelectedRecipes :");
-    console.log(res);
     // Recipies
     const container = document.getElementById("thisweek_recipelist");
     ReactDOM.render(
@@ -85,7 +82,7 @@ export function updateThisweek() {
       container
     );
     // Ingredients
-    console.log("THIS WEEK UPDATED");
+    console.log("TODO THIS WEEK INGREDIENTS");
   });
 }
 
