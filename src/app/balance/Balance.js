@@ -165,7 +165,6 @@ function updateBalance() {
   document.getElementById("balance_newtransaction").style.display = "block";
   //
   getBalance().then((res) => {
-    console.log(res);
     ReactDOM.render(
       <div>
         <Paper>
