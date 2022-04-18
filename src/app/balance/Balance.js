@@ -59,28 +59,16 @@ export default class Balance extends React.Component {
             justifyContent: "space-evenly"
           }}
         >
-          <Button
-            variant="contained"
-            id="balance_updatetransactions"
-            sx={{
-              width: 3 / 7
-            }}
-          >
+          <Button variant="contained" id="balance_updatetransactions">
             {appcopy["title.subsection_transactions"][config.app.language]}
           </Button>
-          <Button
-            variant="contained"
-            id="balance_updatesummary"
-            sx={{
-              width: 3 / 7
-            }}
-          >
+          <Button variant="contained" id="balance_updatesummary">
             {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
           <Fab
             id="balance_newtransaction"
             color="primary"
-            sx={{ position: "fixed", bottom: 70, right: 20 }}
+            sx={{ position: "fixed", right: 20, top: 20 }}
           >
             <AddIcon />
           </Fab>
@@ -108,15 +96,9 @@ export default class Balance extends React.Component {
                 label={appcopy["input.amount"][config.app.language]}
                 variant="standard"
               />
-
-              <h4>{appcopy["text.by"][config.app.language]}</h4>
               <TransactionBy />
-
-              <h4>{appcopy["text.for"][config.app.language]}</h4>
               <TransactionFor />
-
               <CategorySelector />
-
               <Button
                 id="balance_savetransaction"
                 variant="contained"
@@ -132,13 +114,6 @@ export default class Balance extends React.Component {
       </div>
     );
   }
-  /*
-  <TextField
-                id="transaction_category"
-                label={appcopy["input.category"][config.app.language]}
-                variant="standard"
-              />
-   */
   componentDidMount() {
     // Hide
     document.getElementById("balance_transaction").style.display = "none";

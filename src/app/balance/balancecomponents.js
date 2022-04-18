@@ -7,6 +7,9 @@ import {
   Checkbox
 } from "@mui/material";
 
+import config from "../../config";
+import appcopy from "./copy";
+
 export function TransactionDate() {
   const [value, setValue] = useState(Date());
 
@@ -33,6 +36,7 @@ export function TransactionBy() {
         justifyContent: "space-evenly"
       }}
     >
+      <h4>{appcopy["text.by"][config.app.language]}</h4>
       <FormControlLabel
         id="transaction_by_Alice"
         value="Alice"
@@ -75,6 +79,7 @@ export function TransactionFor(props) {
         justifyContent: "space-evenly"
       }}
     >
+      <h4>{appcopy["text.for"][config.app.language]}</h4>
       <FormControlLabel
         control={
           <Checkbox
