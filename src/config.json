@@ -1,7 +1,7 @@
 {
-  "env": "PROD",
+  "env": "DEV",
   "serverProdUrl": "https://re-cp-be.vercel.app",
-  "serverDevUrl": "https://df34s4-3001.sse.codesandbox.io",
+  "serverDevUrl": "https://df34s4-3002.sse.codesandbox.io",
   "app": {
     "language": "FR"
   }
