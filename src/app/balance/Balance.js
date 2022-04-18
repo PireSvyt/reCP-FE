@@ -335,13 +335,13 @@ function saveTransaction() {
     if (transaction._id === "") {
       // POST
       console.log("POST");
-      console.log(transaction);
-      //createTransaction(transaction).then(updateBalance());
+      //console.log(transaction);
+      createTransaction(transaction).then(updateBalance());
     } else {
       // PUT
       console.log("PUT");
-      console.log(transaction);
-      //modifyTransaction(transaction._id, transaction).then(updateBalance());
+      //console.log(transaction);
+      modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
   }
 }
