@@ -1,5 +1,5 @@
 {
-  "env": "DEV",
+  "env": "PROD",
   "serverProdUrl": "https://re-cp-be.vercel.app",
   "serverDevUrl": "https://re-cp-4nt3zvg97-piresvyt.vercel.app",
   "app": {

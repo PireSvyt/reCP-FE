@@ -15,11 +15,9 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import Swipeable from "react-mui-swipeable";
-//import { ThemeProvider } from "@mui/material/styles";
 
 import config from "../../config";
 import appcopy from "./copy";
-//import { theme } from "../theme";
 import {
   TransactionDate,
   TransactionBy,
@@ -34,7 +32,11 @@ import {
 } from "./api/transactions";
 import { getCategoryTransaction } from "./api/categorytransactions";
 import getBalance from "./api/balance";
-import { DialogTransaction } from "./DialogTransaction";
+import {
+  CategorySelector,
+  CategorySelectorSetValue,
+  CategorySelectorGetValue
+} from "./autocomplete";
 
 var selectedTransaction = "";
 
@@ -75,7 +77,6 @@ export default class Balance extends React.Component {
           >
             {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
-          <DialogTransaction />
           <Fab
             id="balance_newtransaction"
             color="primary"
@@ -114,11 +115,7 @@ export default class Balance extends React.Component {
               <h4>{appcopy["text.for"][config.app.language]}</h4>
               <TransactionFor />
 
-              <TextField
-                id="transaction_category"
-                label={appcopy["input.category"][config.app.language]}
-                variant="standard"
-              />
+              <CategorySelector />
 
               <Button
                 id="balance_savetransaction"
@@ -135,6 +132,13 @@ export default class Balance extends React.Component {
       </div>
     );
   }
+  /*
+  <TextField
+                id="transaction_category"
+                label={appcopy["input.category"][config.app.language]}
+                variant="standard"
+              />
+   */
   componentDidMount() {
     // Hide
     document.getElementById("balance_transaction").style.display = "none";
@@ -228,22 +232,21 @@ async function openTransaction(id) {
   // Display
   document.getElementById("balance_transaction").style.display = "block";
 
+  selectedTransaction = "";
+  openTransactionUpdate({
+    _id: "",
+    name: "",
+    date: Date(),
+    amount: "",
+    by: "",
+    for: ["Alice", "Pierre"],
+    category: ""
+  });
   if (id !== "") {
     // Load
     getTransaction(id).then((res) => {
       selectedTransaction = res._id;
       openTransactionUpdate(res);
-    });
-  } else {
-    selectedTransaction = "";
-    openTransactionUpdate({
-      _id: "",
-      name: "",
-      date: Date(),
-      amount: "",
-      by: "",
-      for: ["Alice", "Pierre"],
-      category: ""
     });
   }
 
@@ -281,8 +284,9 @@ async function openTransaction(id) {
       }
     }
     // Category
-    document.getElementById("transaction_category").value =
-      transaction.category;
+    //document.getElementById("transaction_category").value =
+    //  transaction.category;
+    CategorySelectorSetValue(transaction.category);
   }
 }
 
@@ -317,7 +321,8 @@ function saveTransaction() {
       transaction.for.push(checkButton.value);
     }
   }
-  transaction.category = document.getElementById("transaction_category").value;
+  //transaction.category = document.getElementById("transaction_category").value;
+  transaction.category = CategorySelectorGetValue();
   // Check inputs
   let save = true;
   let errors = [];
@@ -354,12 +359,14 @@ function saveTransaction() {
     //console.log(transaction);
     if (transaction._id === "") {
       // POST
-      //console.log("POST");
-      createTransaction(transaction).then(updateBalance());
+      console.log("POST");
+      console.log(transaction);
+      //createTransaction(transaction).then(updateBalance());
     } else {
       // PUT
-      //console.log("PUT");
-      modifyTransaction(transaction._id, transaction).then(updateBalance());
+      console.log("PUT");
+      console.log(transaction);
+      //modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
   }
 }

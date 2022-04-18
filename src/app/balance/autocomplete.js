@@ -6,6 +6,7 @@ import { getCategoryTransactions } from "./api/categorytransactions";
 
 const filter = createFilterOptions();
 var options = [];
+var currentValue = "";
 
 /*export function FreeSoloCreateOption() {
   const [value, setValue] = React.useState(null);
@@ -70,11 +71,11 @@ var options = [];
 }*/
 
 export function CategorySelector() {
-  const [value, setValue] = React.useState(null);
+  //const [value, setValue] = React.useState(null);
   const [options, setOptions] = React.useState([]);
   return (
     <Autocomplete
-      value={value}
+      value={currentValue}
       onOpen={() => {
         getCategoryTransactions().then((newOptions) => {
           //console.log("newOptions");
@@ -82,18 +83,22 @@ export function CategorySelector() {
           setOptions(newOptions);
         });
       }}
+      onClose={handleClose}
       onChange={(event, newValue) => {
         if (typeof newValue === "string") {
-          setValue({
+          currentValue = newValue;
+          /*setValue({
             name: newValue
-          });
+          });*/
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
-          setValue({
+          currentValue = newValue.inputValue;
+          /*setValue({
             name: newValue.inputValue
-          });
+          });*/
         } else {
-          setValue(newValue);
+          currentValue = "";
+          /*setValue(newValue);*/
         }
       }}
       filterOptions={(options, params) => {
@@ -111,7 +116,7 @@ export function CategorySelector() {
 
         return filtered;
       }}
-      selectOnFocus
+      autoSelect
       clearOnBlur
       handleHomeEndKeys
       id="balance_transaction_category_autocomplete"
@@ -132,14 +137,29 @@ export function CategorySelector() {
       freeSolo
       size="small"
       renderInput={(params) => (
-        <TextField {...params} variant="standard" label="CATEGORY" />
+        <TextField
+          id="balance_transaction_category_input"
+          {...params}
+          variant="standard"
+          label="CATEGORY"
+        />
       )}
     />
   );
 }
 
+function handleClose() {
+  currentValue = document.getElementById(
+    "balance_transaction_category_autocomplete"
+  ).value;
+}
+
 export function CategorySelectorSetValue(newValue) {
+  currentValue = newValue;
   document.getElementById(
     "balance_transaction_category_autocomplete"
-  ).value = newValue;
+  ).value = currentValue;
+}
+export function CategorySelectorGetValue() {
+  return currentValue;
 }
