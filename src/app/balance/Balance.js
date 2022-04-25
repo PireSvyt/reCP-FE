@@ -37,19 +37,36 @@ import {
   CategorySelectorSetValue,
   CategorySelectorGetValue
 } from "./autocomplete";
+import DialogTransaction from "./DialogTransaction";
 
 var selectedTransaction = "";
+let debug = true;
 
 export default class Balance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       transaction: "",
-      date: Date()
+      transactionOpen: false
     };
+    this.updateTransactions = this.updateTransactions.bind(this);
+    this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
+  }
+  handleCloseTransaction() {
+    this.setState(
+      (prevState, props) => ({
+        transaction: prevState.transaction,
+        transactionOpen: false
+      }),
+      () => {
+        if (debug) {
+          console.log("this.state");
+          console.log(this.state);
+        }
+      }
+    );
   }
   render() {
-    //<ThemeProvider theme={theme}>
     return (
       <div>
         <Box
@@ -59,20 +76,45 @@ export default class Balance extends React.Component {
             justifyContent: "space-evenly"
           }}
         >
-          <Button variant="contained" id="balance_updatetransactions">
+          <Button
+            variant="contained"
+            id="balance_updatetransactions"
+            onClick={this.updateTransactions}
+          >
             {appcopy["title.subsection_transactions"][config.app.language]}
           </Button>
           <Button variant="contained" id="balance_updatesummary">
             {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
-          <Fab
-            id="balance_newtransaction"
-            color="primary"
-            sx={{ position: "fixed", right: 20, top: 20 }}
-          >
-            <AddIcon />
-          </Fab>
         </Box>
+        <Fab color="primary" sx={{ position: "fixed", right: 20, top: 80 }}>
+          <AddIcon
+            onClick={() => {
+              if (debug) {
+                console.log("newTransaction.onClick ");
+              }
+              this.setState(
+                (prevState, props) => ({
+                  transaction: "",
+                  transactionOpen: true
+                }),
+                () => {
+                  if (debug) {
+                    console.log("this.state");
+                    console.log(this.state);
+                  }
+                }
+              );
+            }}
+          />
+        </Fab>
+        <DialogTransaction
+          id="dialogTransaction"
+          transaction={this.state.transaction}
+          open={false}
+          onsave={updateBalance}
+          onclose={this.handleCloseTransaction}
+        />
         <div id="balance_summary"></div>
         <div id="balance_transaction">
           <Paper>
@@ -119,22 +161,83 @@ export default class Balance extends React.Component {
     document.getElementById("balance_transaction").style.display = "none";
     document.getElementById("balance_transactions").style.display = "none";
     // Bind
-    document.getElementById("balance_newtransaction").onclick = function () {
-      openTransaction("");
-    };
     document.getElementById("balance_updatesummary").onclick = function () {
       updateBalance();
     };
     document.getElementById("balance_savetransaction").onclick = function () {
       saveTransaction();
     };
-    document.getElementById(
+    /*document.getElementById(
       "balance_updatetransactions"
     ).onclick = function () {
-      updateTransactions();
-    };
+      this.updateTransactions();
+    };*/
     // Update
     updateBalance();
+  }
+  updateTransactions() {
+    // Hide
+    document.getElementById("balance_transaction").style.display = "none";
+    document.getElementById("balance_summary").style.display = "none";
+    // Display
+    document.getElementById("balance_transactions").style.display = "block";
+    //<Swipeable onSwipeLeft={() => handleSwipeLeft(value._id)}>
+    function handleSwipeLeft(id) {
+      console.log("handleSwipeLeft " + id);
+    }
+    //
+    Moment.locale("en");
+    getTransactions().then((res) => {
+      const container = document.getElementById("balance_transactions");
+      ReactDOM.render(
+        <Paper>
+          <h3>
+            {appcopy["title.subsection_transactions"][config.app.language]}
+          </h3>
+          <List dense={true}>
+            {res.map((value) => (
+              <ListItem key={`${value._id}`} id={`${value._id}`}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row"
+                  }}
+                >
+                  <ListItemButton
+                    onClick={() => {
+                      if (debug) {
+                        console.log("updateTransactions.onClick " + value._id);
+                      }
+                      this.setState(
+                        (prevState, props) => ({
+                          transaction: value._id,
+                          transactionOpen: true
+                        }),
+                        () => {
+                          if (debug) {
+                            console.log("this.state");
+                            console.log(this.state);
+                          }
+                        }
+                      );
+                    }}
+                  >
+                    <EditIcon />
+                  </ListItemButton>
+                  <ListItemText
+                    primary={`${value.name}`}
+                    secondary={`${value.amount} €, le ${Moment(
+                      value.date
+                    ).format("DD/MM/YYYY")}`}
+                  />
+                </Box>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>,
+        container
+      );
+    });
   }
 }
 function updateBalance() {
@@ -143,7 +246,6 @@ function updateBalance() {
   document.getElementById("balance_transactions").style.display = "none";
   // Display
   document.getElementById("balance_summary").style.display = "block";
-  document.getElementById("balance_newtransaction").style.display = "block";
   //
   getBalance().then((res) => {
     ReactDOM.render(
@@ -198,12 +300,10 @@ function updateBalance() {
     );
   });
 }
-
 async function openTransaction(id) {
   // Hide
   document.getElementById("balance_summary").style.display = "none";
   document.getElementById("balance_transactions").style.display = "none";
-  document.getElementById("balance_newtransaction").style.display = "none";
   // Display
   document.getElementById("balance_transaction").style.display = "block";
 
@@ -344,56 +444,6 @@ function saveTransaction() {
       modifyTransaction(transaction._id, transaction).then(updateBalance());
     }
   }
-}
-
-function updateTransactions() {
-  // Hide
-  document.getElementById("balance_transaction").style.display = "none";
-  document.getElementById("balance_summary").style.display = "none";
-  // Display
-  document.getElementById("balance_transactions").style.display = "block";
-  document.getElementById("balance_newtransaction").style.display = "block";
-  // Handles
-  function handleClick(id) {
-    openTransaction(id);
-  }
-  //<Swipeable onSwipeLeft={() => handleSwipeLeft(value._id)}>
-  function handleSwipeLeft(id) {
-    console.log("handleSwipeLeft " + id);
-  }
-  //
-  Moment.locale("en");
-  getTransactions().then((res) => {
-    const container = document.getElementById("balance_transactions");
-    ReactDOM.render(
-      <Paper>
-        <h3>{appcopy["title.subsection_transactions"][config.app.language]}</h3>
-        <List dense={true}>
-          {res.map((value) => (
-            <ListItem key={`${value._id}`} id={`${value._id}`}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row"
-                }}
-              >
-                <ListItemButton onClick={() => handleClick(value._id)}>
-                  <EditIcon />
-                </ListItemButton>
-                <ListItemText
-                  primary={`${value.name}`}
-                  secondary={`${value.amount} €, le ${Moment(value.date).format(
-                    "DD/MM/YYYY"
-                  )}`}
-                />
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-      </Paper>,
-      container
-    );
-  });
 }
 
 function transactionDateToInputFormat(date) {
