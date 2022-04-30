@@ -35,6 +35,10 @@
     "FR": "Editer",
     "EN": "Edit"
   },
+  "button.cancel": {
+    "FR": "Annuler",
+    "EN": "Cancel"
+  },
   "button.renew": {
     "FR": "Renouveler",
     "EN": "Renew"
