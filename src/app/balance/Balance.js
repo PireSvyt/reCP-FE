@@ -21,7 +21,7 @@ import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./transaction";
 
-let debug = true;
+let debug = false;
 
 export default class Balance extends React.Component {
   constructor(props) {
