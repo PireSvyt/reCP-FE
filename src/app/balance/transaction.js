@@ -3,7 +3,6 @@ import {
   Button,
   TextField,
   Box,
-  Fab,
   Dialog,
   DialogActions,
   DialogContent,
@@ -42,16 +41,18 @@ let emptyTransaction = {
   category: ""
 };
 
-export default class DialogTransaction extends React.Component {
+export default class Transaction extends React.Component {
   constructor(props) {
+    if (debug) {
+      console.log("Transaction.constructor");
+    }
     super(props);
     this.state = {
-      open: this.props.open,
-      transaction: Object.assign({}, emptyTransaction),
+      transactionOpen: this.props.transactionOpen,
       options: []
     };
+    this.transaction = { ...emptyTransaction };
     // Bindings
-    this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -60,11 +61,18 @@ export default class DialogTransaction extends React.Component {
     );
   }
   render() {
+    if (debug) {
+      console.log("Transaction.render");
+      console.log("Transaction.props.transactionID");
+      console.log(this.props.transactionID);
+      console.log("Transaction.transaction");
+      console.log(this.transaction);
+    }
     return (
       <div>
         <Dialog
           id="dialog_transaction"
-          open={this.state.open}
+          open={this.state.transactionOpen}
           onClose={this.handleClose}
           fullWidth={true}
         >
@@ -81,7 +89,7 @@ export default class DialogTransaction extends React.Component {
                 name="name"
                 label={appcopy["input.name"][config.app.language]}
                 variant="standard"
-                defaultValue={this.state.transaction.name}
+                defaultValue={this.transaction.name}
                 onChange={this.handleChange}
               />
               <LocalizationProvider
@@ -90,7 +98,7 @@ export default class DialogTransaction extends React.Component {
               >
                 <DesktopDatePicker
                   label=""
-                  value={this.state.transaction.date}
+                  value={this.transaction.date}
                   onChange={(newValue) => this.handleChangeDate(newValue)}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -100,14 +108,14 @@ export default class DialogTransaction extends React.Component {
                 name="amount"
                 label={appcopy["input.amount"][config.app.language]}
                 variant="standard"
-                defaultValue={this.state.transaction.amount}
+                defaultValue={this.transaction.amount}
                 onChange={this.handleChange}
               />
 
               <RadioGroup
                 name="by"
                 onChange={this.handleChange}
-                defaultValue={this.state.transaction.by}
+                defaultValue={this.transaction.by}
                 sx={{
                   display: "flex",
                   flexDirection: "row",
@@ -166,7 +174,7 @@ export default class DialogTransaction extends React.Component {
               </FormGroup>
 
               <Autocomplete
-                defaultValue={this.state.transaction.category}
+                defaultValue={this.transaction.category}
                 onOpen={this.hanldeOpenCategorySelector}
                 onChange={this.handleChange}
                 filterOptions={(options, params) => {
@@ -231,114 +239,67 @@ export default class DialogTransaction extends React.Component {
     );
   }
   componentDidMount() {
-    if (this.props.transaction !== "") {
-      // Load
-      getTransaction(this.props.transaction).then((res) => {
-        this.setState(
-          (prevState, props) => ({
-            open: prevState.open,
-            transaction: res,
-            options: prevState.options
-          }),
-          () => {
-            if (debug) {
-              console.log("this.state");
-              console.log(this.state);
-            }
-          }
-        );
-      });
+    if (debug) {
+      console.log("Transaction.componentDidMount");
     }
   }
-  componentDidUpdate(prevProps) {
-    if (prevProps.open === false) {
-      if (debug) {
-        console.log("componentDidUpdate.open");
-      }
-      if (this.props.transaction === "") {
-        this.setState(
-          (prevState, props) => ({
-            open: prevState.open,
-            transaction: emptyTransaction,
-            options: prevState.options
-          }),
-          () => {
-            this.handleOpen();
-            if (debug) {
-              console.log("this.state");
-              console.log(this.state);
-            }
-          }
-        );
-      } else {
+  componentDidUpdate(prevState) {
+    if (debug) {
+      console.log("Transaction.componentDidUpdate");
+      console.log("Transaction.state");
+      console.log(this.state);
+    }
+    if (
+      prevState.transactionOpen !== this.props.transactionOpen ||
+      prevState.transactionID !== this.props.transactionID
+    ) {
+      this.transaction = { ...emptyTransaction };
+      if (this.props.transactionID !== "") {
         // Load
-        getTransaction(this.props.transaction).then((res) => {
-          this.setState(
-            (prevState, props) => ({
-              open: prevState.open,
-              transaction: res,
+        console.log(
+          "Transaction.componentDidUpdate.getTransaction " +
+            this.props.transactionID
+        );
+        getTransaction(this.props.transactionID)
+          .then((res) => {
+            this.transaction = { ...res };
+            console.log("this.transaction");
+            console.log(this.transaction);
+          })
+          .then(() => {
+            this.setState((prevState, props) => ({
+              transactionOpen: this.props.transactionOpen,
               options: prevState.options
-            }),
-            () => {
-              this.handleOpen();
-              if (debug) {
-                console.log("this.state");
-                console.log(this.state);
-              }
-            }
-          );
-        });
+            }));
+            console.log("this.transaction after set state");
+            console.log(this.transaction);
+          });
+      } else {
+        this.setState((prevState, props) => ({
+          transactionOpen: this.props.transactionOpen,
+          options: prevState.options
+        }));
       }
     }
   }
 
   // Handles
-  handleOpen() {
-    if (debug) {
-      console.log("DialogTransaction.handleOpen");
-    }
-    this.setState(
-      (prevState, props) => ({
-        open: true,
-        transaction: prevState.transaction,
-        options: prevState.options
-      }),
-      () => {
-        if (debug) {
-          console.log("this.state");
-          console.log(this.state);
-        }
-      }
-    );
-  }
   handleClose() {
     if (debug) {
-      console.log("DialogTransaction.handleClose");
+      console.log("Transaction.handleClose");
     }
-    this.setState(
-      (prevState, props) => ({
-        open: false,
-        transaction: prevState.transaction,
-        options: prevState.options
-      }),
-      () => {
-        this.props.onclose();
-        if (debug) {
-          console.log("this.state");
-          console.log(this.state);
-        }
-      }
-    );
+    this.transaction = { ...emptyTransaction };
+    this.props.onclose();
   }
   handleChange(event, newValue) {
     if (debug) {
-      console.log("DialogTransaction.handleChange");
+      console.log("Transaction.handleChange");
     }
     const target = event.target;
     if (debug) {
       console.log(target);
     }
-    var previousTransaction = this.state.transaction;
+    var previousTransaction = this.transaction;
     switch (target.name) {
       case "name":
         if (debug) {
@@ -384,45 +345,33 @@ export default class DialogTransaction extends React.Component {
           console.log("no match " + target.name);
         }
     }
-
-    this.setState(
-      (prevState, props) => ({
-        open: prevState.open,
-        transaction: previousTransaction,
-        options: prevState.options
-      }),
-      () => {
-        if (debug) {
-          console.log("this.state");
-          console.log(this.state);
-        }
-      }
-    );
+    // Update
+    this.transaction = previousTransaction;
   }
   handleSave() {
     if (debug) {
-      console.log("DialogTransaction.handleSave");
+      console.log("Transaction.handleSave");
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.transaction.name === "") {
+    if (this.transaction.name === "") {
       save = false;
       errors.push("Nom vide");
     }
-    if (this.state.transaction.date === null) {
+    if (this.transaction.date === null) {
       save = false;
       errors.push("Date vide");
     }
-    if (this.state.transaction.amount === "") {
+    if (this.transaction.amount === "") {
       save = false;
       errors.push("Montant vide");
     }
-    if (this.state.transaction.by === "") {
+    if (this.transaction.by === "") {
       save = false;
       errors.push("Payé par vide");
     }
-    if (this.state.transaction.for === []) {
+    if (this.transaction.for === []) {
       save = false;
       errors.push("Payé pour vide");
     }
@@ -433,73 +382,52 @@ export default class DialogTransaction extends React.Component {
     // Post or publish
     if (save === true) {
       if (debug) {
-        console.log(this.props.transaction);
+        console.log(this.props.transactionID);
+        console.log(this.transaction);
       }
-      if (this.props.transaction === "") {
+      if (this.props.transactionID === "") {
         // POST
         if (debug) {
           console.log("POST");
-          console.log(this.state.transaction);
         }
         if (debug === false) {
-          createTransaction(this.state.transaction).then(() => {
+          createTransaction(this.transaction).then(() => {
             this.props.onsave();
           });
         }
-        this.setState((prevState, props) => ({
-          open: false,
-          transaction: prevState.transaction,
-          options: prevState.options
-        }));
+        this.props.onclose();
       } else {
         // PUT
         if (debug) {
           console.log("PUT");
-          console.log(this.state.transaction);
         }
         if (debug === false) {
-          modifyTransaction(
-            this.props.transaction,
-            this.state.transaction
-          ).then(() => {
-            this.props.onsave();
-          });
+          modifyTransaction(this.props.transactionID, this.transaction).then(
+            () => {
+              this.props.onsave();
+            }
+          );
         }
-        this.setState((prevState, props) => ({
-          open: false,
-          transaction: prevState.transaction
-        }));
+        this.props.onclose();
       }
     }
   }
   handleChangeDate(newValue) {
-    var previousTransaction = this.state.transaction;
+    var previousTransaction = this.transaction;
     previousTransaction.date = newValue;
-    this.setState(
-      (prevState, props) => ({
-        open: prevState.open,
-        transaction: previousTransaction,
-        options: prevState.options
-      }),
-      () => {
-        if (debug) {
-          console.log("this.state");
-          console.log(this.state);
-        }
-      }
-    );
+    // Update
+    this.transaction = previousTransaction;
   }
   hanldeOpenCategorySelector() {
     getCategoryTransactions().then((newOptions) => {
       this.setState(
         (prevState, props) => ({
-          open: prevState.open,
-          transaction: prevState.transaction,
+          transactionOpen: prevState.transactionOpen,
           options: newOptions
         }),
         () => {
           if (debug) {
-            console.log("this.state");
+            console.log("Transaction.state");
             console.log(this.state);
           }
         }
