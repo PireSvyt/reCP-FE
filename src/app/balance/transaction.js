@@ -29,7 +29,7 @@ import {
 } from "./api/transactions";
 import { getCategoryTransactions } from "./api/categorytransactions";
 
-let debug = true;
+let debug = false;
 const filter = createFilterOptions();
 let emptyTransaction = {
   _id: "",
