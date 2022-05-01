@@ -3,6 +3,10 @@
     "FR": "Mes recettes",
     "EN": "My recipies"
   },
+  "title.subsection_recipe": {
+    "FR": "Ma recette",
+    "EN": "My recipe"
+  },
   "title.section_recipieedit": {
     "FR": "Editer ma recette",
     "EN": "Edit my recipe"
@@ -63,9 +67,17 @@
     "FR": "Selectionner",
     "EN": "Select"
   },
+  "button.cancel": {
+    "FR": "Annuler",
+    "EN": "Cancel"
+  },
   "input.name": {
     "FR": "Nom",
     "EN": "Name"
+  },
+  "input.portions": {
+    "FR": "Portions",
+    "EN": "Portions"
   },
   "input.date": {
     "FR": "Date",
@@ -78,6 +90,14 @@
   "input.category": {
     "FR": "Catégorie",
     "EN": "Category"
+  },
+  "input.quantity": {
+    "FR": "Quantité",
+    "EN": "Quantity"
+  },
+  "input.unit": {
+    "FR": "Unité",
+    "EN": "Unit"
   },
   "text.by": {
     "FR": "Par",

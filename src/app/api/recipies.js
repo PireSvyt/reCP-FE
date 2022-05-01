@@ -49,7 +49,7 @@ export async function modifyRecipe(id, newRecipe) {
   }
 }
 
-export async function getRecipes() {
+export async function getRecipies() {
   try {
     const res = await axios.get(serverUrl + "/api/recipe");
     return res.data;

@@ -29,7 +29,6 @@ import {
 } from "./api/transactions";
 import { getCategoryTransactions } from "./api/categorytransactions";
 
-let debug = false;
 const filter = createFilterOptions();
 let emptyTransaction = {
   _id: "",
@@ -43,7 +42,7 @@ let emptyTransaction = {
 
 export default class Transaction extends React.Component {
   constructor(props) {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.constructor");
     }
     super(props);
@@ -53,7 +52,7 @@ export default class Transaction extends React.Component {
       options: []
     };
     this.transaction = { ...emptyTransaction };
-    // Bindings
+    // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -62,7 +61,7 @@ export default class Transaction extends React.Component {
     );
   }
   render() {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.render");
       console.log("Transaction.props.transactionID");
       console.log(this.props.transactionID);
@@ -77,7 +76,9 @@ export default class Transaction extends React.Component {
           onClose={this.handleClose}
           fullWidth={true}
         >
-          <DialogTitle>Transaction</DialogTitle>
+          <DialogTitle>
+            {appcopy["title.subsection_transaction"][config.app.language]}
+          </DialogTitle>
           <DialogContent>
             <Box
               sx={{
@@ -255,7 +256,7 @@ export default class Transaction extends React.Component {
     );
   }
   componentDidUpdate(prevState) {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.componentDidUpdate");
       console.log("Transaction.state");
       console.log(this.state);
@@ -298,30 +299,30 @@ export default class Transaction extends React.Component {
 
   // Handles
   handleClose() {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.handleClose");
     }
     this.transaction = { ...emptyTransaction };
     this.props.onclose();
   }
   handleChange(event, newValue) {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.handleChange");
     }
     const target = event.target;
-    if (debug) {
+    if (config.debug) {
       console.log(target);
     }
     var previousTransaction = this.transaction;
     switch (target.name) {
       case "name":
-        if (debug) {
+        if (config.debug) {
           console.log("change name : " + target.value);
         }
         previousTransaction.name = target.value;
         break;
       case "date":
-        if (debug) {
+        if (config.debug) {
           console.log("change date : " + target.value);
         }
         previousTransaction.date = target.value;
@@ -330,19 +331,19 @@ export default class Transaction extends React.Component {
         }));
         break;
       case "amount":
-        if (debug) {
+        if (config.debug) {
           console.log("change amount : " + target.value);
         }
         previousTransaction.amount = target.value;
         break;
       case "by":
-        if (debug) {
+        if (config.debug) {
           console.log("change by : " + target.value);
         }
         previousTransaction.by = target.value;
         break;
       case "for":
-        if (debug) {
+        if (config.debug) {
           console.log("change for : " + target.value + " " + target.checked);
         }
         previousTransaction.for = previousTransaction.for.filter(function (
@@ -357,25 +358,25 @@ export default class Transaction extends React.Component {
         }
         break;
       case "category":
-        if (debug) {
+        if (config.debug) {
           console.log("change category : " + target.value);
         }
         previousTransaction.category = target.value;
         break;
       default:
-        if (debug) {
+        if (config.debug) {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.transaction");
       console.log(this.transaction);
     }
     this.transaction = previousTransaction;
   }
   handleSave() {
-    if (debug) {
+    if (config.debug) {
       console.log("Transaction.handleSave");
     }
     // Check inputs
@@ -407,16 +408,16 @@ export default class Transaction extends React.Component {
     }
     // Post or publish
     if (save === true) {
-      if (debug) {
+      if (config.debug) {
         console.log(this.props.transactionID);
         console.log(this.transaction);
       }
       if (this.props.transactionID === "") {
         // POST
-        if (debug) {
+        if (config.debug) {
           console.log("POST");
         }
-        if (debug === false) {
+        if (config.debug === false) {
           createTransaction(this.transaction).then(() => {
             this.props.onsave();
           });
@@ -424,10 +425,10 @@ export default class Transaction extends React.Component {
         this.props.onclose();
       } else {
         // PUT
-        if (debug) {
+        if (config.debug) {
           console.log("PUT");
         }
-        if (debug === false) {
+        if (config.debug === false) {
           modifyTransaction(this.props.transactionID, this.transaction).then(
             () => {
               this.props.onsave();
@@ -446,7 +447,7 @@ export default class Transaction extends React.Component {
           options: newOptions
         }),
         () => {
-          if (debug) {
+          if (config.debug) {
             console.log("Transaction.state");
             console.log(this.state);
           }

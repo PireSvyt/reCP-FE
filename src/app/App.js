@@ -1,37 +1,110 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import * as React from "react";
+import { Paper, Box, Tabs, Tab } from "@mui/material";
+import BalanceIcon from "@mui/icons-material/Balance";
+import BookIcon from "@mui/icons-material/Book";
 
-import { navigates, pages } from "./navigation";
-import Navbar from "./Navbar";
-import Myrecipies from "./Myrecipies";
-import Recipeview from "./Recipeview";
-import Recipeedit from "./Recipeedit";
-import Thisweek from "./Thisweek";
+import config from "../config";
+import appcopy from "./copy";
+
 import Balance from "./balance/Balance";
+import Myrecipies from "./Myrecipies";
+
+const pages = [
+  {
+    index: 0,
+    label: appcopy["title.section_myrecipies"][config.app.language],
+    code: "myrecipies",
+    icon: BookIcon,
+    component: Myrecipies
+  },
+  {
+    index: 1,
+    label: appcopy["title.section_mybalance"][config.app.language],
+    code: "mybalance",
+    icon: BalanceIcon,
+    component: Balance
+  }
+];
 
 export default class App extends React.Component {
   constructor(props) {
+    if (config.debug) {
+      console.log("App.constructor");
+    }
     super(props);
-    this.state = { focus: "thisweek" };
+    this.state = {
+      selectedTab: 0
+    };
+    // Updates
+
+    // Handles
+    this.handleChangeTab = this.handleChangeTab.bind(this);
   }
   render() {
     return (
-      <React.Fragment>
+      <Box sx={{ width: "100%" }}>
         {pages.map((page) => (
-          <div id={`${page.code}`} key={`${page.code}`} />
+          <AppTabPanel
+            value={this.state.selectedTab}
+            index={page.index}
+            key={page.code}
+          >
+            <page.component />
+          </AppTabPanel>
         ))}
-        <Navbar />
-      </React.Fragment>
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          elevation={3}
+        >
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={this.state.selectedTab}
+              onChange={this.handleChangeTab}
+              variant="fullWidth"
+            >
+              {pages.map((page) => (
+                <Tab
+                  icon={<page.icon />}
+                  id={"navtab-" + page.index}
+                  aria-controls={"navtabpanel-" + page.index}
+                  key={page.code}
+                />
+              ))}
+            </Tabs>
+          </Box>
+        </Paper>
+      </Box>
     );
   }
-  componentDidMount() {
-    // Render sub components
-    ReactDOM.render(<Balance />, document.getElementById("mybalance"));
-    ReactDOM.render(<Myrecipies />, document.getElementById("myrecipies"));
-    ReactDOM.render(<Recipeview />, document.getElementById("recipeview"));
-    ReactDOM.render(<Recipeedit />, document.getElementById("recipeedit"));
-    ReactDOM.render(<Thisweek />, document.getElementById("thisweek"));
-    // Navigate to landing page
-    navigates("mybalance");
+
+  // Handlers
+  handleChangeTab(event, newTabIndex) {
+    if (config.debug) {
+      console.log("App.handleChangeTab " + newTabIndex);
+    }
+    switch (newTabIndex) {
+      default:
+        if (config.debug) {
+          console.log("/!\\ no match tab index : " + newTabIndex);
+        }
+    }
+    this.setState({
+      selectedTab: newTabIndex
+    });
   }
+}
+
+function AppTabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={"navtabpanel-" + index}
+      aria-labelledby={"navtab-" + index}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
+    </div>
+  );
 }

@@ -20,11 +20,9 @@ import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";
 
-let debug = false;
-
 export default class Balance extends React.Component {
   constructor(props) {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.constructor");
     }
     super(props);
@@ -36,15 +34,17 @@ export default class Balance extends React.Component {
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
       transactions: []
     };
+    // Updates
     this.updateTabHeight = this.updateTabHeight.bind(this);
+    this.updateSummary = this.updateSummary.bind(this);
+    this.updateTransactions = this.updateTransactions.bind(this);
+    // Handles
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
-    this.updateSummary = this.updateSummary.bind(this);
-    this.updateTransactions = this.updateTransactions.bind(this);
   }
   render() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.render");
     }
     return (
@@ -87,17 +87,21 @@ export default class Balance extends React.Component {
               <List>
                 <ListItem key={"Alice"}>
                   <ListItemText
-                    primary={`Alice : ${
+                    sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                    primary={`${
                       Math.round(this.state.summary.users.Alice * 100) / 100
                     } €`}
                   />
+                  <ListItemText sx={{ width: 5 / 7 }} primary={"Alice"} />
                 </ListItem>
                 <ListItem key={"Pierre"}>
                   <ListItemText
-                    primary={`Pierre : ${
+                    sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                    primary={`${
                       Math.round(this.state.summary.users.Pierre * 100) / 100
                     } €`}
                   />
+                  <ListItemText sx={{ width: 5 / 7 }} primary={"Pierre"} />
                 </ListItem>
               </List>
             </Paper>
@@ -149,9 +153,9 @@ export default class Balance extends React.Component {
                     >
                       <ListItemButton
                         onClick={() => {
-                          if (debug) {
+                          if (config.debug) {
                             console.log(
-                              "updateTransactions.onClick " + value._id
+                              "Balance.transactions.onClick " + value._id
                             );
                           }
                           this.handleOpenTransaction(value._id);
@@ -182,7 +186,7 @@ export default class Balance extends React.Component {
         >
           <AddIcon
             onClick={() => {
-              if (debug) {
+              if (config.debug) {
                 console.log("Balance.AddIcon.onClick");
               }
               this.handleOpenTransaction("");
@@ -199,35 +203,17 @@ export default class Balance extends React.Component {
     );
   }
   componentDidMount() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.componentDidMount");
     }
     // Update
-    this.updateSummary();
     this.updateTabHeight();
+    this.updateSummary();
   }
-  handleChangeTab(event, newTabIndex) {
-    if (debug) {
-      console.log("Balance.handleChangeTab " + newTabIndex);
-    }
-    switch (newTabIndex) {
-      case 0:
-        this.updateSummary();
-        break;
-      case 1:
-        this.updateTransactions();
-        break;
-      default:
-        if (debug) {
-          console.log("/!\\ no match tab index : " + newTabIndex);
-        }
-    }
-    this.setState({
-      selectedTab: newTabIndex
-    });
-  }
+
+  // Updates
   updateTabHeight() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
@@ -235,7 +221,7 @@ export default class Balance extends React.Component {
     });
   }
   updateSummary() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.updateSummary");
     }
     getBalance().then((res) => {
@@ -245,7 +231,7 @@ export default class Balance extends React.Component {
     });
   }
   updateTransactions() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.updateTransactions");
     }
     //
@@ -256,8 +242,30 @@ export default class Balance extends React.Component {
       });
     });
   }
+
+  // Handlers
+  handleChangeTab(event, newTabIndex) {
+    if (config.debug) {
+      console.log("Balance.handleChangeTab " + newTabIndex);
+    }
+    switch (newTabIndex) {
+      case 0:
+        this.updateSummary();
+        break;
+      case 1:
+        this.updateTransactions();
+        break;
+      default:
+        if (config.debug) {
+          console.log("/!\\ no match tab index : " + newTabIndex);
+        }
+    }
+    this.setState({
+      selectedTab: newTabIndex
+    });
+  }
   handleOpenTransaction(id) {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.handleOpenTransaction " + id);
     }
     this.setState({
@@ -266,7 +274,7 @@ export default class Balance extends React.Component {
     });
   }
   handleCloseTransaction() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
@@ -275,7 +283,7 @@ export default class Balance extends React.Component {
     });
   }
   handleSaveTransaction() {
-    if (debug) {
+    if (config.debug) {
       console.log("Balance.handleSaveTransaction");
     }
     this.updateBalance();

@@ -4,12 +4,12 @@
     "EN": "My balance"
   },
   "title.subsection_balanceperuser": {
-    "FR": "Balance par utilisateur",
-    "EN": "Balance per user"
+    "FR": "Par utilisateur",
+    "EN": "Per user"
   },
   "title.subsection_balancepercategory": {
-    "FR": "Balance par catégorie",
-    "EN": "Balance per category"
+    "FR": "Par catégorie",
+    "EN": "Per category"
   },
   "title.subsection_balance": {
     "FR": "Balance",
