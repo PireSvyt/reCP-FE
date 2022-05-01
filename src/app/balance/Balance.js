@@ -138,9 +138,6 @@ export default class Balance extends React.Component {
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
             <Paper>
-              <h3>
-                {appcopy["title.subsection_transactions"][config.app.language]}
-              </h3>
               <List dense={true}>
                 {this.state.transactions.map((value) => (
                   <ListItem key={`${value._id}`} id={`${value._id}`}>
@@ -179,8 +176,8 @@ export default class Balance extends React.Component {
           color="primary"
           sx={{
             position: "absolute",
-            top: 85,
-            left: window.innerWidth / 2 - 20
+            top: 30,
+            left: window.innerWidth / 2 - 28
           }}
         >
           <AddIcon
