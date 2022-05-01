@@ -11,6 +11,10 @@
     "FR": "Balance par catégorie",
     "EN": "Balance per category"
   },
+  "title.subsection_balance": {
+    "FR": "Balance",
+    "EN": "Balance"
+  },
   "title.subsection_transactions": {
     "FR": "Transactions",
     "EN": "Transactions"
