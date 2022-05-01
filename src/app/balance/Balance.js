@@ -43,6 +43,7 @@ export default class Balance extends React.Component {
     }
     return (
       <div>
+        <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
         <Box
           sx={{
             display: "flex",
@@ -65,8 +66,7 @@ export default class Balance extends React.Component {
             {appcopy["title.section_mybalance"][config.app.language]}
           </Button>
           <Fab
-            color="primary"
-            sx={{ position: "fixed", right: 20, bottom: 80 }}
+            color="primary" /*sx={{ position: "fixed", right: 20, top: 20 }}*/
           >
             <AddIcon
               onClick={() => {
