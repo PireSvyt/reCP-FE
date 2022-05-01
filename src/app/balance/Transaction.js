@@ -11,11 +11,11 @@ import {
   RadioGroup,
   FormControlLabel,
   Checkbox,
-  FormGroup
+  FormGroup,
+  InputAdornment
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
@@ -49,6 +49,7 @@ export default class Transaction extends React.Component {
     super(props);
     this.state = {
       transactionOpen: this.props.transactionOpen,
+      transactionDate: Date(),
       options: []
     };
     this.transaction = { ...emptyTransaction };
@@ -96,10 +97,20 @@ export default class Transaction extends React.Component {
                 dateAdapter={AdapterDateFns}
                 locale={frLocale}
               >
-                <DesktopDatePicker
+                <MobileDatePicker
+                  name="date"
                   label=""
-                  value={this.transaction.date}
-                  onChange={(newValue) => this.handleChangeDate(newValue)}
+                  value={this.state.transactionDate}
+                  onChange={(newValue) => {
+                    this.setState((prevState, props) => ({
+                      transactionDate: newValue
+                    }));
+                  }}
+                  onAccept={(newValue) => {
+                    this.handleChange({
+                      target: { name: "date", value: newValue }
+                    });
+                  }}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -110,6 +121,11 @@ export default class Transaction extends React.Component {
                 variant="standard"
                 defaultValue={this.transaction.amount}
                 onChange={this.handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">€</InputAdornment>
+                  )
+                }}
               />
 
               <RadioGroup
@@ -238,11 +254,6 @@ export default class Transaction extends React.Component {
       </div>
     );
   }
-  componentDidMount() {
-    if (debug) {
-      console.log("Transaction.componentDidMount");
-    }
-  }
   componentDidUpdate(prevState) {
     if (debug) {
       console.log("Transaction.componentDidUpdate");
@@ -254,6 +265,9 @@ export default class Transaction extends React.Component {
       prevState.transactionID !== this.props.transactionID
     ) {
       this.transaction = { ...emptyTransaction };
+      this.setState((prevState, props) => ({
+        transactionDate: Date()
+      }));
       if (this.props.transactionID !== "") {
         // Load
         console.log(
@@ -269,15 +283,14 @@ export default class Transaction extends React.Component {
           .then(() => {
             this.setState((prevState, props) => ({
               transactionOpen: this.props.transactionOpen,
-              options: prevState.options
+              transactionDate: this.transaction.date
             }));
             console.log("this.transaction after set state");
             console.log(this.transaction);
           });
       } else {
         this.setState((prevState, props) => ({
-          transactionOpen: this.props.transactionOpen,
-          options: prevState.options
+          transactionOpen: this.props.transactionOpen
         }));
       }
     }
@@ -303,25 +316,34 @@ export default class Transaction extends React.Component {
     switch (target.name) {
       case "name":
         if (debug) {
-          console.log("change name " + target.value);
+          console.log("change name : " + target.value);
         }
         previousTransaction.name = target.value;
         break;
+      case "date":
+        if (debug) {
+          console.log("change date : " + target.value);
+        }
+        previousTransaction.date = target.value;
+        this.setState((prevState, props) => ({
+          transactionDate: previousTransaction.date
+        }));
+        break;
       case "amount":
         if (debug) {
-          console.log("change amount " + target.value);
+          console.log("change amount : " + target.value);
         }
         previousTransaction.amount = target.value;
         break;
       case "by":
         if (debug) {
-          console.log("change by " + target.value);
+          console.log("change by : " + target.value);
         }
         previousTransaction.by = target.value;
         break;
       case "for":
         if (debug) {
-          console.log("change for " + target.value + " " + target.checked);
+          console.log("change for : " + target.value + " " + target.checked);
         }
         previousTransaction.for = previousTransaction.for.filter(function (
           value,
@@ -336,16 +358,20 @@ export default class Transaction extends React.Component {
         break;
       case "category":
         if (debug) {
-          console.log("change category " + target.value);
+          console.log("change category : " + target.value);
         }
         previousTransaction.category = target.value;
         break;
       default:
         if (debug) {
-          console.log("no match " + target.name);
+          console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
+    if (debug) {
+      console.log("Transaction.transaction");
+      console.log(this.transaction);
+    }
     this.transaction = previousTransaction;
   }
   handleSave() {
@@ -411,12 +437,6 @@ export default class Transaction extends React.Component {
         this.props.onclose();
       }
     }
-  }
-  handleChangeDate(newValue) {
-    var previousTransaction = this.transaction;
-    previousTransaction.date = newValue;
-    // Update
-    this.transaction = previousTransaction;
   }
   hanldeOpenCategorySelector() {
     getCategoryTransactions().then((newOptions) => {
