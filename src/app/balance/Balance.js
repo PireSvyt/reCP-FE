@@ -19,7 +19,7 @@ import config from "../../config";
 import appcopy from "./copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
-import Transaction from "./transaction";
+import Transaction from "./Transaction";
 
 let debug = false;
 
@@ -36,30 +36,6 @@ export default class Balance extends React.Component {
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
     this.updateTransactions = this.updateTransactions.bind(this);
-  }
-  handleOpenTransaction(id) {
-    if (debug) {
-      console.log("Balance.handleOpenTransaction " + id);
-    }
-    this.setState({
-      transactionID: id,
-      transactionOpen: true
-    });
-  }
-  handleCloseTransaction() {
-    if (debug) {
-      console.log("Balance.handleCloseTransaction");
-    }
-    this.setState({
-      transactionID: "",
-      transactionOpen: false
-    });
-  }
-  handleSaveTransaction() {
-    if (debug) {
-      console.log("Balance.handleSaveTransaction");
-    }
-    this.updateBalance();
   }
   render() {
     if (debug) {
@@ -91,18 +67,18 @@ export default class Balance extends React.Component {
           <Fab
             color="primary"
             sx={{ position: "fixed", right: 20, bottom: 80 }}
-            onClick={() => {
-              if (debug) {
-                console.log("Balance.AddIcon.onClick");
-              }
-              this.handleOpenTransaction("");
-            }}
           >
-            <AddIcon />
+            <AddIcon
+              onClick={() => {
+                if (debug) {
+                  console.log("Balance.AddIcon.onClick");
+                }
+                this.handleOpenTransaction("");
+              }}
+            />
           </Fab>
         </Box>
         <Transaction
-          id="dialogTransaction"
           transactionID={this.state.transactionID}
           transactionOpen={this.state.transactionOpen}
           onsave={this.handleSaveTransaction}
@@ -128,14 +104,9 @@ export default class Balance extends React.Component {
       console.log("Balance.updateTransactions");
     }
     // Hide
-    //document.getElementById("balance_transaction").style.display = "none";
     document.getElementById("balance_summary").style.display = "none";
     // Display
     document.getElementById("balance_transactions").style.display = "block";
-    //<Swipeable onSwipeLeft={() => handleSwipeLeft(value._id)}>
-    function handleSwipeLeft(id) {
-      console.log("handleSwipeLeft " + id);
-    }
     //
     Moment.locale("en");
     getTransactions().then((res) => {
@@ -245,5 +216,29 @@ export default class Balance extends React.Component {
         document.getElementById("balance_summary")
       );
     });
+  }
+  handleOpenTransaction(id) {
+    if (debug) {
+      console.log("Balance.handleOpenTransaction " + id);
+    }
+    this.setState({
+      transactionID: id,
+      transactionOpen: true
+    });
+  }
+  handleCloseTransaction() {
+    if (debug) {
+      console.log("Balance.handleCloseTransaction");
+    }
+    this.setState({
+      transactionID: "",
+      transactionOpen: false
+    });
+  }
+  handleSaveTransaction() {
+    if (debug) {
+      console.log("Balance.handleSaveTransaction");
+    }
+    this.updateBalance();
   }
 }
