@@ -5,5 +5,5 @@
   "app": {
     "language": "FR"
   },
-  "debug": false
+  "debug": true
 }

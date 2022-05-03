@@ -9,9 +9,6 @@ import {
   DialogTitle,
   List,
   ListItem,
-  ListItemText,
-  ListItemButton,
-  Fab,
   IconButton
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,7 +17,6 @@ import config from "../config";
 import appcopy from "./copy";
 import { random_id } from "./toolkit";
 import { getRecipe, createRecipe, modifyRecipe } from "./api/recipies";
-import { ThirtyFpsSelect } from "@mui/icons-material";
 
 let emptyRecipe = {
   _id: "",
@@ -44,6 +40,9 @@ function getEmptyIngredient() {
   };
 }
 let nextables = {};
+
+// NEED TO SET RECIPE AS THIS INSTEAD OF STATE
+// NEED TO REWORK COMPONENT DID MOUNT
 
 export default class Recipe extends React.Component {
   constructor(props) {
