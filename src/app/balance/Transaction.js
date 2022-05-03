@@ -265,10 +265,6 @@ export default class Transaction extends React.Component {
       prevState.transactionOpen !== this.props.transactionOpen ||
       prevState.transactionID !== this.props.transactionID
     ) {
-      this.transaction = { ...emptyTransaction };
-      this.setState((prevState, props) => ({
-        transactionDate: Date()
-      }));
       if (this.props.transactionID !== "") {
         // Load
         console.log(
@@ -290,8 +286,10 @@ export default class Transaction extends React.Component {
             console.log(this.transaction);
           });
       } else {
+        this.transaction = { ...emptyTransaction };
         this.setState((prevState, props) => ({
-          transactionOpen: this.props.transactionOpen
+          transactionOpen: this.props.transactionOpen,
+          transactionDate: Date()
         }));
       }
     }
@@ -401,6 +399,10 @@ export default class Transaction extends React.Component {
     if (this.transaction.for === []) {
       save = false;
       errors.push("Payé pour vide");
+    }
+    if (this.transaction.category === "") {
+      save = false;
+      errors.push("Catégorie vide");
     }
     // Save or not?
     if (errors !== []) {
