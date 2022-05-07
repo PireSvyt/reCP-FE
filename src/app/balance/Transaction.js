@@ -49,9 +49,9 @@ export default class Transaction extends React.Component {
     this.state = {
       transactionOpen: this.props.transactionOpen,
       transactionDate: Date(),
-      options: []
+      options: [],
+      transaction: { ...emptyTransaction }
     };
-    this.transaction = { ...emptyTransaction };
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -65,8 +65,8 @@ export default class Transaction extends React.Component {
       console.log("Transaction.render");
       console.log("Transaction.props.transactionID");
       console.log(this.props.transactionID);
-      console.log("Transaction.transaction");
-      console.log(this.transaction);
+      console.log("Transaction.state.transaction");
+      console.log(this.state.transaction);
     }
     return (
       <div>
@@ -91,7 +91,7 @@ export default class Transaction extends React.Component {
                 name="name"
                 label={appcopy["input.name"][config.app.language]}
                 variant="standard"
-                defaultValue={this.transaction.name}
+                defaultValue={this.state.transaction.name}
                 onChange={this.handleChange}
               />
               <LocalizationProvider
@@ -120,7 +120,7 @@ export default class Transaction extends React.Component {
                 name="amount"
                 label={appcopy["input.amount"][config.app.language]}
                 variant="standard"
-                defaultValue={this.transaction.amount}
+                defaultValue={this.state.transaction.amount}
                 onChange={this.handleChange}
                 InputProps={{
                   startAdornment: (
@@ -132,7 +132,7 @@ export default class Transaction extends React.Component {
               <RadioGroup
                 name="by"
                 onChange={this.handleChange}
-                defaultValue={this.transaction.by}
+                defaultValue={this.state.transaction.by}
                 sx={{
                   display: "flex",
                   flexDirection: "row",
@@ -191,9 +191,9 @@ export default class Transaction extends React.Component {
               </FormGroup>
 
               <Autocomplete
-                defaultValue={this.transaction.category}
+                defaultValue={this.state.transaction.category}
+                //onChange={this.handleChange}
                 onOpen={this.hanldeOpenCategorySelector}
-                onChange={this.handleChange}
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params);
                   const { inputValue } = params;
@@ -226,7 +226,18 @@ export default class Transaction extends React.Component {
                   return option.name;
                 }}
                 renderOption={(props, option) => (
-                  <li {...props} name="category">
+                  <li
+                    {...props}
+                    name="category"
+                    value={option.name}
+                    onClick={(e) => {
+                      e.target = {
+                        name: "category",
+                        value: option.name
+                      };
+                      this.handleChange(e, option.name);
+                    }}
+                  >
                     {option.name}
                   </li>
                 )}
@@ -273,23 +284,21 @@ export default class Transaction extends React.Component {
         );
         getTransaction(this.props.transactionID)
           .then((res) => {
-            this.transaction = { ...res };
-            console.log("this.transaction");
-            console.log(this.transaction);
+            this.setState((prevState, props) => ({
+              transaction: { ...res }
+            }));
           })
           .then(() => {
             this.setState((prevState, props) => ({
               transactionOpen: this.props.transactionOpen,
-              transactionDate: this.transaction.date
+              transactionDate: this.state.transaction.date
             }));
-            console.log("this.transaction after set state");
-            console.log(this.transaction);
           });
       } else {
-        this.transaction = { ...emptyTransaction };
         this.setState((prevState, props) => ({
           transactionOpen: this.props.transactionOpen,
-          transactionDate: Date()
+          transactionDate: Date(),
+          transaction: { ...emptyTransaction }
         }));
       }
     }
@@ -300,7 +309,9 @@ export default class Transaction extends React.Component {
     if (config.debug) {
       console.log("Transaction.handleClose");
     }
-    this.transaction = { ...emptyTransaction };
+    this.setState((prevState, props) => ({
+      transaction: { ...emptyTransaction }
+    }));
     this.props.onclose();
   }
   handleChange(event, newValue) {
@@ -309,9 +320,14 @@ export default class Transaction extends React.Component {
     }
     const target = event.target;
     if (config.debug) {
+      console.log("target");
       console.log(target);
+      console.log("target.name");
+      console.log(target.name);
+      console.log("newValue");
+      console.log(newValue);
     }
-    var previousTransaction = this.transaction;
+    var previousTransaction = this.state.transaction;
     switch (target.name) {
       case "name":
         if (config.debug) {
@@ -357,9 +373,9 @@ export default class Transaction extends React.Component {
         break;
       case "category":
         if (config.debug) {
-          console.log("change category : " + target.value);
+          console.log("change category : " + newValue);
         }
-        previousTransaction.category = target.value;
+        previousTransaction.category = newValue;
         break;
       default:
         if (config.debug) {
@@ -369,41 +385,47 @@ export default class Transaction extends React.Component {
     // Update
     if (config.debug) {
       console.log("Transaction.transaction");
-      console.log(this.transaction);
+      console.log(this.state.transaction);
     }
-    this.transaction = previousTransaction;
+    this.setState((prevState, props) => ({
+      transaction: previousTransaction
+    }));
   }
   handleSave() {
     if (config.debug) {
       console.log("Transaction.handleSave");
+      console.log("this.state.transaction");
+      console.log(this.state.transaction);
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.transaction.name === "") {
+    if (this.state.transaction.name === "") {
       save = false;
       errors.push("Nom vide");
     }
-    if (this.transaction.date === null) {
+    if (this.state.transaction.date === null) {
       save = false;
       errors.push("Date vide");
     }
-    if (this.transaction.amount === "") {
+    if (this.state.transaction.amount === "") {
       save = false;
       errors.push("Montant vide");
     }
-    if (this.transaction.by === "") {
+    if (this.state.transaction.by === "") {
       save = false;
       errors.push("Payé par vide");
     }
-    if (this.transaction.for === []) {
+    if (this.state.transaction.for === []) {
       save = false;
       errors.push("Payé pour vide");
     }
-    if (this.transaction.category === "") {
+    /*
+    if (this.state.transaction.category === "") {
       save = false;
       errors.push("Catégorie vide");
     }
+    */
     // Save or not?
     if (errors !== []) {
       console.log(errors);
@@ -412,7 +434,7 @@ export default class Transaction extends React.Component {
     if (save === true) {
       if (config.debug) {
         console.log(this.props.transactionID);
-        console.log(this.transaction);
+        console.log(this.state.transaction);
       }
       if (this.props.transactionID === "") {
         // POST
@@ -420,7 +442,7 @@ export default class Transaction extends React.Component {
           console.log("POST");
         }
         if (config.debug === false) {
-          createTransaction(this.transaction).then(() => {
+          createTransaction(this.state.transaction).then(() => {
             this.props.onsave();
           });
         }
@@ -431,11 +453,12 @@ export default class Transaction extends React.Component {
           console.log("PUT");
         }
         if (config.debug === false) {
-          modifyTransaction(this.props.transactionID, this.transaction).then(
-            () => {
-              this.props.onsave();
-            }
-          );
+          modifyTransaction(
+            this.props.transactionID,
+            this.state.transaction
+          ).then(() => {
+            this.props.onsave();
+          });
         }
         this.props.onclose();
       }
