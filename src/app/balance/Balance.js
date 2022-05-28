@@ -1,7 +1,7 @@
 import * as React from "react";
 import Moment from "moment";
 import {
-  Paper,
+  Button,
   List,
   ListItem,
   ListItemText,
@@ -19,6 +19,7 @@ import appcopy from "./copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";
+import TransactionCategory from "./TransactionCategory";
 import Snack from "./Snack";
 
 export default class Balance extends React.Component {
@@ -34,6 +35,7 @@ export default class Balance extends React.Component {
       transactionOpen: false,
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
       transactions: [],
+      transactionCategoryOpen: false,
       snackOpen: false,
       snackSeverity: "warning",
       snackMessage: "Empty",
@@ -47,6 +49,15 @@ export default class Balance extends React.Component {
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
+    this.handleOpenTransactionCategory = this.handleOpenTransactionCategory.bind(
+      this
+    );
+    this.handleCloseTransactionCategory = this.handleCloseTransactionCategory.bind(
+      this
+    );
+    this.handleSaveTransactionCategory = this.handleSaveTransactionCategory.bind(
+      this
+    );
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
@@ -82,111 +93,104 @@ export default class Balance extends React.Component {
             index={0}
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
-            <Paper>
-              <h3>
-                {
-                  appcopy["title.subsection_balanceperuser"][
-                    config.app.language
-                  ]
-                }
-              </h3>
-              <List>
-                <ListItem key={"Alice"}>
+            <h3>
+              {appcopy["title.subsection_balanceperuser"][config.app.language]}
+            </h3>
+            <List>
+              <ListItem key={"Alice"}>
+                <ListItemText
+                  sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                  primary={`${
+                    Math.round(this.state.summary.users.Alice * 100) / 100
+                  } €`}
+                />
+                <ListItemText sx={{ width: 5 / 7 }} primary={"Alice"} />
+              </ListItem>
+              <ListItem key={"Pierre"}>
+                <ListItemText
+                  sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                  primary={`${
+                    Math.round(this.state.summary.users.Pierre * 100) / 100
+                  } €`}
+                />
+                <ListItemText sx={{ width: 5 / 7 }} primary={"Pierre"} />
+              </ListItem>
+            </List>
+            <h3>
+              {
+                appcopy["title.subsection_balancepercategory"][
+                  config.app.language
+                ]
+              }
+            </h3>
+            <List dense={true}>
+              {Object.keys(this.state.summary.categories).map((value) => (
+                <ListItem
+                  key={`${this.state.summary.categories[value]._id}`}
+                  id={`${this.state.summary.categories[value]._id}`}
+                >
                   <ListItemText
                     sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
                     primary={`${
-                      Math.round(this.state.summary.users.Alice * 100) / 100
+                      Math.round(
+                        this.state.summary.categories[value].total * 100
+                      ) / 100
                     } €`}
                   />
-                  <ListItemText sx={{ width: 5 / 7 }} primary={"Alice"} />
-                </ListItem>
-                <ListItem key={"Pierre"}>
                   <ListItemText
-                    sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
-                    primary={`${
-                      Math.round(this.state.summary.users.Pierre * 100) / 100
-                    } €`}
+                    sx={{ width: 5 / 7 }}
+                    primary={`${this.state.summary.categories[value].name}`}
                   />
-                  <ListItemText sx={{ width: 5 / 7 }} primary={"Pierre"} />
                 </ListItem>
-              </List>
-            </Paper>
-            <Paper>
-              <h3>
-                {
-                  appcopy["title.subsection_balancepercategory"][
-                    config.app.language
-                  ]
-                }
-              </h3>
-              <List dense={true}>
-                {Object.keys(this.state.summary.categories).map((value) => (
-                  <ListItem
-                    key={`${this.state.summary.categories[value]._id}`}
-                    id={`${this.state.summary.categories[value]._id}`}
-                  >
-                    <ListItemText
-                      sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
-                      primary={`${
-                        Math.round(
-                          this.state.summary.categories[value].total * 100
-                        ) / 100
-                      } €`}
-                    />
-                    <ListItemText
-                      sx={{ width: 5 / 7 }}
-                      primary={`${this.state.summary.categories[value].name}`}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+              ))}
+            </List>
+            <Button onClick={this.handleOpenTransactionCategory}>
+              {appcopy["button.newTransactionCategory"][config.app.language]}
+            </Button>
           </TabPanel>
           <TabPanel
             value={this.state.selectedTab}
             index={1}
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
-            <Paper>
-              <List dense={true}>
-                {this.state.transactions.map((value) => (
-                  <ListItem key={`${value._id}`} id={`${value._id}`}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row"
+            <List dense={true}>
+              {this.state.transactions.map((value) => (
+                <ListItem key={`${value._id}`} id={`${value._id}`}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row"
+                    }}
+                  >
+                    <ListItemButton
+                      onClick={() => {
+                        if (config.debug) {
+                          console.log(
+                            "Balance.transactions.onClick " + value._id
+                          );
+                        }
+                        this.handleOpenTransaction(value._id);
                       }}
                     >
-                      <ListItemButton
-                        onClick={() => {
-                          if (config.debug) {
-                            console.log(
-                              "Balance.transactions.onClick " + value._id
-                            );
-                          }
-                          this.handleOpenTransaction(value._id);
-                        }}
-                      >
-                        <EditIcon />
-                      </ListItemButton>
-                      <ListItemText
-                        primary={`${value.name}`}
-                        secondary={`${value.amount} €, le ${Moment(
-                          value.date
-                        ).format("DD/MM/YYYY")}`}
-                      />
-                    </Box>
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+                      <EditIcon />
+                    </ListItemButton>
+                    <ListItemText
+                      primary={`${value.name}`}
+                      secondary={`${value.amount} €, le ${Moment(
+                        value.date
+                      ).format("DD/MM/YYYY")}`}
+                    />
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
           </TabPanel>
         </Box>
         <Fab
           color="primary"
           sx={{
             position: "absolute",
-            top: 30,
+            top: 40,
             left: window.innerWidth / 2 - 28
           }}
         >
@@ -202,8 +206,12 @@ export default class Balance extends React.Component {
         <Transaction
           transactionID={this.state.transactionID}
           transactionOpen={this.state.transactionOpen}
-          onsave={() => {} /*this.handleSaveTransaction*/}
           onclose={this.handleCloseTransaction}
+          balanceSnack={this.handleSnack}
+        />
+        <TransactionCategory
+          open={this.state.transactionCategoryOpen}
+          onclose={this.handleCloseTransactionCategory}
           balanceSnack={this.handleSnack}
         />
 
@@ -219,7 +227,7 @@ export default class Balance extends React.Component {
   }
   componentDidMount() {
     if (config.debug) {
-      console.log("Balance.componentDidMount");
+      //console.log("Balance.componentDidMount");
     }
     // Update
     this.updateTabHeight();
@@ -304,6 +312,32 @@ export default class Balance extends React.Component {
   handleSaveTransaction() {
     if (config.debug) {
       console.log("Balance.handleSaveTransaction");
+    }
+    this.updateBalance();
+  }
+  handleOpenTransactionCategory() {
+    if (config.debug) {
+      console.log("Balance.handleOpenTransactionCategory");
+    }
+    this.setState({
+      transactionCategoryOpen: true
+    });
+  }
+  handleCloseTransactionCategory(snack) {
+    if (config.debug) {
+      console.log("Balance.handleCloseTransactionCategory");
+    }
+    this.setState({
+      transactionCategoryOpen: false,
+      snackOpen: true,
+      snackSeverity: snack.severity,
+      snackMessage: snack.message,
+      snackDuration: snack.duration
+    });
+  }
+  handleSaveTransactionCategory() {
+    if (config.debug) {
+      console.log("Balance.handleSaveTransactionCategory");
     }
     this.updateBalance();
   }

@@ -9,12 +9,11 @@ if (config.env === "DEV") {
   serverUrl = config.serverDevUrl;
 }
 
-export async function createCategoryTransaction(newTransaction) {
-  //exports.createTransaction = async (id, newTransaction) => {
+export async function createCategoryTransaction(newCategoryTransaction) {
   try {
     const res = await axios.post(
       serverUrl + "/api/categorytransaction/",
-      newTransaction
+      newCategoryTransaction
     );
     return res.data;
   } catch (err) {
@@ -24,7 +23,6 @@ export async function createCategoryTransaction(newTransaction) {
 }
 
 export async function getCategoryTransaction(id) {
-  //exports.getTransaction = async (id) => {
   try {
     const res = await axios.get(serverUrl + "/api/categorytransaction/" + id);
     return res.data;
@@ -35,7 +33,6 @@ export async function getCategoryTransaction(id) {
 }
 
 export async function deleteCategoryTransaction(id) {
-  //exports.deleteTransaction = async (id) => {
   try {
     const res = await axios.delete(
       serverUrl + "/api/categorytransaction/" + id
@@ -47,12 +44,11 @@ export async function deleteCategoryTransaction(id) {
   }
 }
 
-export async function modifyCategoryTransaction(id, newTransaction) {
-  //exports.modifyTransaction = async (id, newTransaction) => {
+export async function modifyCategoryTransaction(id, newCategoryTransaction) {
   try {
     const res = await axios.put(
       serverUrl + "/api/categorytransaction/" + id,
-      newTransaction
+      newCategoryTransaction
     );
     return res.data;
   } catch (err) {
@@ -62,7 +58,6 @@ export async function modifyCategoryTransaction(id, newTransaction) {
 }
 
 export async function getCategoryTransactions() {
-  //exports.getTransactions = async () => {
   try {
     const res = await axios.get(serverUrl + "/api/categorytransaction");
     return res.data;

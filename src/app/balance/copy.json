@@ -23,6 +23,10 @@
     "FR": "Transaction",
     "EN": "Transaction"
   },
+  "title.subsection_transactioncategory": {
+    "FR": "Catégorie",
+    "EN": "Category"
+  },
   "button.add": {
     "FR": "Ajouter",
     "EN": "Add"
@@ -55,6 +59,10 @@
     "FR": "Selectionner",
     "EN": "Select"
   },
+  "button.newTransactionCategory": {
+    "FR": "Nouvelle catégorie",
+    "EN": "New category"
+  },
   "input.name": {
     "FR": "Nom",
     "EN": "Name"
@@ -80,13 +88,38 @@
     "EN": "For"
   },
   "snack.balance_summary_uptodate": {
-    "color": "lightblue",
+    "severity": "info",
     "FR": "Balance à jour",
     "EN": "Balance up to date"
   },
   "snack.saving": {
-    "color": "lightblue",
+    "severity": "info",
     "FR": "Sauvergarde en cours",
     "EN": "Saving in progress"
+  },
+  "snack.categoryclosed": {
+    "severity": "info",
+    "FR": "Catégorie fermée",
+    "EN": "Category closed"
+  },
+  "snack.categorysaved": {
+    "severity": "success",
+    "FR": "Catégorie enregistrée",
+    "EN": "Category saved"
+  },
+  "snack.duplicatedcategory": {
+    "severity": "warning",
+    "FR": "Catégorie existante",
+    "EN": "Existing category"
+  },
+  "snack.errornetwork": {
+    "severity": "warning",
+    "FR": "Problème réseau",
+    "EN": "Network issue"
+  },
+  "snack.error": {
+    "severity": "warning",
+    "FR": "Erreur :",
+    "EN": "Error :"
   }
 }

@@ -33,12 +33,12 @@ import Snack from "./Snack";
 const filter = createFilterOptions();
 let emptyTransaction = {
   _id: "",
-  name: "",
+  name: null,
   date: Date(),
-  amount: "",
+  amount: null,
   by: "",
   for: ["Alice", "Pierre"],
-  category: ""
+  category: null
 };
 
 export default class Transaction extends React.Component {
@@ -69,8 +69,8 @@ export default class Transaction extends React.Component {
   render() {
     if (config.debug) {
       console.log("Transaction.render");
-      console.log("Transaction.props.transactionID");
-      console.log(this.props.transactionID);
+      //console.log("Transaction.props.transactionID");
+      //console.log(this.props.transactionID);
       //console.log("Transaction.state.transaction");
       //console.log(this.state.transaction);
     }
@@ -197,80 +197,9 @@ export default class Transaction extends React.Component {
               </FormGroup>
 
               <Autocomplete
-                defaultValue={this.state.transaction.category}
-                onChange={(event, newValue) => {
-                  let a = "";
-                  if (typeof newValue === "string") {
-                    a = newValue; // OK
-                    //console.log("Case 1 : " + a);
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    a = newValue.inputValue; // OK
-                    //console.log("Case 2 : " + a);
-                  } else {
-                    a = newValue.name; // OK
-                    //console.log("Case 3 : " + a);
-                    //console.log(a);
-                  }
-                  event.target = {
-                    name: "category",
-                    value: a
-                  };
-                  this.handleChange(event, a);
-                }}
-                onOpen={this.hanldeOpenCategorySelector}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = this.state.options.some(
-                    (option) => inputValue === option.name
-                  );
-                  if (inputValue !== "" && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      name: `Add "${inputValue}"`
-                    });
-                  }
-                  return filtered;
-                }}
-                autoSelect
-                clearOnBlur
-                handleHomeEndKeys
+                disablePortal
+                id="combo-box-demo"
                 options={this.state.options}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === "string") {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.name;
-                }}
-                /*renderOption={(props, option) => (
-                  <li
-                    {...props}
-                    name="category"
-                    value={option.name}
-                    onClick={(e) => {
-                      e.target = {
-                        name: "category",
-                        value: option.name
-                      };
-                      this.handleChange(e, option.name);
-                    }}
-                  >
-                    {option.name}
-                  </li>
-                )}*/
-                renderOption={(props, option) => (
-                  <li {...props}>{option.name}</li>
-                )}
-                freeSolo
-                size="small"
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -278,6 +207,46 @@ export default class Transaction extends React.Component {
                     label={appcopy["input.category"][config.app.language]}
                   />
                 )}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
+                )}
+                defaultValue={this.state.transaction.category}
+                onOpen={this.hanldeOpenCategorySelector}
+                onChange={(event, newValue) => {
+                  /*console.log("event.target");
+                  console.log(event.target);
+                  console.log("newValue");
+                  console.log(newValue);*/
+                  event.target = {
+                    name: "category",
+                    value: newValue.name
+                  };
+                  this.handleChange(event, newValue.name);
+                }}
+                getOptionLabel={(option) => {
+                  var shorlist = this.state.options.filter(function (
+                    value,
+                    index,
+                    arr
+                  ) {
+                    /*console.log("value");
+                    console.log(value);
+                    console.log("value");
+                    console.log(value);*/
+                    if (typeof option === "string") {
+                      return value.name === option;
+                    } else {
+                      return value.name === option.name;
+                    }
+                  });
+                  if (shorlist.length === 1) {
+                    return shorlist[0].name;
+                  }
+                  /*console.log("option");
+                  console.log(option);
+                  console.log("shorlist");
+                  console.log(shorlist);*/
+                }}
               />
             </Box>
           </DialogContent>
@@ -304,7 +273,7 @@ export default class Transaction extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (config.debug) {
-      console.log("Transaction.componentDidUpdate");
+      //console.log("Transaction.componentDidUpdate");
       //console.log("Transaction.state");
       //console.log(this.state);
     }
@@ -440,7 +409,7 @@ export default class Transaction extends React.Component {
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.transaction.name === "") {
+    if (this.state.transaction.name === null) {
       save = false;
       errors.push(" Nom vide");
     }
@@ -448,7 +417,7 @@ export default class Transaction extends React.Component {
       save = false;
       errors.push(" Date vide");
     }
-    if (this.state.transaction.amount === "") {
+    if (this.state.transaction.amount === null) {
       save = false;
       errors.push(" Montant vide");
     }
@@ -460,7 +429,7 @@ export default class Transaction extends React.Component {
       save = false;
       errors.push(" Payé pour vide");
     }
-    if (this.state.transaction.category === "") {
+    if (this.state.transaction.category === null) {
       save = false;
       errors.push(" Catégorie vide");
     }
@@ -486,7 +455,7 @@ export default class Transaction extends React.Component {
         //}
         //if (config.debug === false) {
         createTransaction(this.state.transaction).then(() => {
-          this.props.onsave();
+          //this.props.onsave();
           snack.message = "Transaction enregistrée";
         });
         //}
@@ -501,7 +470,7 @@ export default class Transaction extends React.Component {
           this.props.transactionID,
           this.state.transaction
         ).then(() => {
-          this.props.onsave();
+          //this.props.onsave();
           snack.message = "Transaction modifiée";
         });
         //}
@@ -520,7 +489,6 @@ export default class Transaction extends React.Component {
   hanldeOpenCategorySelector() {
     getCategoryTransactions().then((newOptions) => {
       this.setState((prevState, props) => ({
-        transactionOpen: prevState.transactionOpen,
         options: newOptions
       }));
     });
