@@ -198,7 +198,26 @@ export default class Transaction extends React.Component {
 
               <Autocomplete
                 defaultValue={this.state.transaction.category}
-                //onChange={this.handleChange}
+                onChange={(event, newValue) => {
+                  let a = "";
+                  if (typeof newValue === "string") {
+                    a = newValue; // OK
+                    //console.log("Case 1 : " + a);
+                  } else if (newValue && newValue.inputValue) {
+                    // Create a new value from the user input
+                    a = newValue.inputValue; // OK
+                    //console.log("Case 2 : " + a);
+                  } else {
+                    a = newValue.name; // OK
+                    //console.log("Case 3 : " + a);
+                    //console.log(a);
+                  }
+                  event.target = {
+                    name: "category",
+                    value: a
+                  };
+                  this.handleChange(event, a);
+                }}
                 onOpen={this.hanldeOpenCategorySelector}
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params);
@@ -231,7 +250,7 @@ export default class Transaction extends React.Component {
                   // Regular option
                   return option.name;
                 }}
-                renderOption={(props, option) => (
+                /*renderOption={(props, option) => (
                   <li
                     {...props}
                     name="category"
@@ -246,6 +265,9 @@ export default class Transaction extends React.Component {
                   >
                     {option.name}
                   </li>
+                )}*/
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
                 )}
                 freeSolo
                 size="small"
@@ -386,9 +408,9 @@ export default class Transaction extends React.Component {
         break;
       case "category":
         if (config.debug) {
-          console.log("change category : " + newValue);
+          console.log("change category : " + target.value);
         }
-        previousTransaction.category = newValue;
+        previousTransaction.category = target.value;
         break;
       default:
         if (config.debug) {
@@ -485,18 +507,10 @@ export default class Transaction extends React.Component {
   }
   hanldeOpenCategorySelector() {
     getCategoryTransactions().then((newOptions) => {
-      this.setState(
-        (prevState, props) => ({
-          transactionOpen: prevState.transactionOpen,
-          options: newOptions
-        }),
-        () => {
-          if (config.debug) {
-            console.log("Transaction.state");
-            console.log(this.state);
-          }
-        }
-      );
+      this.setState((prevState, props) => ({
+        transactionOpen: prevState.transactionOpen,
+        options: newOptions
+      }));
     });
   }
   handleCloseSnack() {
