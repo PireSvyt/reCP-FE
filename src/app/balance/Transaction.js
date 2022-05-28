@@ -28,6 +28,7 @@ import {
   modifyTransaction
 } from "./api/transactions";
 import { getCategoryTransactions } from "./api/categorytransactions";
+import Snack from "./Snack";
 
 const filter = createFilterOptions();
 let emptyTransaction = {
@@ -50,7 +51,11 @@ export default class Transaction extends React.Component {
       transactionOpen: this.props.transactionOpen,
       transactionDate: Date(),
       options: [],
-      transaction: { ...emptyTransaction }
+      transaction: { ...emptyTransaction },
+      snackOpen: false,
+      snackSeverity: "warning",
+      snackMessage: "Empty",
+      snackDuration: 5000
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -59,14 +64,15 @@ export default class Transaction extends React.Component {
     this.hanldeOpenCategorySelector = this.hanldeOpenCategorySelector.bind(
       this
     );
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
     if (config.debug) {
       console.log("Transaction.render");
       console.log("Transaction.props.transactionID");
       console.log(this.props.transactionID);
-      console.log("Transaction.state.transaction");
-      console.log(this.state.transaction);
+      //console.log("Transaction.state.transaction");
+      //console.log(this.state.transaction);
     }
     return (
       <div>
@@ -263,14 +269,22 @@ export default class Transaction extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snack
+          snackOpen={this.state.snackOpen}
+          snackMessage={this.state.snackMessage}
+          snackDuration={this.state.snackDuration}
+          snackSeverity={this.state.snackSeverity}
+          onclose={this.handleCloseSnack}
+        />
       </div>
     );
   }
   componentDidUpdate(prevState) {
     if (config.debug) {
       console.log("Transaction.componentDidUpdate");
-      console.log("Transaction.state");
-      console.log(this.state);
+      //console.log("Transaction.state");
+      //console.log(this.state);
     }
     if (
       prevState.transactionOpen !== this.props.transactionOpen ||
@@ -320,12 +334,11 @@ export default class Transaction extends React.Component {
     }
     const target = event.target;
     if (config.debug) {
-      console.log("target");
-      console.log(target);
-      console.log("target.name");
-      console.log(target.name);
-      console.log("newValue");
-      console.log(newValue);
+      //console.log("target");
+      //console.log(target);
+      console.log("target.name : " + target.name);
+      console.log("target.value : " + target.value);
+      console.log("newValue : " + newValue);
     }
     var previousTransaction = this.state.transaction;
     switch (target.name) {
@@ -402,30 +415,28 @@ export default class Transaction extends React.Component {
     let errors = [];
     if (this.state.transaction.name === "") {
       save = false;
-      errors.push("Nom vide");
+      errors.push(" Nom vide");
     }
     if (this.state.transaction.date === null) {
       save = false;
-      errors.push("Date vide");
+      errors.push(" Date vide");
     }
     if (this.state.transaction.amount === "") {
       save = false;
-      errors.push("Montant vide");
+      errors.push(" Montant vide");
     }
     if (this.state.transaction.by === "") {
       save = false;
-      errors.push("Payé par vide");
+      errors.push(" Payé par vide");
     }
     if (this.state.transaction.for === []) {
       save = false;
-      errors.push("Payé pour vide");
+      errors.push(" Payé pour vide");
     }
-    /*
     if (this.state.transaction.category === "") {
       save = false;
-      errors.push("Catégorie vide");
+      errors.push(" Catégorie vide");
     }
-    */
     // Save or not?
     if (errors !== []) {
       console.log(errors);
@@ -438,30 +449,38 @@ export default class Transaction extends React.Component {
       }
       if (this.props.transactionID === "") {
         // POST
-        if (config.debug) {
-          console.log("POST");
-        }
-        if (config.debug === false) {
-          createTransaction(this.state.transaction).then(() => {
-            this.props.onsave();
-          });
-        }
+        //if (config.debug) {
+        console.log("POST");
+        //}
+        //if (config.debug === false) {
+        createTransaction(this.state.transaction).then(() => {
+          this.props.onsave();
+        });
+        //}
         this.props.onclose();
       } else {
         // PUT
-        if (config.debug) {
-          console.log("PUT");
-        }
-        if (config.debug === false) {
-          modifyTransaction(
-            this.props.transactionID,
-            this.state.transaction
-          ).then(() => {
-            this.props.onsave();
-          });
-        }
+        //if (config.debug) {
+        console.log("PUT");
+        //}
+        //if (config.debug === false) {
+        modifyTransaction(
+          this.props.transactionID,
+          this.state.transaction
+        ).then(() => {
+          this.props.onsave();
+        });
+        //}
         this.props.onclose();
       }
+    } else {
+      // Snack
+      this.setState((prevState, props) => ({
+        snackOpen: true,
+        snackSeverity: "warning",
+        snackMessage: "Error" + errors,
+        snackDuration: 5000
+      }));
     }
   }
   hanldeOpenCategorySelector() {
@@ -479,5 +498,13 @@ export default class Transaction extends React.Component {
         }
       );
     });
+  }
+  handleCloseSnack() {
+    if (config.debug) {
+      console.log("Transaction.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
   }
 }
