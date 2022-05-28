@@ -19,6 +19,7 @@ import appcopy from "./copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";
+import Snack from "./Snack";
 
 export default class Balance extends React.Component {
   constructor(props) {
@@ -32,7 +33,11 @@ export default class Balance extends React.Component {
       transactionID: "",
       transactionOpen: false,
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
-      transactions: []
+      transactions: [],
+      snackOpen: false,
+      snackSeverity: "warning",
+      snackMessage: "Empty",
+      snackDuration: 5000
     };
     // Updates
     this.updateTabHeight = this.updateTabHeight.bind(this);
@@ -42,6 +47,7 @@ export default class Balance extends React.Component {
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
     if (config.debug) {
@@ -198,6 +204,15 @@ export default class Balance extends React.Component {
           transactionOpen={this.state.transactionOpen}
           onsave={() => {} /*this.handleSaveTransaction*/}
           onclose={this.handleCloseTransaction}
+          balanceSnack={this.handleSnack}
+        />
+
+        <Snack
+          snackOpen={this.state.snackOpen}
+          snackMessage={this.state.snackMessage}
+          snackDuration={this.state.snackDuration}
+          snackSeverity={this.state.snackSeverity}
+          onclose={this.handleCloseSnack}
         />
       </div>
     );
@@ -273,13 +288,17 @@ export default class Balance extends React.Component {
       transactionOpen: true
     });
   }
-  handleCloseTransaction() {
+  handleCloseTransaction(snack) {
     if (config.debug) {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
       transactionID: "",
-      transactionOpen: false
+      transactionOpen: false,
+      snackOpen: true,
+      snackSeverity: snack.severity,
+      snackMessage: snack.message,
+      snackDuration: snack.duration
     });
   }
   handleSaveTransaction() {
@@ -287,6 +306,14 @@ export default class Balance extends React.Component {
       console.log("Balance.handleSaveTransaction");
     }
     this.updateBalance();
+  }
+  handleCloseSnack() {
+    if (config.debug) {
+      console.log("Balance.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
   }
 }
 

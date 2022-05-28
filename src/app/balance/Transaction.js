@@ -348,7 +348,12 @@ export default class Transaction extends React.Component {
     this.setState((prevState, props) => ({
       transaction: { ...emptyTransaction }
     }));
-    this.props.onclose();
+    let snack = {
+      severity: "info",
+      message: "Transaction fermée",
+      duration: 1500
+    };
+    this.props.onclose(snack);
   }
   handleChange(event, newValue) {
     if (config.debug) {
@@ -469,6 +474,11 @@ export default class Transaction extends React.Component {
         console.log(this.props.transactionID);
         console.log(this.state.transaction);
       }
+      let snack = {
+        severity: "success",
+        message: "Transaction modifiée",
+        duration: 3000
+      };
       if (this.props.transactionID === "") {
         // POST
         //if (config.debug) {
@@ -477,6 +487,7 @@ export default class Transaction extends React.Component {
         //if (config.debug === false) {
         createTransaction(this.state.transaction).then(() => {
           this.props.onsave();
+          snack.message = "Transaction enregistrée";
         });
         //}
         this.props.onclose();
@@ -491,9 +502,10 @@ export default class Transaction extends React.Component {
           this.state.transaction
         ).then(() => {
           this.props.onsave();
+          snack.message = "Transaction modifiée";
         });
         //}
-        this.props.onclose();
+        this.props.onclose(snack);
       }
     } else {
       // Snack

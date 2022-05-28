@@ -146,7 +146,9 @@ export default class Recipe extends React.Component {
       console.log("Recipe.componentDidMount");
     }
     // Add empty inputs
-    this.updateIngredients();
+    if (this.state.recipeOpen === true) {
+      this.updateIngredients();
+    }
   }
   componentDidUpdate(prevState) {
     if (config.debug) {
