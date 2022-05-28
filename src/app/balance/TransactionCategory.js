@@ -159,12 +159,13 @@ export default class TransactionCategory extends React.Component {
         console.log(this.state.transactionCategory);
       }
       // POST
-      //if (config.debug) {
-      console.log("POST");
-      //}
-      //if (config.debug === false) {
-      createCategoryTransaction({ name: this.state.transactionCategory }).then(
-        (res) => {
+      if (config.debug) {
+        console.log("POST");
+      }
+      if (config.debug === false) {
+        createCategoryTransaction({
+          name: this.state.transactionCategory
+        }).then((res) => {
           //this.props.onsave();
           console.log("res");
           console.log(res);
@@ -193,9 +194,8 @@ export default class TransactionCategory extends React.Component {
             };
             this.props.onclose(snack);
           }
-        }
-      );
-      //}
+        });
+      }
       this.setState((prevState, props) => ({
         transactionCategory: ""
       }));

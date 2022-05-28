@@ -14,7 +14,7 @@ import {
   FormGroup,
   InputAdornment
 } from "@mui/material";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -30,7 +30,6 @@ import {
 import { getCategoryTransactions } from "./api/categorytransactions";
 import Snack from "./Snack";
 
-const filter = createFilterOptions();
 let emptyTransaction = {
   _id: undefined,
   name: undefined,
@@ -456,30 +455,30 @@ export default class Transaction extends React.Component {
       };
       if (this.props.transactionID === "") {
         // POST
-        //if (config.debug) {
-        console.log("POST");
-        //}
-        //if (config.debug === false) {
-        createTransaction(this.state.transaction).then(() => {
-          //this.props.onsave();
-          snack.message = "Transaction enregistrée";
-        });
-        //}
+        if (config.debug) {
+          console.log("POST");
+        }
+        if (config.debug === false) {
+          createTransaction(this.state.transaction).then(() => {
+            //this.props.onsave();
+            snack.message = "Transaction enregistrée";
+          });
+        }
         this.props.onclose(snack);
       } else {
         // PUT
-        //if (config.debug) {
-        console.log("PUT");
-        //}
-        //if (config.debug === false) {
-        modifyTransaction(
-          this.props.transactionID,
-          this.state.transaction
-        ).then(() => {
-          //this.props.onsave();
-          snack.message = "Transaction modifiée";
-        });
-        //}
+        if (config.debug) {
+          console.log("PUT");
+        }
+        if (config.debug === false) {
+          modifyTransaction(
+            this.props.transactionID,
+            this.state.transaction
+          ).then(() => {
+            //this.props.onsave();
+            snack.message = "Transaction modifiée";
+          });
+        }
         this.props.onclose(snack);
       }
     } else {
