@@ -490,7 +490,7 @@ export default class Transaction extends React.Component {
           snack.message = "Transaction enregistrée";
         });
         //}
-        this.props.onclose();
+        this.props.onclose(snack);
       } else {
         // PUT
         //if (config.debug) {
