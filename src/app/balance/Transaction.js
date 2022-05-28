@@ -32,13 +32,13 @@ import Snack from "./Snack";
 
 const filter = createFilterOptions();
 let emptyTransaction = {
-  _id: "",
-  name: null,
+  _id: undefined,
+  name: undefined,
   date: Date(),
-  amount: null,
-  by: "",
+  amount: undefined,
+  by: undefined,
   for: ["Alice", "Pierre"],
-  category: null
+  category: undefined
 };
 
 export default class Transaction extends React.Component {
@@ -65,6 +65,12 @@ export default class Transaction extends React.Component {
       this
     );
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    // Preload
+    getCategoryTransactions().then((newOptions) => {
+      this.setState((prevState, props) => ({
+        options: newOptions
+      }));
+    });
   }
   render() {
     if (config.debug) {
@@ -409,19 +415,19 @@ export default class Transaction extends React.Component {
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.transaction.name === null) {
+    if (this.state.transaction.name === undefined) {
       save = false;
       errors.push(" Nom vide");
     }
-    if (this.state.transaction.date === null) {
+    if (this.state.transaction.date === undefined) {
       save = false;
       errors.push(" Date vide");
     }
-    if (this.state.transaction.amount === null) {
+    if (this.state.transaction.amount === undefined) {
       save = false;
       errors.push(" Montant vide");
     }
-    if (this.state.transaction.by === "") {
+    if (this.state.transaction.by === undefined) {
       save = false;
       errors.push(" Payé par vide");
     }
@@ -429,7 +435,7 @@ export default class Transaction extends React.Component {
       save = false;
       errors.push(" Payé pour vide");
     }
-    if (this.state.transaction.category === null) {
+    if (this.state.transaction.category === undefined) {
       save = false;
       errors.push(" Catégorie vide");
     }

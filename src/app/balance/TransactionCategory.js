@@ -91,9 +91,9 @@ export default class TransactionCategory extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (config.debug) {
-      console.log("TransactionCategory.componentDidUpdate");
-      console.log("TransactionCategory.state");
-      console.log(this.state);
+      //console.log("TransactionCategory.componentDidUpdate");
+      //console.log("TransactionCategory.state");
+      //console.log(this.state);
     }
   }
 
