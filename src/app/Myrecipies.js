@@ -47,7 +47,7 @@ export default class Myrecipies extends React.Component {
           color="primary"
           sx={{
             position: "absolute",
-            top: 20,
+            bottom: 70,
             right: 20
           }}
         >

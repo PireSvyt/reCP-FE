@@ -204,8 +204,8 @@ export default class Balance extends React.Component {
           color="primary"
           sx={{
             position: "absolute",
-            top: 40,
-            left: window.innerWidth / 2 - 28
+            bottom: 70,
+            right: 20
           }}
         >
           <AddIcon

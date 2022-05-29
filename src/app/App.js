@@ -5,6 +5,7 @@ import BookIcon from "@mui/icons-material/Book";
 
 import appcopy from "./copy";
 
+import AppMenu from "./AppMenu";
 import Balance from "./balance/Balance";
 import Myrecipies from "./Myrecipies";
 
@@ -44,6 +45,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Box sx={{ width: "100%" }}>
+        <AppMenu language={this.props.language} />
         {this.state.pages.map((page) => (
           <AppTabPanel
             value={this.state.selectedTab}
