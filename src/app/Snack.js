@@ -18,6 +18,8 @@ success
 
 function getDymmySnack() {
   return {
+    duration: 1000,
+    message: "DUMMY SNACK MESSAGE",
     severity: "warning",
     FR: "DUMMY SNACK FR",
     EN: "DUMMY SNACK EN"
@@ -44,15 +46,15 @@ export default class Snack extends React.Component {
     return (
       <Snackbar
         open={this.props.snackOpen}
-        autoHideDuration={this.props.snackDuration}
+        autoHideDuration={this.state.snack.duration}
         onClose={this.handleClose}
       >
         <Alert
           onClose={this.handleClose}
-          severity={this.props.snackSeverity}
+          severity={this.state.snack.severity}
           sx={{ width: "100%" }}
         >
-          {this.props.snackMessage}
+          {this.state.snack.message}
         </Alert>
       </Snackbar>
     );
