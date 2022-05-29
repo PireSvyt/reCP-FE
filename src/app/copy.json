@@ -147,6 +147,36 @@
     "FR": "Transaction modifiée",
     "EN": "Transaction edited"
   },
+  "snack.ingredientsaved": {
+    "severity": "success",
+    "FR": "Ingrédient enregistré",
+    "EN": "Ingredient saved"
+  },
+  "snack.ingredientduplicated": {
+    "severity": "success",
+    "FR": "Ingrédient existante",
+    "EN": "Existing ingredient"
+  },
+  "snack.ingredientmodified": {
+    "severity": "success",
+    "FR": "Ingrédient modifié",
+    "EN": "Ingredient edited"
+  },
+  "snack.recipesaved": {
+    "severity": "success",
+    "FR": "Recette enregistrée",
+    "EN": "Recipe saved"
+  },
+  "snack.recipeduplicated": {
+    "severity": "success",
+    "FR": "Recette existante",
+    "EN": "Existing recipe"
+  },
+  "snack.recipemodified": {
+    "severity": "success",
+    "FR": "Recette modifiée",
+    "EN": "Recipe edited"
+  },
   "snack.errornetwork": {
     "severity": "warning",
     "FR": "Problème réseau",
