@@ -179,9 +179,9 @@ export default class TransactionCategory extends React.Component {
               this.props.onclose(snack);
             } else {
               let snack = {
-                severity: appcopy["snack.duplicatedcategory"]["severity"],
+                severity: appcopy["snack.categoryduplicated"]["severity"],
                 message:
-                  appcopy["snack.duplicatedcategory"][config.app.language],
+                  appcopy["snack.categoryduplicated"][config.app.language],
                 duration: 1000
               };
               this.props.onclose(snack);

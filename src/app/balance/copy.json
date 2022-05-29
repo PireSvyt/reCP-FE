@@ -107,10 +107,25 @@
     "FR": "Catégorie enregistrée",
     "EN": "Category saved"
   },
-  "snack.duplicatedcategory": {
+  "snack.categoryduplicated": {
     "severity": "warning",
     "FR": "Catégorie existante",
     "EN": "Existing category"
+  },
+  "snack.transactionsaved": {
+    "severity": "success",
+    "FR": "Transaction enregistrée",
+    "EN": "Transaction saved"
+  },
+  "snack.transactionduplicated": {
+    "severity": "success",
+    "FR": "Transaction existante",
+    "EN": "Existing transaction"
+  },
+  "snack.transactionmodified": {
+    "severity": "success",
+    "FR": "Transaction modifiée",
+    "EN": "Transaction edited"
   },
   "snack.errornetwork": {
     "severity": "warning",

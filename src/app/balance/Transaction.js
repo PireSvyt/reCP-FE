@@ -448,23 +448,42 @@ export default class Transaction extends React.Component {
         console.log(this.props.transactionID);
         console.log(this.state.transaction);
       }
-      let snack = {
-        severity: "success",
-        message: "Transaction modifiée",
-        duration: 3000
-      };
       if (this.props.transactionID === "") {
         // POST
         if (config.debug) {
           console.log("POST");
         }
         if (config.debug === false) {
-          createTransaction(this.state.transaction).then(() => {
+          createTransaction(this.state.transaction).then((res) => {
             //this.props.onsave();
-            snack.message = "Transaction enregistrée";
+            if (res !== undefined) {
+              if (res.message === "transaction enregistrée") {
+                let snack = {
+                  severity: appcopy["snack.transactionsaved"]["severity"],
+                  message:
+                    appcopy["snack.transactionsaved"][config.app.language],
+                  duration: 3000
+                };
+                this.props.onclose(snack);
+              } else {
+                let snack = {
+                  severity: appcopy["snack.transactionduplicated"]["severity"],
+                  message:
+                    appcopy["snack.transactionduplicated"][config.app.language],
+                  duration: 3000
+                };
+                this.props.onclose(snack);
+              }
+            } else {
+              let snack = {
+                severity: appcopy["snack.errornetwork"]["severity"],
+                message: appcopy["snack.errornetwork"][config.app.language],
+                duration: 3000
+              };
+              this.props.onclose(snack);
+            }
           });
         }
-        this.props.onclose(snack);
       } else {
         // PUT
         if (config.debug) {
@@ -474,19 +493,43 @@ export default class Transaction extends React.Component {
           modifyTransaction(
             this.props.transactionID,
             this.state.transaction
-          ).then(() => {
+          ).then((res) => {
             //this.props.onsave();
-            snack.message = "Transaction modifiée";
+            if (res !== undefined) {
+              if (res.message === "transaction modifiée") {
+                let snack = {
+                  severity: appcopy["snack.transactionmodified"]["severity"],
+                  message:
+                    appcopy["snack.transactionmodified"][config.app.language],
+                  duration: 3000
+                };
+                this.props.onclose(snack);
+              } else {
+                let snack = {
+                  severity: appcopy["snack.transactionduplicated"]["severity"],
+                  message:
+                    appcopy["snack.transactionduplicated"][config.app.language],
+                  duration: 3000
+                };
+                this.props.onclose(snack);
+              }
+            } else {
+              let snack = {
+                severity: appcopy["snack.errornetwork"]["severity"],
+                message: appcopy["snack.errornetwork"][config.app.language],
+                duration: 3000
+              };
+              this.props.onclose(snack);
+            }
           });
         }
-        this.props.onclose(snack);
       }
     } else {
       // Snack
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snackSeverity: "warning",
-        snackMessage: "Error" + errors,
+        snackSeverity: appcopy["snack.error"]["severity"],
+        snackMessage: appcopy["snack.error"][config.app.language] + errors,
         snackDuration: 5000
       }));
     }

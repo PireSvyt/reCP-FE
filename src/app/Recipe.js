@@ -20,8 +20,8 @@ import { getRecipe, createRecipe, modifyRecipe } from "./api/recipies";
 
 let emptyRecipe = {
   _id: "",
-  name: "",
-  portions: null,
+  name: undefined,
+  portions: undefined,
   ingredients: [],
   instructions: [],
   scale: 1,
@@ -251,11 +251,11 @@ export default class Recipe extends React.Component {
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.recipe.name === "") {
+    if (this.state.recipe.name === undefined) {
       save = false;
       errors.push("Nom vide");
     }
-    if (this.state.recipe.portions === null) {
+    if (this.state.recipe.portions === undefined) {
       save = false;
       errors.push("Portions vide");
     }
