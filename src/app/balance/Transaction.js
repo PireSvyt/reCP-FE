@@ -105,6 +105,7 @@ export default class Transaction extends React.Component {
                 variant="standard"
                 defaultValue={this.state.transaction.name}
                 onChange={this.handleChange}
+                autoComplete="off"
               />
               <LocalizationProvider
                 dateAdapter={AdapterDateFns}
@@ -147,6 +148,7 @@ export default class Transaction extends React.Component {
                     <InputAdornment position="start">€</InputAdornment>
                   )
                 }}
+                autoComplete="off"
               />
 
               <RadioGroup
@@ -319,10 +321,12 @@ export default class Transaction extends React.Component {
     ) {
       if (this.props.transactionID !== "") {
         // Load
-        console.log(
-          "Transaction.componentDidUpdate.getTransaction " +
-            this.props.transactionID
-        );
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log(
+            "Transaction.componentDidUpdate.getTransaction " +
+              this.props.transactionID
+          );
+        }
         getTransaction(this.props.transactionID)
           .then((res) => {
             this.setState((prevState, props) => ({

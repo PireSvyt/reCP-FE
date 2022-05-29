@@ -188,9 +188,11 @@ export default class Recipe extends React.Component {
     ) {
       if (this.props.recipeID !== "") {
         // Load
-        console.log(
-          "Recipe.componentDidUpdate.getRecipe " + this.props.recipeID
-        );
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log(
+            "Recipe.componentDidUpdate.getRecipe " + this.props.recipeID
+          );
+        }
         getRecipe(this.props.recipeID).then((res) => {
           res.ingredients.forEach((ingredient) => {
             ingredient.uid = random_id();
@@ -371,9 +373,13 @@ export default class Recipe extends React.Component {
       }
     } else {
       // Snack
+      var snack = appcopy["generic"]["snack"]["error"];
+      snack.message =
+        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+        errors;
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snack: appcopy["generic"]["snack"]["error"]
+        snack: snack
       }));
     }
   }

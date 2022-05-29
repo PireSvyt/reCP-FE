@@ -69,6 +69,7 @@ export default class TransactionCategory extends React.Component {
                 variant="standard"
                 defaultValue={this.state.transactionCategory}
                 onChange={this.handleChange}
+                autoComplete="off"
               />
             </Box>
           </DialogContent>
@@ -170,8 +171,6 @@ export default class TransactionCategory extends React.Component {
         name: this.state.transactionCategory
       }).then((res) => {
         //this.props.onsave();
-        console.log("res");
-        console.log(res);
         if (res !== undefined) {
           if (res.message === "catégorie enregistrée") {
             this.props.onclose(
