@@ -47,7 +47,7 @@ function getEmptyIngredient() {
 
 export default class Recipe extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.constructor");
     }
     super(props);
@@ -68,7 +68,7 @@ export default class Recipe extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.render");
       console.log("Recipe.props.recipeID");
       console.log(this.props.recipeID);
@@ -160,12 +160,12 @@ export default class Recipe extends React.Component {
     );
   }
   componentDidMount() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.componentDidMount");
     }
   }
   componentDidUpdate(prevState) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.componentDidUpdate");
       console.log("Recipe.state");
       console.log(this.state);
@@ -203,7 +203,7 @@ export default class Recipe extends React.Component {
 
   // Handles
   handleClose() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleClose");
     }
     this.setState({
@@ -212,34 +212,34 @@ export default class Recipe extends React.Component {
     this.props.onclose();
   }
   handleChange(event) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log(target);
     }
     var previousRecipe = this.state.recipe;
     switch (target.name) {
       case "name":
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         previousRecipe.name = target.value;
         break;
       case "portions":
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("change portions : " + target.value);
         }
         previousRecipe.portions = target.value;
         break;
       default:
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.recipe");
       console.log(this.state.recipe);
     }
@@ -248,7 +248,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleSave() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleSave");
     }
     // Check inputs
@@ -328,13 +328,13 @@ export default class Recipe extends React.Component {
         delete ingredient["name"];
         delete ingredient["unit"];
       });
-      if (process.env.MODE_DEBUG) {
+      if (process.env.MODE_DEBUG === "TRUE") {
         console.log(this.props.recipeID);
         console.log(this.state.recipe);
       }
       if (this.props.recipeID === "") {
         // POST
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("POST");
         }
         if (process.env.MODE_DEBUG === false) {
@@ -372,7 +372,7 @@ export default class Recipe extends React.Component {
         this.props.onclose();
       } else {
         // PUT
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("PUT");
         }
         if (process.env.MODE_DEBUG === false) {
@@ -419,7 +419,7 @@ export default class Recipe extends React.Component {
     }
   }
   handleIngredientDelete(uid) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleIngredientDelete " + uid);
     }
     let ingredients = this.state.recipe.ingredients.filter(
@@ -432,7 +432,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleIngredientChange(newIngredientValue) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleIngredientChange " + newIngredientValue.uid);
       console.log("newIngredientValue");
       console.log(newIngredientValue);
@@ -452,7 +452,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleCloseSnack() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Recipe.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
@@ -464,7 +464,7 @@ export default class Recipe extends React.Component {
 class Ingredient extends React.Component {
   constructor(props) {
     super(props);
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Ingredient.constructor " + this.props.ingredient.uid);
     }
     // Handlers
@@ -472,7 +472,7 @@ class Ingredient extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Ingredient.render " + this.props.ingredient.uid);
     }
     return (
@@ -525,41 +525,41 @@ class Ingredient extends React.Component {
 
   // Handlers()
   handleChange(event) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Ingredient.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log(target);
     }
     var updatingIngredient = this.props.ingredient;
     switch (target.name) {
       case "name":
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         updatingIngredient.name = target.value;
         break;
       case "count":
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("change count : " + target.value);
         }
         updatingIngredient.count = target.value;
         break;
       default:
-        if (process.env.MODE_DEBUG) {
+        if (process.env.MODE_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("updatingIngredient");
       console.log(updatingIngredient);
     }
     this.props.onchange(updatingIngredient);
   }
   handleDelete() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Ingredient.handleDelete " + this.props.ingredient.uid);
     }
     this.props.ondelete(this.props.ingredient.uid);

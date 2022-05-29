@@ -16,7 +16,7 @@ import Recipe from "./Recipe";
 
 export default class Myrecipies extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Myrecipies.constructor");
     }
     super(props);
@@ -48,7 +48,7 @@ export default class Myrecipies extends React.Component {
         >
           <AddIcon
             onClick={() => {
-              if (process.env.MODE_DEBUG) {
+              if (process.env.MODE_DEBUG === "TRUE") {
                 console.log("Myrecipies.AddIcon.onClick");
               }
               this.handleOpenRecipe("");
@@ -64,7 +64,7 @@ export default class Myrecipies extends React.Component {
               <ListItem key={`${value._id}`} id={`${value._id}`}>
                 <ListItemButton
                   onClick={() => {
-                    if (process.env.MODE_DEBUG) {
+                    if (process.env.MODE_DEBUG === "TRUE") {
                       console.log("Myrecipies.recipies.onClick " + value._id);
                     }
                     this.handleOpenRecipe(value._id);
@@ -89,7 +89,7 @@ export default class Myrecipies extends React.Component {
     );
   }
   componentDidMount() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Myrecipies.componentDidMount");
     }
     // Update
@@ -99,7 +99,7 @@ export default class Myrecipies extends React.Component {
 
   // Updates
   updateRecipiesHeight() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Myrecipies.updateTabHeight");
     }
     this.setState({
@@ -107,7 +107,7 @@ export default class Myrecipies extends React.Component {
     });
   }
   updateRecipies() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Myrecipies.updateSummary");
     }
     getRecipies().then((res) => {
@@ -119,7 +119,7 @@ export default class Myrecipies extends React.Component {
 
   // Handlers
   handleOpenRecipe(id) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Balance.handleOpenRecipe " + id);
     }
     this.setState({
@@ -128,7 +128,7 @@ export default class Myrecipies extends React.Component {
     });
   }
   handleCloseRecipe() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Balance.handleCloseRecipe");
     }
     this.setState({
@@ -137,7 +137,7 @@ export default class Myrecipies extends React.Component {
     });
   }
   handleSaveRecipe() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("Balance.handleSaveRecipe");
     }
     this.updateRecipies();

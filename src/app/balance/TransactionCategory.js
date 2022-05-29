@@ -15,7 +15,7 @@ import Snack from "../Snack";
 
 export default class TransactionCategory extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.constructor");
     }
     super(props);
@@ -30,7 +30,7 @@ export default class TransactionCategory extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.render");
       //console.log("TransactionCategory.state.transactionCategory");
       //console.log(this.state.transactionCategory);
@@ -89,7 +89,7 @@ export default class TransactionCategory extends React.Component {
     );
   }
   componentDidUpdate(prevState) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       //console.log("TransactionCategory.componentDidUpdate");
       //console.log("TransactionCategory.state");
       //console.log(this.state);
@@ -98,7 +98,7 @@ export default class TransactionCategory extends React.Component {
 
   // Handles
   handleClose() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.handleClose");
     }
     this.setState((prevState, props) => ({
@@ -112,11 +112,11 @@ export default class TransactionCategory extends React.Component {
     this.props.onclose(snack);
   }
   handleChange(event, newValue) {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       //console.log("target");
       //console.log(target);
       console.log("target.name : " + target.name);
@@ -124,7 +124,7 @@ export default class TransactionCategory extends React.Component {
       console.log("newValue : " + newValue);
     }
     // Update
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.state.transactionCategory");
       console.log(this.state.transactionCategory);
     }
@@ -133,7 +133,7 @@ export default class TransactionCategory extends React.Component {
     }));
   }
   handleSave() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.handleSave");
       console.log("this.state.transactionCategory");
       console.log(this.state.transactionCategory);
@@ -154,11 +154,11 @@ export default class TransactionCategory extends React.Component {
     }
     // Post or publish
     if (save === true) {
-      if (process.env.MODE_DEBUG) {
+      if (process.env.MODE_DEBUG === "TRUE") {
         console.log(this.state.transactionCategory);
       }
       // POST
-      if (process.env.MODE_DEBUG) {
+      if (process.env.MODE_DEBUG === "TRUE") {
         console.log("POST");
       }
       if (process.env.MODE_DEBUG === false) {
@@ -210,7 +210,7 @@ export default class TransactionCategory extends React.Component {
     }
   }
   handleCloseSnack() {
-    if (process.env.MODE_DEBUG) {
+    if (process.env.MODE_DEBUG === "TRUE") {
       console.log("TransactionCategory.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
