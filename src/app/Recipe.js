@@ -51,6 +51,9 @@ export default class Recipe extends React.Component {
       console.log("Recipe.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe language = " + this.props.language);
+    }
     this.state = {
       recipeOpen: this.props.recipeOpen,
       recipe: { ...emptyRecipe },
@@ -82,7 +85,7 @@ export default class Recipe extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["recipe"]["title"][process.env.REACT_APP_LANGUAGE]}
+            {appcopy["recipe"]["title"][this.props.language]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -94,11 +97,7 @@ export default class Recipe extends React.Component {
             >
               <TextField
                 name="name"
-                label={
-                  appcopy["generic"]["input"]["name"][
-                    process.env.REACT_APP_LANGUAGE
-                  ]
-                }
+                label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
                 defaultValue={this.state.recipe.name}
                 onChange={this.handleChange}
@@ -107,9 +106,7 @@ export default class Recipe extends React.Component {
               <TextField
                 name="portions"
                 label={
-                  appcopy["generic"]["input"]["portions"][
-                    process.env.REACT_APP_LANGUAGE
-                  ]
+                  appcopy["generic"]["input"]["portions"][this.props.language]
                 }
                 variant="standard"
                 defaultValue={this.state.recipe.portions}
@@ -119,7 +116,7 @@ export default class Recipe extends React.Component {
               <h3>
                 {
                   appcopy["recipe"]["subsection"]["ingredients"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
               </h3>
@@ -130,6 +127,7 @@ export default class Recipe extends React.Component {
                     ingredient={ingredient}
                     onchange={this.handleIngredientChange}
                     ondelete={this.handleIngredientDelete}
+                    language={this.props.language}
                   />
                 ))}
               </List>
@@ -137,7 +135,7 @@ export default class Recipe extends React.Component {
               <h3>
                 {
                   appcopy["recipe"]["subsection"]["instructions"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
               </h3>
@@ -147,18 +145,10 @@ export default class Recipe extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {
-                appcopy["generic"]["button"]["cancel"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
+              {appcopy["generic"]["button"]["cancel"][this.props.language]}
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {
-                appcopy["generic"]["button"]["save"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
+              {appcopy["generic"]["button"]["save"][this.props.language]}
             </Button>
           </DialogActions>
         </Dialog>
@@ -167,14 +157,10 @@ export default class Recipe extends React.Component {
           snackOpen={this.state.snackOpen}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
+          language={this.props.language}
         />
       </div>
     );
-  }
-  componentDidMount() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.componentDidMount");
-    }
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -375,8 +361,7 @@ export default class Recipe extends React.Component {
       // Snack
       var snack = appcopy["generic"]["snack"]["error"];
       snack.message =
-        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
-        errors;
+        appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
         snackOpen: true,
         snack: snack
@@ -464,33 +449,21 @@ class Ingredient extends React.Component {
         >
           <TextField
             name="name"
-            label={
-              appcopy["generic"]["input"]["name"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            label={appcopy["generic"]["input"]["name"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.name}
             onChange={this.handleChange}
           />
           <TextField
             name="count"
-            label={
-              appcopy["generic"]["input"]["quantity"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            label={appcopy["generic"]["input"]["quantity"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.quantity}
             onChange={this.handleChange}
           />
           <TextField
             name="unit"
-            label={
-              appcopy["generic"]["input"]["unit"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            label={appcopy["generic"]["input"]["unit"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.unit}
             onChange={this.handleChange}

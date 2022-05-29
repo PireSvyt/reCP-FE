@@ -32,6 +32,9 @@ export default class Snack extends React.Component {
       console.log("Snack.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Snack language = " + this.props.language);
+    }
     this.state = {
       snackOpen: this.props.snackOpen,
       snack: getDymmySnack()
@@ -61,8 +64,8 @@ export default class Snack extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.componentDidUpdate");
-      console.log("Recipe.state");
+      console.log("Snack.componentDidUpdate");
+      console.log("Snack.state");
       console.log(this.state);
     }
     if (
@@ -79,7 +82,7 @@ export default class Snack extends React.Component {
           newSnack.severity = "info";
         }
         if (newSnack.message === undefined) {
-          newSnack.message = newSnack[process.env.REACT_APP_LANGUAGE];
+          newSnack.message = newSnack[this.props.language];
         }
         this.setState((prevState, props) => ({
           snack: newSnack

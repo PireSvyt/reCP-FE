@@ -20,6 +20,9 @@ export default class Myrecipies extends React.Component {
       console.log("Myrecipies.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Myrecipies language = " + this.props.language);
+    }
     this.state = {
       recipiesHeight: 300,
       recipeID: "",
@@ -39,9 +42,7 @@ export default class Myrecipies extends React.Component {
   render() {
     return (
       <div>
-        <h2>
-          {appcopy["myrecipies"]["title"][process.env.REACT_APP_LANGUAGE]}
-        </h2>
+        <h2>{appcopy["myrecipies"]["title"][this.props.language]}</h2>
         <Fab
           color="primary"
           sx={{
@@ -88,12 +89,14 @@ export default class Myrecipies extends React.Component {
           recipeOpen={this.state.recipeOpen}
           onsave={() => {} /*this.handleSaveRecipe*/}
           onclose={this.handleCloseRecipe}
+          language={this.props.language}
         />
 
         <Snack
           snackOpen={this.state.snackOpen}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
+          language={this.props.language}
         />
       </div>
     );

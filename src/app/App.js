@@ -8,31 +8,33 @@ import appcopy from "./copy";
 import Balance from "./balance/Balance";
 import Myrecipies from "./Myrecipies";
 
-const pages = [
-  {
-    index: 0,
-    label: appcopy["myrecipies"]["title"][process.env.REACT_APP_LANGUAGE],
-    code: "myrecipies",
-    icon: BookIcon,
-    component: Myrecipies
-  },
-  {
-    index: 1,
-    label: appcopy["mybalance"]["title"][process.env.REACT_APP_LANGUAGE],
-    code: "mybalance",
-    icon: BalanceIcon,
-    component: Balance
-  }
-];
-
 export default class App extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("App.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App language = " + this.props.language);
+    }
     this.state = {
-      selectedTab: 0
+      selectedTab: 0,
+      pages: [
+        {
+          index: 0,
+          label: appcopy["myrecipies"]["title"][this.props.language],
+          code: "myrecipies",
+          icon: BookIcon,
+          component: Myrecipies
+        },
+        {
+          index: 1,
+          label: appcopy["mybalance"]["title"][this.props.language],
+          code: "mybalance",
+          icon: BalanceIcon,
+          component: Balance
+        }
+      ]
     };
     // Updates
 
@@ -42,13 +44,13 @@ export default class App extends React.Component {
   render() {
     return (
       <Box sx={{ width: "100%" }}>
-        {pages.map((page) => (
+        {this.state.pages.map((page) => (
           <AppTabPanel
             value={this.state.selectedTab}
             index={page.index}
             key={page.code}
           >
-            <page.component />
+            <page.component language={this.props.language} />
           </AppTabPanel>
         ))}
         <Paper
@@ -61,7 +63,7 @@ export default class App extends React.Component {
               onChange={this.handleChangeTab}
               variant="fullWidth"
             >
-              {pages.map((page) => (
+              {this.state.pages.map((page) => (
                 <Tab
                   icon={<page.icon />}
                   id={"navtab-" + page.index}
