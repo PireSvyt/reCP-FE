@@ -20,7 +20,7 @@ success
 
 export default class Snack extends React.Component {
   constructor(props) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Snack.constructor");
     }
     super(props);
@@ -31,7 +31,7 @@ export default class Snack extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
   render() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Snack.render");
     }
     return (
@@ -53,7 +53,7 @@ export default class Snack extends React.Component {
 
   // Handles
   handleClose(event, reason) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Snack.handleClose");
     }
     if (reason !== "clickaway") {

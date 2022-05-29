@@ -1,13 +1,6 @@
-import config from "../../../config";
 const axios = require("axios");
 
-let serverUrl = "";
-if (config.env === "PROD") {
-  serverUrl = config.serverProdUrl;
-}
-if (config.env === "DEV") {
-  serverUrl = config.serverDevUrl;
-}
+let serverUrl = process.env.SERVER_URL;
 
 export async function createTransaction(newTransaction) {
   //exports.createTransaction = async (id, newTransaction) => {

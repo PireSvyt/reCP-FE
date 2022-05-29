@@ -28,7 +28,7 @@ const pages = [
 
 export default class App extends React.Component {
   constructor(props) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("App.constructor");
     }
     super(props);
@@ -79,12 +79,12 @@ export default class App extends React.Component {
 
   // Handlers
   handleChangeTab(event, newTabIndex) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("App.handleChangeTab " + newTabIndex);
     }
     switch (newTabIndex) {
       default:
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("/!\\ no match tab index : " + newTabIndex);
         }
     }

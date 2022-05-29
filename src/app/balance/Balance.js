@@ -24,7 +24,7 @@ import Snack from "../Snack";
 
 export default class Balance extends React.Component {
   constructor(props) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.constructor");
     }
     super(props);
@@ -61,7 +61,7 @@ export default class Balance extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.render");
     }
     return (
@@ -164,7 +164,7 @@ export default class Balance extends React.Component {
                   >
                     <ListItemButton
                       onClick={() => {
-                        if (config.debug) {
+                        if (process.env.MODE_DEBUG) {
                           console.log(
                             "Balance.transactions.onClick " + value._id
                           );
@@ -196,7 +196,7 @@ export default class Balance extends React.Component {
         >
           <AddIcon
             onClick={() => {
-              if (config.debug) {
+              if (process.env.MODE_DEBUG) {
                 console.log("Balance.AddIcon.onClick");
               }
               this.handleOpenTransaction("");
@@ -226,7 +226,7 @@ export default class Balance extends React.Component {
     );
   }
   componentDidMount() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       //console.log("Balance.componentDidMount");
     }
     // Update
@@ -236,7 +236,7 @@ export default class Balance extends React.Component {
 
   // Updates
   updateTabHeight() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
@@ -244,7 +244,7 @@ export default class Balance extends React.Component {
     });
   }
   updateSummary() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.updateSummary");
     }
     getBalance().then((res) => {
@@ -254,7 +254,7 @@ export default class Balance extends React.Component {
     });
   }
   updateTransactions() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.updateTransactions");
     }
     //
@@ -268,7 +268,7 @@ export default class Balance extends React.Component {
 
   // Handlers
   handleChangeTab(event, newTabIndex) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleChangeTab " + newTabIndex);
     }
     switch (newTabIndex) {
@@ -279,7 +279,7 @@ export default class Balance extends React.Component {
         this.updateTransactions();
         break;
       default:
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("/!\\ no match tab index : " + newTabIndex);
         }
     }
@@ -288,7 +288,7 @@ export default class Balance extends React.Component {
     });
   }
   handleOpenTransaction(id) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleOpenTransaction " + id);
     }
     this.setState({
@@ -297,7 +297,7 @@ export default class Balance extends React.Component {
     });
   }
   handleCloseTransaction(snack) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
@@ -310,13 +310,13 @@ export default class Balance extends React.Component {
     });
   }
   handleSaveTransaction() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleSaveTransaction");
     }
     this.updateBalance();
   }
   handleOpenTransactionCategory() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleOpenTransactionCategory");
     }
     this.setState({
@@ -324,7 +324,7 @@ export default class Balance extends React.Component {
     });
   }
   handleCloseTransactionCategory(snack) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleCloseTransactionCategory");
     }
     this.setState({
@@ -336,13 +336,13 @@ export default class Balance extends React.Component {
     });
   }
   handleSaveTransactionCategory() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleSaveTransactionCategory");
     }
     this.updateBalance();
   }
   handleCloseSnack() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Balance.handleCloseSnack");
     }
     this.setState((prevState, props) => ({

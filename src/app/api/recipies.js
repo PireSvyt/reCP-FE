@@ -1,13 +1,6 @@
 const axios = require("axios");
-const config = require("../../config");
 
-let serverUrl = "";
-if (config.env === "PROD") {
-  serverUrl = config.serverProdUrl;
-}
-if (config.env === "DEV") {
-  serverUrl = config.serverDevUrl;
-}
+let serverUrl = process.env.SERVER_URL;
 
 export async function createRecipe(newRecipe) {
   try {

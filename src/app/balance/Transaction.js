@@ -42,7 +42,7 @@ let emptyTransaction = {
 
 export default class Transaction extends React.Component {
   constructor(props) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.constructor");
     }
     super(props);
@@ -72,7 +72,7 @@ export default class Transaction extends React.Component {
     });
   }
   render() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.render");
       //console.log("Transaction.props.transactionID");
       //console.log(this.props.transactionID);
@@ -277,7 +277,7 @@ export default class Transaction extends React.Component {
     );
   }
   componentDidUpdate(prevState) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       //console.log("Transaction.componentDidUpdate");
       //console.log("Transaction.state");
       //console.log(this.state);
@@ -316,7 +316,7 @@ export default class Transaction extends React.Component {
 
   // Handles
   handleClose() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.handleClose");
     }
     this.setState((prevState, props) => ({
@@ -330,11 +330,11 @@ export default class Transaction extends React.Component {
     this.props.onclose(snack);
   }
   handleChange(event, newValue) {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.handleChange");
     }
     const target = event.target;
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       //console.log("target");
       //console.log(target);
       console.log("target.name : " + target.name);
@@ -344,13 +344,13 @@ export default class Transaction extends React.Component {
     var previousTransaction = this.state.transaction;
     switch (target.name) {
       case "name":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change name : " + target.value);
         }
         previousTransaction.name = target.value;
         break;
       case "date":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change date : " + target.value);
         }
         previousTransaction.date = target.value;
@@ -359,19 +359,19 @@ export default class Transaction extends React.Component {
         }));
         break;
       case "amount":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change amount : " + target.value);
         }
         previousTransaction.amount = target.value;
         break;
       case "by":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change by : " + target.value);
         }
         previousTransaction.by = target.value;
         break;
       case "for":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change for : " + target.value + " " + target.checked);
         }
         previousTransaction.for = previousTransaction.for.filter(function (
@@ -386,18 +386,18 @@ export default class Transaction extends React.Component {
         }
         break;
       case "category":
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("change category : " + target.value);
         }
         previousTransaction.category = target.value;
         break;
       default:
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.transaction");
       console.log(this.state.transaction);
     }
@@ -406,7 +406,7 @@ export default class Transaction extends React.Component {
     }));
   }
   handleSave() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.handleSave");
       console.log("this.state.transaction");
       console.log(this.state.transaction);
@@ -444,16 +444,16 @@ export default class Transaction extends React.Component {
     }
     // Post or publish
     if (save === true) {
-      if (config.debug) {
+      if (process.env.MODE_DEBUG) {
         console.log(this.props.transactionID);
         console.log(this.state.transaction);
       }
       if (this.props.transactionID === "") {
         // POST
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("POST");
         }
-        if (config.debug === false) {
+        if (process.env.MODE_DEBUG === false) {
           createTransaction(this.state.transaction).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
@@ -486,10 +486,10 @@ export default class Transaction extends React.Component {
         }
       } else {
         // PUT
-        if (config.debug) {
+        if (process.env.MODE_DEBUG) {
           console.log("PUT");
         }
-        if (config.debug === false) {
+        if (process.env.MODE_DEBUG === false) {
           modifyTransaction(
             this.props.transactionID,
             this.state.transaction
@@ -542,7 +542,7 @@ export default class Transaction extends React.Component {
     });
   }
   handleCloseSnack() {
-    if (config.debug) {
+    if (process.env.MODE_DEBUG) {
       console.log("Transaction.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
