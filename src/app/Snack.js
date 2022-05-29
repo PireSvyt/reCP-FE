@@ -69,18 +69,20 @@ export default class Snack extends React.Component {
     ) {
       // Add optional inputs
       var newSnack = this.props.snack;
-      if (!newSnack.duration) {
-        newSnack.duration = 3000;
+      if (newSnack !== undefined) {
+        if (newSnack.duration === undefined) {
+          newSnack.duration = 3000;
+        }
+        if (newSnack.severity === undefined) {
+          newSnack.severity = "info";
+        }
+        if (newSnack.message === undefined) {
+          newSnack.message = newSnack[process.env.REACT_APP_LANGUAGE];
+        }
+        this.setState((prevState, props) => ({
+          snack: newSnack
+        }));
       }
-      if (!newSnack.severity) {
-        newSnack.severity = "info";
-      }
-      if (!newSnack.message) {
-        newSnack.message = newSnack[process.env.REACT_APP_LANGUAGE];
-      }
-      this.setState((prevState, props) => ({
-        snack: newSnack
-      }));
     }
   }
 

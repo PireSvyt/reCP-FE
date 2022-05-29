@@ -331,44 +331,43 @@ export default class Recipe extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.REACT_APP_DEBUG === "FALSE") {
-          createRecipe(recipe).then((res) => {
-            //this.props.onsave();
-            if (res !== undefined) {
-              if (res.message === "recette enregistrée") {
-                this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
-              } else {
-                this.props.onclose(
-                  appcopy["recipe"]["snack"]["erroroncreation"]
-                );
-              }
+        //if (process.env.REACT_APP_DEBUG === "FALSE") {
+        createRecipe(recipe).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "recette enregistrée") {
+              this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
             } else {
-              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+              this.props.onclose(appcopy["recipe"]["snack"]["erroroncreation"]);
             }
-          });
-        }
-        this.props.onclose();
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
+        }*/
       } else {
         // PUT
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.REACT_APP_DEBUG === "FALSE") {
-          modifyRecipe(this.props.recipeID, recipe).then((res) => {
-            //this.props.onsave();
-            if (res !== undefined) {
-              if (res.message === "recette modifiée") {
-                this.props.onclose(appcopy["recipe"]["snack"]["modified"]);
-              } else {
-                this.props.onclose(
-                  appcopy["recipe"]["snack"]["erroroncreation"]
-                );
-              }
+        //if (process.env.REACT_APP_DEBUG === "FALSE") {
+        modifyRecipe(this.props.recipeID, recipe).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "recette modifiée") {
+              this.props.onclose(appcopy["recipe"]["snack"]["modified"]);
             } else {
-              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+              this.props.onclose(appcopy["recipe"]["snack"]["erroroncreation"]);
             }
-          });
-        }
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
+        }*/
       }
     } else {
       // Snack

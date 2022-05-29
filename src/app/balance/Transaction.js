@@ -479,48 +479,50 @@ export default class Transaction extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.REACT_APP_DEBUG === "FALSE") {
-          createTransaction(this.state.transaction).then((res) => {
-            //this.props.onsave();
-            if (res !== undefined) {
-              if (res.message === "transaction enregistrée") {
-                this.props.onclose(appcopy["transaction"]["snack"]["saved"]);
-              } else {
-                this.props.onclose(
-                  appcopy["transaction"]["snack"]["erroroncreation"]
-                );
-              }
+        //if (process.env.REACT_APP_DEBUG === "FALSE") {
+        createTransaction(this.state.transaction).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "transaction enregistrée") {
+              this.props.onclose(appcopy["transaction"]["snack"]["saved"]);
             } else {
-              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+              this.props.onclose(
+                appcopy["transaction"]["snack"]["erroroncreation"]
+              );
             }
-          });
-        }
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
+        }*/
       } else {
         // PUT
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.REACT_APP_MOCKAPI === "FALSE") {
-          modifyTransaction(
-            this.props.transactionID,
-            this.state.transaction
-          ).then((res) => {
-            //this.props.onsave();
-            if (res !== undefined) {
-              if (res.message === "transaction modifiée") {
-                this.props.onclose(appcopy["transaction"]["snack"]["modified"]);
-              } else {
-                this.props.onclose(
-                  appcopy["transaction"]["snack"]["erroroncreation"]
-                );
-              }
+        //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
+        modifyTransaction(
+          this.props.transactionID,
+          this.state.transaction
+        ).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "transaction modifiée") {
+              this.props.onclose(appcopy["transaction"]["snack"]["modified"]);
             } else {
-              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+              this.props.onclose(
+                appcopy["transaction"]["snack"]["erroroncreation"]
+              );
             }
-          });
-        } else {
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
           this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-        }
+        }*/
       }
     } else {
       // Snack

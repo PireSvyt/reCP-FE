@@ -115,7 +115,7 @@ export default class TransactionCategory extends React.Component {
     this.setState((prevState, props) => ({
       transactionCategory: ""
     }));
-    this.props.onclose(appcopy["transactioncategory"]["specific"]["closed"]);
+    this.props.onclose(appcopy["transactioncategory"]["snack"]["discarded"]);
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -167,30 +167,30 @@ export default class TransactionCategory extends React.Component {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log("POST");
       }
-      if (process.env.REACT_APP_DEBUG === "FALSE") {
-        createCategoryTransaction({
-          name: this.state.transactionCategory
-        }).then((res) => {
-          //this.props.onsave();
-          console.log("res");
-          console.log(res);
-          if (res !== undefined) {
-            if (res.message === "catégorie enregistrée") {
-              this.props.onclose(
-                appcopy["transactioncategory"]["snack"]["saved"]
-              );
-            } else {
-              this.props.onclose(
-                appcopy["transactioncategory"]["snack"]["erroroncreation"]
-              );
-            }
+      //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
+      createCategoryTransaction({
+        name: this.state.transactionCategory
+      }).then((res) => {
+        //this.props.onsave();
+        console.log("res");
+        console.log(res);
+        if (res !== undefined) {
+          if (res.message === "catégorie enregistrée") {
+            this.props.onclose(
+              appcopy["transactioncategory"]["snack"]["saved"]
+            );
           } else {
-            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+            this.props.onclose(
+              appcopy["transactioncategory"]["snack"]["erroroncreation"]
+            );
           }
-        });
-      } else {
+        } else {
+          this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+        }
+      });
+      /*} else {
         this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-      }
+      }*/
       this.setState((prevState, props) => ({
         transactionCategory: ""
       }));
