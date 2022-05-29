@@ -5,7 +5,7 @@
       "EN": "My recipies"
     },
     "snack": {
-      "recipesaved": {
+      "saved": {
         "severity": "success",
         "FR": "Recette enregistrée",
         "EN": "Recipe saved"
@@ -15,7 +15,7 @@
         "FR": "Recette modifiée",
         "EN": "Recipe edited"
       },
-      "recipemodified": {
+      "edited": {
         "severity": "success",
         "FR": "Recette modifiée",
         "EN": "Recipe edited"
@@ -48,7 +48,7 @@
         "FR": "Ingrédient non créé",
         "EN": "Ingredient not created"
       },
-      "modified": {
+      "edited": {
         "severity": "success",
         "FR": "Ingrédient modifié",
         "EN": "Ingredient edited"
@@ -142,6 +142,11 @@
         "severity": "success",
         "FR": "Transaction enregistrée",
         "EN": "Transaction saved"
+      },
+      "edited": {
+        "severity": "success",
+        "FR": "Transaction modifiée",
+        "EN": "Transaction edited"
       },
       "erroroncreation": {
         "severity": "error",

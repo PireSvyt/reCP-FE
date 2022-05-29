@@ -502,7 +502,7 @@ export default class Transaction extends React.Component {
           //this.props.onsave();
           if (res !== undefined) {
             if (res.message === "transaction modifiée") {
-              this.props.onclose(appcopy["transaction"]["snack"]["modified"]);
+              this.props.onclose(appcopy["transaction"]["snack"]["edited"]);
             } else {
               this.props.onclose(
                 appcopy["transaction"]["snack"]["erroroncreation"]

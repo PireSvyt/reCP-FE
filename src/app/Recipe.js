@@ -345,7 +345,7 @@ export default class Recipe extends React.Component {
           //this.props.onsave();
           if (res !== undefined) {
             if (res.message === "recette modifiée") {
-              this.props.onclose(appcopy["recipe"]["snack"]["modified"]);
+              this.props.onclose(appcopy["recipe"]["snack"]["edited"]);
             } else {
               this.props.onclose(appcopy["recipe"]["snack"]["erroroncreation"]);
             }
