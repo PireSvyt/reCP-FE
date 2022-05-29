@@ -47,7 +47,7 @@ function getEmptyIngredient() {
 
 export default class Recipe extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.constructor");
     }
     super(props);
@@ -68,7 +68,7 @@ export default class Recipe extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.render");
       console.log("Recipe.props.recipeID");
       console.log(this.props.recipeID);
@@ -84,7 +84,7 @@ export default class Recipe extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["title.subsection_recipe"][process.env.APP_LANGUAGE]}
+            {appcopy["recipe"]["title"][process.env.REACT_APP_LANGUAGE]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -96,7 +96,11 @@ export default class Recipe extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][process.env.APP_LANGUAGE]}
+                label={
+                  appcopy["generic"]["input"]["name"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
                 defaultValue={this.state.recipe.name}
                 onChange={this.handleChange}
@@ -104,7 +108,11 @@ export default class Recipe extends React.Component {
 
               <TextField
                 name="portions"
-                label={appcopy["input.portions"][process.env.APP_LANGUAGE]}
+                label={
+                  appcopy["generic"]["input"]["portions"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
                 defaultValue={this.state.recipe.portions}
                 onChange={this.handleChange}
@@ -112,8 +120,8 @@ export default class Recipe extends React.Component {
 
               <h3>
                 {
-                  appcopy["title.subsection_ingredients"][
-                    process.env.APP_LANGUAGE
+                  appcopy["recipe"]["subsection"]["ingredients"][
+                    process.env.REACT_APP_LANGUAGE
                   ]
                 }
               </h3>
@@ -130,8 +138,8 @@ export default class Recipe extends React.Component {
 
               <h3>
                 {
-                  appcopy["title.subsection_instructions"][
-                    process.env.APP_LANGUAGE
+                  appcopy["recipe"]["subsection"]["instructions"][
+                    process.env.REACT_APP_LANGUAGE
                   ]
                 }
               </h3>
@@ -141,10 +149,18 @@ export default class Recipe extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][process.env.APP_LANGUAGE]}
+              {
+                appcopy["generic"]["button"]["cancel"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][process.env.APP_LANGUAGE]}
+              {
+                appcopy["generic"]["button"]["save"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
           </DialogActions>
         </Dialog>
@@ -160,12 +176,12 @@ export default class Recipe extends React.Component {
     );
   }
   componentDidMount() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.componentDidMount");
     }
   }
   componentDidUpdate(prevState) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.componentDidUpdate");
       console.log("Recipe.state");
       console.log(this.state);
@@ -203,7 +219,7 @@ export default class Recipe extends React.Component {
 
   // Handles
   handleClose() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleClose");
     }
     this.setState({
@@ -212,34 +228,34 @@ export default class Recipe extends React.Component {
     this.props.onclose();
   }
   handleChange(event) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(target);
     }
     var previousRecipe = this.state.recipe;
     switch (target.name) {
       case "name":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         previousRecipe.name = target.value;
         break;
       case "portions":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change portions : " + target.value);
         }
         previousRecipe.portions = target.value;
         break;
       default:
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.recipe");
       console.log(this.state.recipe);
     }
@@ -248,7 +264,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleSave() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleSave");
     }
     // Check inputs
@@ -296,18 +312,21 @@ export default class Recipe extends React.Component {
             if (res !== undefined) {
               if (res.message === "ingredient enregistré") {
                 let snack = {
-                  severity: appcopy["snack.ingredientsaved"]["severity"],
+                  severity: appcopy["recipe"]["snack"]["saved"]["severity"],
                   message:
-                    appcopy["snack.ingredientsaved"][process.env.APP_LANGUAGE],
+                    appcopy["recipe"]["snack"]["saved"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               } else {
                 let snack = {
-                  severity: appcopy["snack.ingredientduplicated"]["severity"],
+                  severity:
+                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
                   message:
-                    appcopy["snack.ingredientduplicated"][
-                      process.env.APP_LANGUAGE
+                    appcopy["recipe"]["snack"]["erroroncreation"][
+                      process.env.REACT_APP_LANGUAGE
                     ],
                   duration: 3000
                 };
@@ -315,9 +334,12 @@ export default class Recipe extends React.Component {
               }
             } else {
               let snack = {
-                severity: appcopy["snack.errornetwork"]["severity"],
+                severity:
+                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
                 message:
-                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
+                  appcopy["generic"]["snack"]["errornetwork"][
+                    process.env.REACT_APP_LANGUAGE
+                  ],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -328,41 +350,49 @@ export default class Recipe extends React.Component {
         delete ingredient["name"];
         delete ingredient["unit"];
       });
-      if (process.env.MODE_DEBUG === "TRUE") {
+      if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(this.props.recipeID);
         console.log(this.state.recipe);
       }
       if (this.props.recipeID === "") {
         // POST
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.MODE_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === false) {
           createRecipe(recipe).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "recette enregistrée") {
                 let snack = {
-                  severity: appcopy["snack.recipesaved"]["severity"],
+                  severity: appcopy["recipe"]["snack"]["saved"]["severity"],
                   message:
-                    appcopy["snack.recipesaved"][process.env.APP_LANGUAGE],
+                    appcopy["recipe"]["snack"]["saved"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               } else {
                 let snack = {
-                  severity: appcopy["snack.recipeduplicated"]["severity"],
+                  severity:
+                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
                   message:
-                    appcopy["snack.recipeduplicated"][process.env.APP_LANGUAGE],
+                    appcopy["recipe"]["snack"]["erroroncreation"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               }
             } else {
               let snack = {
-                severity: appcopy["snack.errornetwork"]["severity"],
+                severity:
+                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
                 message:
-                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
+                  appcopy["generic"]["snack"]["errornetwork"][
+                    process.env.REACT_APP_LANGUAGE
+                  ],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -372,35 +402,43 @@ export default class Recipe extends React.Component {
         this.props.onclose();
       } else {
         // PUT
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.MODE_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === false) {
           modifyRecipe(this.props.recipeID, recipe).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "recette modifiée") {
                 let snack = {
-                  severity: appcopy["snack.recipeedited"]["severity"],
+                  severity: appcopy["recipe"]["snack"]["modified"]["severity"],
                   message:
-                    appcopy["snack.recipeedited"][process.env.APP_LANGUAGE],
+                    appcopy["recipe"]["snack"]["modified"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               } else {
                 let snack = {
-                  severity: appcopy["snack.recipeduplicated"]["severity"],
+                  severity:
+                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
                   message:
-                    appcopy["snack.recipeduplicated"][process.env.APP_LANGUAGE],
+                    appcopy["recipe"]["snack"]["erroroncreation"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               }
             } else {
               let snack = {
-                severity: appcopy["snack.errornetwork"]["severity"],
+                severity:
+                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
                 message:
-                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
+                  appcopy["generic"]["snack"]["errornetwork"][
+                    process.env.REACT_APP_LANGUAGE
+                  ],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -412,14 +450,16 @@ export default class Recipe extends React.Component {
       // Snack
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snackSeverity: appcopy["snack.error"]["severity"],
-        snackMessage: appcopy["snack.error"][process.env.APP_LANGUAGE] + errors,
+        snackSeverity: appcopy["generic"]["snack"]["error"]["severity"],
+        snackMessage:
+          appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+          errors,
         snackDuration: 5000
       }));
     }
   }
   handleIngredientDelete(uid) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleIngredientDelete " + uid);
     }
     let ingredients = this.state.recipe.ingredients.filter(
@@ -432,7 +472,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleIngredientChange(newIngredientValue) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleIngredientChange " + newIngredientValue.uid);
       console.log("newIngredientValue");
       console.log(newIngredientValue);
@@ -452,7 +492,7 @@ export default class Recipe extends React.Component {
     });
   }
   handleCloseSnack() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
@@ -464,7 +504,7 @@ export default class Recipe extends React.Component {
 class Ingredient extends React.Component {
   constructor(props) {
     super(props);
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredient.constructor " + this.props.ingredient.uid);
     }
     // Handlers
@@ -472,7 +512,7 @@ class Ingredient extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredient.render " + this.props.ingredient.uid);
     }
     return (
@@ -499,21 +539,33 @@ class Ingredient extends React.Component {
         >
           <TextField
             name="name"
-            label={appcopy["input.name"][process.env.APP_LANGUAGE]}
+            label={
+              appcopy["generic"]["input"]["name"][
+                process.env.REACT_APP_LANGUAGE
+              ]
+            }
             variant="standard"
             defaultValue={this.props.ingredient.name}
             onChange={this.handleChange}
           />
           <TextField
             name="count"
-            label={appcopy["input.count"][process.env.APP_LANGUAGE]}
+            label={
+              appcopy["generic"]["input"]["quantity"][
+                process.env.REACT_APP_LANGUAGE
+              ]
+            }
             variant="standard"
             defaultValue={this.props.ingredient.quantity}
             onChange={this.handleChange}
           />
           <TextField
             name="unit"
-            label={appcopy["input.unit"][process.env.APP_LANGUAGE]}
+            label={
+              appcopy["generic"]["input"]["unit"][
+                process.env.REACT_APP_LANGUAGE
+              ]
+            }
             variant="standard"
             defaultValue={this.props.ingredient.unit}
             onChange={this.handleChange}
@@ -525,41 +577,41 @@ class Ingredient extends React.Component {
 
   // Handlers()
   handleChange(event) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredient.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(target);
     }
     var updatingIngredient = this.props.ingredient;
     switch (target.name) {
       case "name":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         updatingIngredient.name = target.value;
         break;
       case "count":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change count : " + target.value);
         }
         updatingIngredient.count = target.value;
         break;
       default:
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("updatingIngredient");
       console.log(updatingIngredient);
     }
     this.props.onchange(updatingIngredient);
   }
   handleDelete() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredient.handleDelete " + this.props.ingredient.uid);
     }
     this.props.ondelete(this.props.ingredient.uid);

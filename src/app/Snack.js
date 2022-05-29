@@ -18,7 +18,7 @@ success
 
 export default class Snack extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Snack.constructor");
     }
     super(props);
@@ -29,7 +29,7 @@ export default class Snack extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Snack.render");
     }
     return (
@@ -51,7 +51,7 @@ export default class Snack extends React.Component {
 
   // Handles
   handleClose(event, reason) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Snack.handleClose");
     }
     if (reason !== "clickaway") {

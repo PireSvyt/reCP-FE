@@ -41,7 +41,7 @@ let emptyTransaction = {
 
 export default class Transaction extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.constructor");
     }
     super(props);
@@ -71,7 +71,7 @@ export default class Transaction extends React.Component {
     });
   }
   render() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.render");
       //console.log("Transaction.props.transactionID");
       //console.log(this.props.transactionID);
@@ -87,7 +87,7 @@ export default class Transaction extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["title.subsection_transaction"][process.env.APP_LANGUAGE]}
+            {appcopy["transaction"]["title"][process.env.REACT_APP_LANGUAGE]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -99,7 +99,11 @@ export default class Transaction extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][process.env.APP_LANGUAGE]}
+                label={
+                  appcopy["generic"]["input"]["name"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
                 defaultValue={this.state.transaction.name}
                 onChange={this.handleChange}
@@ -110,7 +114,11 @@ export default class Transaction extends React.Component {
               >
                 <MobileDatePicker
                   name="date"
-                  label=""
+                  label={
+                    appcopy["generic"]["input"]["date"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
                   value={this.state.transactionDate}
                   onChange={(newValue) => {
                     this.setState((prevState, props) => ({
@@ -128,7 +136,11 @@ export default class Transaction extends React.Component {
 
               <TextField
                 name="amount"
-                label={appcopy["input.amount"][process.env.APP_LANGUAGE]}
+                label={
+                  appcopy["generic"]["input"]["quantity"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
                 defaultValue={this.state.transaction.amount}
                 onChange={this.handleChange}
@@ -149,7 +161,13 @@ export default class Transaction extends React.Component {
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.by"][process.env.APP_LANGUAGE]}</h4>
+                <h4>
+                  {
+                    appcopy["transaction"]["specific"]["by"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
+                </h4>
                 <FormControlLabel
                   value="Alice"
                   control={<Radio />}
@@ -175,7 +193,13 @@ export default class Transaction extends React.Component {
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.for"][process.env.APP_LANGUAGE]}</h4>
+                <h4>
+                  {
+                    appcopy["transaction"]["specific"]["for"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
+                </h4>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -208,7 +232,11 @@ export default class Transaction extends React.Component {
                   <TextField
                     {...params}
                     variant="standard"
-                    label={appcopy["input.category"][process.env.APP_LANGUAGE]}
+                    label={
+                      appcopy["transaction"]["specific"]["category"][
+                        process.env.REACT_APP_LANGUAGE
+                      ]
+                    }
                   />
                 )}
                 renderOption={(props, option) => (
@@ -257,10 +285,18 @@ export default class Transaction extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][process.env.APP_LANGUAGE]}
+              {
+                appcopy["generic"]["button"]["cancel"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][process.env.APP_LANGUAGE]}
+              {
+                appcopy["generic"]["button"]["save"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
           </DialogActions>
         </Dialog>
@@ -276,7 +312,7 @@ export default class Transaction extends React.Component {
     );
   }
   componentDidUpdate(prevState) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Transaction.componentDidUpdate");
       //console.log("Transaction.state");
       //console.log(this.state);
@@ -315,25 +351,28 @@ export default class Transaction extends React.Component {
 
   // Handles
   handleClose() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleClose");
     }
     this.setState((prevState, props) => ({
       transaction: { ...emptyTransaction }
     }));
     let snack = {
-      severity: "info",
-      message: "Transaction fermée",
+      severity: appcopy["transaction"]["snack"]["discarded"]["severity"],
+      message:
+        appcopy["transaction"]["snack"]["discarded"][
+          process.env.REACT_APP_LANGUAGE
+        ],
       duration: 1500
     };
     this.props.onclose(snack);
   }
   handleChange(event, newValue) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleChange");
     }
     const target = event.target;
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("target");
       //console.log(target);
       console.log("target.name : " + target.name);
@@ -343,13 +382,13 @@ export default class Transaction extends React.Component {
     var previousTransaction = this.state.transaction;
     switch (target.name) {
       case "name":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         previousTransaction.name = target.value;
         break;
       case "date":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change date : " + target.value);
         }
         previousTransaction.date = target.value;
@@ -358,19 +397,19 @@ export default class Transaction extends React.Component {
         }));
         break;
       case "amount":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change amount : " + target.value);
         }
         previousTransaction.amount = target.value;
         break;
       case "by":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change by : " + target.value);
         }
         previousTransaction.by = target.value;
         break;
       case "for":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change for : " + target.value + " " + target.checked);
         }
         previousTransaction.for = previousTransaction.for.filter(function (
@@ -385,18 +424,18 @@ export default class Transaction extends React.Component {
         }
         break;
       case "category":
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change category : " + target.value);
         }
         previousTransaction.category = target.value;
         break;
       default:
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.transaction");
       console.log(this.state.transaction);
     }
@@ -405,7 +444,7 @@ export default class Transaction extends React.Component {
     }));
   }
   handleSave() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleSave");
       console.log("this.state.transaction");
       console.log(this.state.transaction);
@@ -443,33 +482,39 @@ export default class Transaction extends React.Component {
     }
     // Post or publish
     if (save === true) {
-      if (process.env.MODE_DEBUG === "TRUE") {
+      if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(this.props.transactionID);
         console.log(this.state.transaction);
       }
       if (this.props.transactionID === "") {
         // POST
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.MODE_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === false) {
           createTransaction(this.state.transaction).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "transaction enregistrée") {
                 let snack = {
-                  severity: appcopy["snack.transactionsaved"]["severity"],
+                  severity:
+                    appcopy["transaction"]["snack"]["saved"]["severity"],
                   message:
-                    appcopy["snack.transactionsaved"][process.env.APP_LANGUAGE],
+                    appcopy["transaction"]["snack"]["saved"][
+                      process.env.REACT_APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               } else {
                 let snack = {
-                  severity: appcopy["snack.transactionduplicated"]["severity"],
+                  severity:
+                    appcopy["transaction"]["snack"]["erroroncreation"][
+                      "severity"
+                    ],
                   message:
-                    appcopy["snack.transactionduplicated"][
-                      process.env.APP_LANGUAGE
+                    appcopy["transaction"]["snack"]["erroroncreation"][
+                      process.env.REACT_APP_LANGUAGE
                     ],
                   duration: 3000
                 };
@@ -477,9 +522,12 @@ export default class Transaction extends React.Component {
               }
             } else {
               let snack = {
-                severity: appcopy["snack.errornetwork"]["severity"],
+                severity:
+                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
                 message:
-                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
+                  appcopy["generic"]["snack"]["errornetwork"][
+                    process.env.REACT_APP_LANGUAGE
+                  ],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -488,10 +536,10 @@ export default class Transaction extends React.Component {
         }
       } else {
         // PUT
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.MODE_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === false) {
           modifyTransaction(
             this.props.transactionID,
             this.state.transaction
@@ -500,20 +548,24 @@ export default class Transaction extends React.Component {
             if (res !== undefined) {
               if (res.message === "transaction modifiée") {
                 let snack = {
-                  severity: appcopy["snack.transactionmodified"]["severity"],
+                  severity:
+                    appcopy["transaction"]["snack"]["modified"]["severity"],
                   message:
-                    appcopy["snack.transactionmodified"][
-                      process.env.APP_LANGUAGE
+                    appcopy["transaction"]["snack"]["modified"][
+                      process.env.REACT_APP_LANGUAGE
                     ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
               } else {
                 let snack = {
-                  severity: appcopy["snack.transactionduplicated"]["severity"],
+                  severity:
+                    appcopy["transaction"]["snack"]["erroroncreation"][
+                      "severity"
+                    ],
                   message:
-                    appcopy["snack.transactionduplicated"][
-                      process.env.APP_LANGUAGE
+                    appcopy["transaction"]["snack"]["erroroncreation"][
+                      process.env.REACT_APP_LANGUAGE
                     ],
                   duration: 3000
                 };
@@ -521,9 +573,12 @@ export default class Transaction extends React.Component {
               }
             } else {
               let snack = {
-                severity: appcopy["snack.errornetwork"]["severity"],
+                severity:
+                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
                 message:
-                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
+                  appcopy["generic"]["snack"]["errornetwork"][
+                    process.env.REACT_APP_LANGUAGE
+                  ],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -535,8 +590,10 @@ export default class Transaction extends React.Component {
       // Snack
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snackSeverity: appcopy["snack.error"]["severity"],
-        snackMessage: appcopy["snack.error"][process.env.APP_LANGUAGE] + errors,
+        snackSeverity: appcopy["generic"]["snack"]["error"]["severity"],
+        snackMessage:
+          appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+          errors,
         snackDuration: 5000
       }));
     }
@@ -549,7 +606,7 @@ export default class Transaction extends React.Component {
     });
   }
   handleCloseSnack() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleCloseSnack");
     }
     this.setState((prevState, props) => ({

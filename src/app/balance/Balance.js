@@ -23,7 +23,7 @@ import Snack from "../Snack";
 
 export default class Balance extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.constructor");
     }
     super(props);
@@ -60,12 +60,12 @@ export default class Balance extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.render");
     }
     return (
       <div>
-        <h2>{appcopy["title.section_mybalance"][process.env.APP_LANGUAGE]}</h2>
+        <h2>{appcopy["mybalance"]["title"][process.env.REACT_APP_LANGUAGE]}</h2>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -75,15 +75,17 @@ export default class Balance extends React.Component {
             >
               <Tab
                 label={
-                  appcopy["title.subsection_balance"][process.env.APP_LANGUAGE]
+                  appcopy["mybalance"]["subsection"]["summary"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
                 }
                 id="tab-0"
                 aria-controls="tabpanel-0"
               />
               <Tab
                 label={
-                  appcopy["title.subsection_transactions"][
-                    process.env.APP_LANGUAGE
+                  appcopy["mybalance"]["subsection"]["transactions"][
+                    process.env.REACT_APP_LANGUAGE
                   ]
                 }
                 id="tab-1"
@@ -98,8 +100,8 @@ export default class Balance extends React.Component {
           >
             <h3>
               {
-                appcopy["title.subsection_balanceperuser"][
-                  process.env.APP_LANGUAGE
+                appcopy["mybalance"]["subsection"]["balanceperuser"][
+                  process.env.REACT_APP_LANGUAGE
                 ]
               }
             </h3>
@@ -125,8 +127,8 @@ export default class Balance extends React.Component {
             </List>
             <h3>
               {
-                appcopy["title.subsection_balancepercategory"][
-                  process.env.APP_LANGUAGE
+                appcopy["mybalance"]["subsection"]["balancepercategory"][
+                  process.env.REACT_APP_LANGUAGE
                 ]
               }
             </h3>
@@ -153,8 +155,8 @@ export default class Balance extends React.Component {
             </List>
             <Button onClick={this.handleOpenTransactionCategory}>
               {
-                appcopy["button.newTransactionCategory"][
-                  process.env.APP_LANGUAGE
+                appcopy["mybalance"]["specific"]["newTransactionCategory"][
+                  process.env.REACT_APP_LANGUAGE
                 ]
               }
             </Button>
@@ -175,7 +177,7 @@ export default class Balance extends React.Component {
                   >
                     <ListItemButton
                       onClick={() => {
-                        if (process.env.MODE_DEBUG === "TRUE") {
+                        if (process.env.REACT_APP_DEBUG === "TRUE") {
                           console.log(
                             "Balance.transactions.onClick " + value._id
                           );
@@ -207,7 +209,7 @@ export default class Balance extends React.Component {
         >
           <AddIcon
             onClick={() => {
-              if (process.env.MODE_DEBUG === "TRUE") {
+              if (process.env.REACT_APP_DEBUG === "TRUE") {
                 console.log("Balance.AddIcon.onClick");
               }
               this.handleOpenTransaction("");
@@ -237,7 +239,7 @@ export default class Balance extends React.Component {
     );
   }
   componentDidMount() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Balance.componentDidMount");
     }
     // Update
@@ -247,7 +249,7 @@ export default class Balance extends React.Component {
 
   // Updates
   updateTabHeight() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
@@ -255,7 +257,7 @@ export default class Balance extends React.Component {
     });
   }
   updateSummary() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateSummary");
     }
     getBalance().then((res) => {
@@ -265,7 +267,7 @@ export default class Balance extends React.Component {
     });
   }
   updateTransactions() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateTransactions");
     }
     //
@@ -279,7 +281,7 @@ export default class Balance extends React.Component {
 
   // Handlers
   handleChangeTab(event, newTabIndex) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleChangeTab " + newTabIndex);
     }
     switch (newTabIndex) {
@@ -290,7 +292,7 @@ export default class Balance extends React.Component {
         this.updateTransactions();
         break;
       default:
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match tab index : " + newTabIndex);
         }
     }
@@ -299,7 +301,7 @@ export default class Balance extends React.Component {
     });
   }
   handleOpenTransaction(id) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleOpenTransaction " + id);
     }
     this.setState({
@@ -308,7 +310,7 @@ export default class Balance extends React.Component {
     });
   }
   handleCloseTransaction(snack) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
@@ -321,13 +323,13 @@ export default class Balance extends React.Component {
     });
   }
   handleSaveTransaction() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleSaveTransaction");
     }
     this.updateBalance();
   }
   handleOpenTransactionCategory() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleOpenTransactionCategory");
     }
     this.setState({
@@ -335,7 +337,7 @@ export default class Balance extends React.Component {
     });
   }
   handleCloseTransactionCategory(snack) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleCloseTransactionCategory");
     }
     this.setState({
@@ -347,13 +349,13 @@ export default class Balance extends React.Component {
     });
   }
   handleSaveTransactionCategory() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleSaveTransactionCategory");
     }
     this.updateBalance();
   }
   handleCloseSnack() {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleCloseSnack");
     }
     this.setState((prevState, props) => ({

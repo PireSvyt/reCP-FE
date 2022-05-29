@@ -1,11 +1,9 @@
 const axios = require("axios");
 
-let serverUrl = process.env.SERVER_URL;
-
 export async function createCategoryTransaction(newCategoryTransaction) {
   try {
     const res = await axios.post(
-      serverUrl + "/api/categorytransaction/",
+      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/",
       newCategoryTransaction
     );
     return res.data;
@@ -17,7 +15,9 @@ export async function createCategoryTransaction(newCategoryTransaction) {
 
 export async function getCategoryTransaction(id) {
   try {
-    const res = await axios.get(serverUrl + "/api/categorytransaction/" + id);
+    const res = await axios.get(
+      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id
+    );
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -28,7 +28,7 @@ export async function getCategoryTransaction(id) {
 export async function deleteCategoryTransaction(id) {
   try {
     const res = await axios.delete(
-      serverUrl + "/api/categorytransaction/" + id
+      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id
     );
     return res.data;
   } catch (err) {
@@ -40,7 +40,7 @@ export async function deleteCategoryTransaction(id) {
 export async function modifyCategoryTransaction(id, newCategoryTransaction) {
   try {
     const res = await axios.put(
-      serverUrl + "/api/categorytransaction/" + id,
+      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id,
       newCategoryTransaction
     );
     return res.data;
@@ -52,7 +52,9 @@ export async function modifyCategoryTransaction(id, newCategoryTransaction) {
 
 export async function getCategoryTransactions() {
   try {
-    const res = await axios.get(serverUrl + "/api/categorytransaction");
+    const res = await axios.get(
+      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction"
+    );
     return res.data;
   } catch (err) {
     // Handle Error Here

@@ -1,190 +1,266 @@
 {
-  "title.section_myrecipies": {
-    "FR": "Mes recettes",
-    "EN": "My recipies"
+  "myrecipies": {
+    "title": {
+      "FR": "Mes recettes",
+      "EN": "My recipies"
+    },
+    "snack": {
+      "recipesaved": {
+        "severity": "success",
+        "FR": "Recette enregistrée",
+        "EN": "Recipe saved"
+      },
+      "recipeduplicated": {
+        "severity": "success",
+        "FR": "Recette existante",
+        "EN": "Existing recipe"
+      },
+      "recipemodified": {
+        "severity": "success",
+        "FR": "Recette modifiée",
+        "EN": "Recipe edited"
+      }
+    }
   },
-  "title.subsection_recipe": {
-    "FR": "Ma recette",
-    "EN": "My recipe"
+  "recipe": {
+    "title": {
+      "FR": "Ma recette",
+      "EN": "My recipe"
+    },
+    "subsection": {
+      "ingredients": {
+        "FR": "Ingrédients",
+        "EN": "Ingredients"
+      },
+      "instructions": {
+        "FR": "Instructions",
+        "EN": "Instructions"
+      }
+    },
+    "snack": {
+      "ingredientsaved": {
+        "severity": "success",
+        "FR": "Ingrédient enregistré",
+        "EN": "Ingredient saved"
+      },
+      "ingredientduplicated": {
+        "severity": "success",
+        "FR": "Ingrédient existante",
+        "EN": "Existing ingredient"
+      },
+      "ingredientmodified": {
+        "severity": "success",
+        "FR": "Ingrédient modifié",
+        "EN": "Ingredient edited"
+      }
+    }
   },
-  "title.section_recipieedit": {
-    "FR": "Editer ma recette",
-    "EN": "Edit my recipe"
+  "thisweek": {
+    "title": {
+      "FR": "Ma semaine",
+      "EN": "My week"
+    }
   },
-  "title.section_recipeview": {
-    "FR": "Ma recette",
-    "EN": "My recipe"
+  "mybalance": {
+    "title": {
+      "FR": "Ma balance",
+      "EN": "My balance"
+    },
+    "subsection": {
+      "summary": {
+        "FR": "Balance",
+        "EN": "Balance"
+      },
+      "transactions": {
+        "FR": "Transactions",
+        "EN": "Transactions"
+      },
+      "balanceperuser": {
+        "FR": "Par utilisateur",
+        "EN": "Per user"
+      },
+      "balancepercategory": {
+        "FR": "Par catégorie",
+        "EN": "Per category"
+      }
+    },
+    "specific": {
+      "newTransactionCategory": {
+        "FR": "Ajouter une catégorie",
+        "EN": "Add a category"
+      }
+    },
+    "snack": {
+      "summary_uptodate": {
+        "severity": "info",
+        "FR": "Balance à jour",
+        "EN": "Balance up to date"
+      },
+      "categoryclosed": {
+        "severity": "info",
+        "FR": "Catégorie fermée",
+        "EN": "Category closed"
+      },
+      "categorysaved": {
+        "severity": "success",
+        "FR": "Catégorie enregistrée",
+        "EN": "Category saved"
+      },
+      "categoryduplicated": {
+        "severity": "warning",
+        "FR": "Catégorie existante",
+        "EN": "Existing category"
+      },
+      "transactionsaved": {
+        "severity": "success",
+        "FR": "Transaction enregistrée",
+        "EN": "Transaction saved"
+      },
+      "transactionduplicated": {
+        "severity": "success",
+        "FR": "Transaction existante",
+        "EN": "Existing transaction"
+      },
+      "transactionmodified": {
+        "severity": "success",
+        "FR": "Transaction modifiée",
+        "EN": "Transaction edited"
+      }
+    }
   },
-  "title.subsection_ingredients": {
-    "FR": "Ingrédients",
-    "EN": "Ingredients"
+  "transaction": {
+    "title": {
+      "FR": "Transaction",
+      "EN": "Transaction"
+    },
+    "specific": {
+      "by": {
+        "FR": "Par",
+        "EN": "By"
+      },
+      "for": {
+        "FR": "Pour",
+        "EN": "For"
+      },
+      "category": {
+        "FR": "Catégorie",
+        "EN": "Category"
+      }
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Transaction abandonnée",
+        "EN": "Transaction discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Transaction enregistrée",
+        "EN": "Transaction saved"
+      },
+      "erroroncreation": {
+        "severity": "warning",
+        "FR": "Transaction non créée",
+        "EN": "Transaction not created"
+      }
+    }
   },
-  "title.subsection_instructions": {
-    "FR": "Instructions",
-    "EN": "Instructions"
+  "transactioncategory": {
+    "title": {
+      "FR": "Catégorie",
+      "EN": "Category"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Catégorie abandonnée",
+        "EN": "Category discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Catégorie enregistrée",
+        "EN": "Category saved"
+      },
+      "erroroncreation": {
+        "severity": "warning",
+        "FR": "Catégorie non créée",
+        "EN": "Ccategory not created"
+      }
+    }
   },
-  "title.section_thisweek": {
-    "FR": "Ma semaine",
-    "EN": "My week"
-  },
-  "title.section_myfridge": {
-    "FR": "Mon frigo",
-    "EN": "My fridge"
-  },
-  "title.section_myshopping": {
-    "FR": "Mes courses",
-    "EN": "My groceries"
-  },
-  "title.section_mybalance": {
-    "FR": "Ma balance",
-    "EN": "My balance"
-  },
-  "button.add": {
-    "FR": "Ajouter",
-    "EN": "Add"
-  },
-  "button.save": {
-    "FR": "Sauver",
-    "EN": "Save"
-  },
-  "button.delete": {
-    "FR": "Supprimer",
-    "EN": "Delete"
-  },
-  "button.edit": {
-    "FR": "Editer",
-    "EN": "Edit"
-  },
-  "button.renew": {
-    "FR": "Renouveler",
-    "EN": "Renew"
-  },
-  "button.transactions": {
-    "FR": "Transactions",
-    "EN": "Transactions"
-  },
-  "button.select": {
-    "FR": "Selectionner",
-    "EN": "Select"
-  },
-  "button.cancel": {
-    "FR": "Annuler",
-    "EN": "Cancel"
-  },
-  "input.name": {
-    "FR": "Nom",
-    "EN": "Name"
-  },
-  "input.portions": {
-    "FR": "Portions",
-    "EN": "Portions"
-  },
-  "input.date": {
-    "FR": "Date",
-    "EN": "Date"
-  },
-  "input.amount": {
-    "FR": "Montant",
-    "EN": "Amount"
-  },
-  "input.category": {
-    "FR": "Catégorie",
-    "EN": "Category"
-  },
-  "input.count": {
-    "FR": "Quantité",
-    "EN": "Quantity"
-  },
-  "input.unit": {
-    "FR": "Unité",
-    "EN": "Unit"
-  },
-  "text.by": {
-    "FR": "Par",
-    "EN": "By"
-  },
-  "text.for": {
-    "FR": "Pour",
-    "EN": "For"
-  },
-  "snack.balance_summary_uptodate": {
-    "severity": "info",
-    "FR": "Balance à jour",
-    "EN": "Balance up to date"
-  },
-  "snack.saving": {
-    "severity": "info",
-    "FR": "Sauvergarde en cours",
-    "EN": "Saving in progress"
-  },
-  "snack.categoryclosed": {
-    "severity": "info",
-    "FR": "Catégorie fermée",
-    "EN": "Category closed"
-  },
-  "snack.categorysaved": {
-    "severity": "success",
-    "FR": "Catégorie enregistrée",
-    "EN": "Category saved"
-  },
-  "snack.categoryduplicated": {
-    "severity": "warning",
-    "FR": "Catégorie existante",
-    "EN": "Existing category"
-  },
-  "snack.transactionsaved": {
-    "severity": "success",
-    "FR": "Transaction enregistrée",
-    "EN": "Transaction saved"
-  },
-  "snack.transactionduplicated": {
-    "severity": "success",
-    "FR": "Transaction existante",
-    "EN": "Existing transaction"
-  },
-  "snack.transactionmodified": {
-    "severity": "success",
-    "FR": "Transaction modifiée",
-    "EN": "Transaction edited"
-  },
-  "snack.ingredientsaved": {
-    "severity": "success",
-    "FR": "Ingrédient enregistré",
-    "EN": "Ingredient saved"
-  },
-  "snack.ingredientduplicated": {
-    "severity": "success",
-    "FR": "Ingrédient existante",
-    "EN": "Existing ingredient"
-  },
-  "snack.ingredientmodified": {
-    "severity": "success",
-    "FR": "Ingrédient modifié",
-    "EN": "Ingredient edited"
-  },
-  "snack.recipesaved": {
-    "severity": "success",
-    "FR": "Recette enregistrée",
-    "EN": "Recipe saved"
-  },
-  "snack.recipeduplicated": {
-    "severity": "success",
-    "FR": "Recette existante",
-    "EN": "Existing recipe"
-  },
-  "snack.recipemodified": {
-    "severity": "success",
-    "FR": "Recette modifiée",
-    "EN": "Recipe edited"
-  },
-  "snack.errornetwork": {
-    "severity": "warning",
-    "FR": "Problème réseau",
-    "EN": "Network issue"
-  },
-  "snack.error": {
-    "severity": "warning",
-    "FR": "Erreur :",
-    "EN": "Error :"
+  "generic": {
+    "button": {
+      "add": {
+        "FR": "Ajouter",
+        "EN": "Add"
+      },
+      "save": {
+        "FR": "Sauver",
+        "EN": "Save"
+      },
+      "delete": {
+        "FR": "Supprimer",
+        "EN": "Delete"
+      },
+      "renew": {
+        "FR": "Renouveler",
+        "EN": "Renew"
+      },
+      "select": {
+        "FR": "Selectionner",
+        "EN": "Select"
+      },
+      "cancel": {
+        "FR": "Annuler",
+        "EN": "Cancel"
+      }
+    },
+    "input": {
+      "name": {
+        "FR": "Nom",
+        "EN": "Name"
+      },
+      "portions": {
+        "FR": "Portions",
+        "EN": "Portions"
+      },
+      "date": {
+        "FR": "Date",
+        "EN": "Date"
+      },
+      "amount": {
+        "FR": "Montant",
+        "EN": "Amount"
+      },
+      "category": {
+        "FR": "Catégorie",
+        "EN": "Category"
+      },
+      "quantity": {
+        "FR": "Quantité",
+        "EN": "Quantity"
+      },
+      "unit": {
+        "FR": "Unité",
+        "EN": "Unit"
+      }
+    },
+    "snack": {
+      "saving": {
+        "severity": "info",
+        "FR": "Sauvergarde en cours",
+        "EN": "Saving in progress"
+      },
+      "errornetwork": {
+        "severity": "warning",
+        "FR": "Erreur : Problème réseau",
+        "EN": "Error : Network issue"
+      },
+      "error": {
+        "severity": "warning",
+        "FR": "Erreur :",
+        "EN": "Error :"
+      }
+    }
   }
 }

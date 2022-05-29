@@ -11,14 +11,14 @@ import Myrecipies from "./Myrecipies";
 const pages = [
   {
     index: 0,
-    label: appcopy["title.section_myrecipies"][process.env.APP_LANGUAGE],
+    label: appcopy["myrecipies"]["title"][process.env.REACT_APP_LANGUAGE],
     code: "myrecipies",
     icon: BookIcon,
     component: Myrecipies
   },
   {
     index: 1,
-    label: appcopy["title.section_mybalance"][process.env.APP_LANGUAGE],
+    label: appcopy["mybalance"]["title"][process.env.REACT_APP_LANGUAGE],
     code: "mybalance",
     icon: BalanceIcon,
     component: Balance
@@ -27,7 +27,7 @@ const pages = [
 
 export default class App extends React.Component {
   constructor(props) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("App.constructor");
     }
     super(props);
@@ -78,12 +78,12 @@ export default class App extends React.Component {
 
   // Handlers
   handleChangeTab(event, newTabIndex) {
-    if (process.env.MODE_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("App.handleChangeTab " + newTabIndex);
     }
     switch (newTabIndex) {
       default:
-        if (process.env.MODE_DEBUG === "TRUE") {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match tab index : " + newTabIndex);
         }
     }
