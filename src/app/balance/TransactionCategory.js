@@ -12,7 +12,7 @@ import {
 import config from "../../config";
 import appcopy from "./copy";
 import { createCategoryTransaction } from "./api/categorytransactions";
-import Snack from "./Snack";
+import Snack from "../Snack";
 
 export default class TransactionCategory extends React.Component {
   constructor(props) {

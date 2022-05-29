@@ -86,55 +86,5 @@
   "text.for": {
     "FR": "Pour",
     "EN": "For"
-  },
-  "snack.balance_summary_uptodate": {
-    "severity": "info",
-    "FR": "Balance à jour",
-    "EN": "Balance up to date"
-  },
-  "snack.saving": {
-    "severity": "info",
-    "FR": "Sauvergarde en cours",
-    "EN": "Saving in progress"
-  },
-  "snack.categoryclosed": {
-    "severity": "info",
-    "FR": "Catégorie fermée",
-    "EN": "Category closed"
-  },
-  "snack.categorysaved": {
-    "severity": "success",
-    "FR": "Catégorie enregistrée",
-    "EN": "Category saved"
-  },
-  "snack.categoryduplicated": {
-    "severity": "warning",
-    "FR": "Catégorie existante",
-    "EN": "Existing category"
-  },
-  "snack.transactionsaved": {
-    "severity": "success",
-    "FR": "Transaction enregistrée",
-    "EN": "Transaction saved"
-  },
-  "snack.transactionduplicated": {
-    "severity": "success",
-    "FR": "Transaction existante",
-    "EN": "Existing transaction"
-  },
-  "snack.transactionmodified": {
-    "severity": "success",
-    "FR": "Transaction modifiée",
-    "EN": "Transaction edited"
-  },
-  "snack.errornetwork": {
-    "severity": "warning",
-    "FR": "Problème réseau",
-    "EN": "Network issue"
-  },
-  "snack.error": {
-    "severity": "warning",
-    "FR": "Erreur :",
-    "EN": "Error :"
   }
 }

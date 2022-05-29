@@ -20,7 +20,7 @@ import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";
 import TransactionCategory from "./TransactionCategory";
-import Snack from "./Snack";
+import Snack from "../Snack";
 
 export default class Balance extends React.Component {
   constructor(props) {

@@ -28,7 +28,7 @@ import {
   modifyTransaction
 } from "./api/transactions";
 import { getCategoryTransactions } from "./api/categorytransactions";
-import Snack from "./Snack";
+import Snack from "../Snack";
 
 let emptyTransaction = {
   _id: undefined,

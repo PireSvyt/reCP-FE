@@ -52,8 +52,7 @@ export default class Recipe extends React.Component {
     super(props);
     this.state = {
       recipeOpen: this.props.recipeOpen,
-      recipe: { ...emptyRecipe },
-      ingredients: []
+      recipe: { ...emptyRecipe }
     };
     // Updates
     this.updateIngredients = this.updateIngredients.bind(this);
@@ -111,11 +110,11 @@ export default class Recipe extends React.Component {
                 {appcopy["title.subsection_ingredients"][config.app.language]}
               </h3>
               <List dense={true} name="recipe-ingredientlist">
-                {this.state.ingredients.map((ingredient) => (
+                {this.state.recipe.ingredients.map((ingredient) => (
                   <Ingredient
-                    key={ingredient.uid}
+                    key={ingredient._id}
                     ingredient={ingredient}
-                    nextable={nextables[ingredient.uid]}
+                    nextable={nextables[ingredient._id]}
                     onchange={this.handleIngredientChange}
                     ondelete={this.handleIngredientDelete}
                   />
@@ -332,8 +331,6 @@ class Ingredient extends React.Component {
     super(props);
     if (config.debug) {
       console.log("Ingredient.constructor " + this.props.ingredient.uid);
-      console.log("this.props.nextable");
-      console.log(this.props.nextable);
     }
     // Handlers
     this.handleChange = this.handleChange.bind(this);
@@ -342,12 +339,10 @@ class Ingredient extends React.Component {
   render() {
     if (config.debug) {
       console.log("Ingredient.render " + this.props.ingredient.uid);
-      console.log("this.props.nextable");
-      console.log(this.props.nextable);
     }
     return (
       <ListItem
-        key={this.props.ingredient.uid}
+        key={this.props.ingredient._id}
         secondaryAction={
           <IconButton
             edge="end"
@@ -363,7 +358,7 @@ class Ingredient extends React.Component {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "ro  qqw",
+            flexDirection: "row",
             justifyContent: "space-evenly"
           }}
         >
@@ -430,22 +425,22 @@ class Ingredient extends React.Component {
   }
   handleDelete() {
     if (config.debug) {
-      console.log("Ingredient.handleDelete " + this.props.ingredient.uid);
+      console.log("Ingredient.handleDelete " + this.props.ingredient._id);
     }
     // Check inputs
     let deleteIngredient = true;
-    if (this.props.ingredient.name === "") {
+    if (this.props.ingredient.name === undefined) {
       deleteIngredient = false;
     }
     if (
-      this.props.ingredient.quantity === null ||
+      this.props.ingredient.quantity === undefined ||
       this.props.ingredient.quantity === ""
     ) {
       deleteIngredient = false;
     }
     // Delete or not?
     if (deleteIngredient === true) {
-      this.props.ondelete(this.props.ingredient.uid);
+      this.props.ondelete(this.props.ingredient._id);
     }
   }
 }
