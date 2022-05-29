@@ -1,100 +1,256 @@
 {
-  "title.section_myrecipies": {
-    "FR": "Mes recettes",
-    "EN": "My recipies"
+  "myrecipies": {
+    "title": {
+      "FR": "Mes recettes",
+      "EN": "My recipies"
+    },
+    "snack": {
+      "recipesaved": {
+        "severity": "success",
+        "FR": "Recette enregistrée",
+        "EN": "Recipe saved"
+      },
+      "erroroncreation": {
+        "severity": "success",
+        "FR": "Recette modifiée",
+        "EN": "Recipe edited"
+      },
+      "recipemodified": {
+        "severity": "success",
+        "FR": "Recette modifiée",
+        "EN": "Recipe edited"
+      }
+    }
   },
-  "title.section_recipieedit": {
-    "FR": "Editer ma recette",
-    "EN": "Edit my recipe"
+  "recipe": {
+    "title": {
+      "FR": "Ma recette",
+      "EN": "My recipe"
+    },
+    "subsection": {
+      "ingredients": {
+        "FR": "Ingrédients",
+        "EN": "Ingredients"
+      },
+      "instructions": {
+        "FR": "Instructions",
+        "EN": "Instructions"
+      }
+    },
+    "snack": {
+      "saved": {
+        "severity": "success",
+        "FR": "Ingrédient enregistré",
+        "EN": "Ingredient saved"
+      },
+      "erroroncreation": {
+        "severity": "success",
+        "FR": "Ingrédient non créé",
+        "EN": "Ingredient not created"
+      },
+      "modified": {
+        "severity": "success",
+        "FR": "Ingrédient modifié",
+        "EN": "Ingredient edited"
+      }
+    }
   },
-  "title.section_recipeview": {
-    "FR": "Ma recette",
-    "EN": "My recipe"
+  "thisweek": {
+    "title": {
+      "FR": "Ma semaine",
+      "EN": "My week"
+    }
   },
-  "title.subsection_ingredients": {
-    "FR": "Ingrédients",
-    "EN": "Ingredients"
+  "mybalance": {
+    "title": {
+      "FR": "Ma balance",
+      "EN": "My balance"
+    },
+    "subsection": {
+      "summary": {
+        "FR": "Balance",
+        "EN": "Balance"
+      },
+      "transactions": {
+        "FR": "Transactions",
+        "EN": "Transactions"
+      },
+      "balanceperuser": {
+        "FR": "Par utilisateur",
+        "EN": "Per user"
+      },
+      "balancepercategory": {
+        "FR": "Par catégorie",
+        "EN": "Per category"
+      }
+    },
+    "specific": {
+      "newTransactionCategory": {
+        "FR": "Ajouter une catégorie",
+        "EN": "Add a category"
+      }
+    },
+    "snack": {
+      "summary_uptodate": {
+        "severity": "info",
+        "FR": "Balance à jour",
+        "EN": "Balance up to date"
+      },
+      "discarded": {
+        "severity": "info",
+        "FR": "Catégorie abandonnée",
+        "EN": "Category discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Catégorie enregistrée",
+        "EN": "Category saved"
+      },
+      "erroroncreation": {
+        "severity": "warning",
+        "FR": "Catégorie non créée",
+        "EN": "Category not created"
+      }
+    }
   },
-  "title.subsection_instructions": {
-    "FR": "Instructions",
-    "EN": "Instructions"
+  "transaction": {
+    "title": {
+      "FR": "Transaction",
+      "EN": "Transaction"
+    },
+    "specific": {
+      "by": {
+        "FR": "Par",
+        "EN": "By"
+      },
+      "for": {
+        "FR": "Pour",
+        "EN": "For"
+      },
+      "category": {
+        "FR": "Catégorie",
+        "EN": "Category"
+      }
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Transaction abandonnée",
+        "EN": "Transaction discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Transaction enregistrée",
+        "EN": "Transaction saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Transaction non créée",
+        "EN": "Transaction not created"
+      }
+    }
   },
-  "title.section_thisweek": {
-    "FR": "Ma semaine",
-    "EN": "My week"
+  "transactioncategory": {
+    "title": {
+      "FR": "Catégorie",
+      "EN": "Category"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Catégorie abandonnée",
+        "EN": "Category discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Catégorie enregistrée",
+        "EN": "Category saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Catégorie non créée",
+        "EN": "Ccategory not created"
+      }
+    }
   },
-  "title.section_myfridge": {
-    "FR": "Mon frigo",
-    "EN": "My fridge"
-  },
-  "title.section_myshopping": {
-    "FR": "Mes courses",
-    "EN": "My groceries"
-  },
-  "title.section_mybalance": {
-    "FR": "Ma balance",
-    "EN": "My balance"
-  },
-  "button.add": {
-    "FR": "Ajouter",
-    "EN": "Add"
-  },
-  "button.save": {
-    "FR": "Sauver",
-    "EN": "Save"
-  },
-  "button.delete": {
-    "FR": "Supprimer",
-    "EN": "Delete"
-  },
-  "button.edit": {
-    "FR": "Editer",
-    "EN": "Edit"
-  },
-  "button.renew": {
-    "FR": "Renouveler",
-    "EN": "Renew"
-  },
-  "button.transactions": {
-    "FR": "Transactions",
-    "EN": "Transactions"
-  },
-  "button.select": {
-    "FR": "Selectionner",
-    "EN": "Select"
-  },
-  "input.name": {
-    "FR": "Nom",
-    "EN": "Name"
-  },
-  "input.date": {
-    "FR": "Date",
-    "EN": "Date"
-  },
-  "input.amount": {
-    "FR": "Montant",
-    "EN": "Amount"
-  },
-  "input.category": {
-    "FR": "Catégorie",
-    "EN": "Category"
-  },
-  "text.by": {
-    "FR": "Par",
-    "EN": "By"
-  },
-  "text.for": {
-    "FR": "Pour",
-    "EN": "For"
-  },
-  "snack.balance_summary_uptodate": {
-    "color": "lightblue",
-    "FR": "Balance à jour",
-    "EN": "Balance up to date"
-  },
-  "snack.saving": {
-    "color": "lightblue",
-    "FR": "Sauvergarde en cours",
-    "EN": "Saving in progress"
+  "generic": {
+    "button": {
+      "add": {
+        "FR": "Ajouter",
+        "EN": "Add"
+      },
+      "save": {
+        "FR": "Sauver",
+        "EN": "Save"
+      },
+      "delete": {
+        "FR": "Supprimer",
+        "EN": "Delete"
+      },
+      "renew": {
+        "FR": "Renouveler",
+        "EN": "Renew"
+      },
+      "select": {
+        "FR": "Selectionner",
+        "EN": "Select"
+      },
+      "cancel": {
+        "FR": "Annuler",
+        "EN": "Cancel"
+      }
+    },
+    "input": {
+      "name": {
+        "FR": "Nom",
+        "EN": "Name"
+      },
+      "portions": {
+        "FR": "Portions",
+        "EN": "Portions"
+      },
+      "date": {
+        "FR": "Date",
+        "EN": "Date"
+      },
+      "amount": {
+        "FR": "Montant",
+        "EN": "Amount"
+      },
+      "category": {
+        "FR": "Catégorie",
+        "EN": "Category"
+      },
+      "quantity": {
+        "FR": "Quantité",
+        "EN": "Quantity"
+      },
+      "unit": {
+        "FR": "Unité",
+        "EN": "Unit"
+      }
+    },
+    "snack": {
+      "mockedassaved": {
+        "severity": "warning",
+        "FR": "Factis : Sauvé",
+        "EN": "Mocked : Saved"
+      },
+      "saving": {
+        "severity": "info",
+        "FR": "Sauvergarde en cours",
+        "EN": "Saving in progress"
+      },
+      "errornetwork": {
+        "severity": "error",
+        "FR": "Erreur : Problème réseau",
+        "EN": "Error : Network issue"
+      },
+      "error": {
+        "severity": "error",
+        "FR": "Erreur :",
+        "EN": "Error :"
+      }
+    }
   }
 }

@@ -14,60 +14,67 @@ import {
   FormGroup,
   InputAdornment
 } from "@mui/material";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
 
-import config from "../../config";
-import appcopy from "./copy";
+import appcopy from "../copy";
 import {
   getTransaction,
   createTransaction,
   modifyTransaction
 } from "./api/transactions";
 import { getCategoryTransactions } from "./api/categorytransactions";
+import Snack from "../Snack";
 
-let debug = false;
-const filter = createFilterOptions();
 let emptyTransaction = {
-  _id: "",
-  name: "",
+  _id: undefined,
+  name: undefined,
   date: Date(),
-  amount: "",
-  by: "",
+  amount: undefined,
+  by: undefined,
   for: ["Alice", "Pierre"],
-  category: ""
+  category: undefined
 };
 
 export default class Transaction extends React.Component {
   constructor(props) {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.constructor");
     }
     super(props);
     this.state = {
       transactionOpen: this.props.transactionOpen,
       transactionDate: Date(),
-      options: []
+      options: [],
+      transaction: { ...emptyTransaction },
+      snackOpen: false,
+      snack: undefined
     };
-    this.transaction = { ...emptyTransaction };
-    // Bindings
+    // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.hanldeOpenCategorySelector = this.hanldeOpenCategorySelector.bind(
       this
     );
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    // Preload
+    getCategoryTransactions().then((newOptions) => {
+      this.setState((prevState, props) => ({
+        options: newOptions
+      }));
+    });
   }
   render() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.render");
-      console.log("Transaction.props.transactionID");
-      console.log(this.props.transactionID);
-      console.log("Transaction.transaction");
-      console.log(this.transaction);
+      //console.log("Transaction.props.transactionID");
+      //console.log(this.props.transactionID);
+      //console.log("Transaction.state.transaction");
+      //console.log(this.state.transaction);
     }
     return (
       <div>
@@ -77,7 +84,9 @@ export default class Transaction extends React.Component {
           onClose={this.handleClose}
           fullWidth={true}
         >
-          <DialogTitle>Transaction</DialogTitle>
+          <DialogTitle>
+            {appcopy["transaction"]["title"][process.env.REACT_APP_LANGUAGE]}
+          </DialogTitle>
           <DialogContent>
             <Box
               sx={{
@@ -88,10 +97,15 @@ export default class Transaction extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][config.app.language]}
+                label={
+                  appcopy["generic"]["input"]["name"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
-                defaultValue={this.transaction.name}
+                defaultValue={this.state.transaction.name}
                 onChange={this.handleChange}
+                autoComplete="off"
               />
               <LocalizationProvider
                 dateAdapter={AdapterDateFns}
@@ -99,7 +113,11 @@ export default class Transaction extends React.Component {
               >
                 <MobileDatePicker
                   name="date"
-                  label=""
+                  label={
+                    appcopy["generic"]["input"]["date"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
                   value={this.state.transactionDate}
                   onChange={(newValue) => {
                     this.setState((prevState, props) => ({
@@ -117,28 +135,39 @@ export default class Transaction extends React.Component {
 
               <TextField
                 name="amount"
-                label={appcopy["input.amount"][config.app.language]}
+                label={
+                  appcopy["generic"]["input"]["quantity"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 variant="standard"
-                defaultValue={this.transaction.amount}
+                defaultValue={this.state.transaction.amount}
                 onChange={this.handleChange}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">€</InputAdornment>
                   )
                 }}
+                autoComplete="off"
               />
 
               <RadioGroup
                 name="by"
                 onChange={this.handleChange}
-                defaultValue={this.transaction.by}
+                defaultValue={this.state.transaction.by}
                 sx={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.by"][config.app.language]}</h4>
+                <h4>
+                  {
+                    appcopy["transaction"]["specific"]["by"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
+                </h4>
                 <FormControlLabel
                   value="Alice"
                   control={<Radio />}
@@ -164,7 +193,13 @@ export default class Transaction extends React.Component {
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.for"][config.app.language]}</h4>
+                <h4>
+                  {
+                    appcopy["transaction"]["specific"]["for"][
+                      process.env.REACT_APP_LANGUAGE
+                    ]
+                  }
+                </h4>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -190,107 +225,125 @@ export default class Transaction extends React.Component {
               </FormGroup>
 
               <Autocomplete
-                defaultValue={this.transaction.category}
-                onOpen={this.hanldeOpenCategorySelector}
-                onChange={this.handleChange}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = this.state.options.some(
-                    (option) => inputValue === option.name
-                  );
-                  if (inputValue !== "" && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      name: `Add "${inputValue}"`
-                    });
-                  }
-                  return filtered;
-                }}
-                autoSelect
-                clearOnBlur
-                handleHomeEndKeys
+                disablePortal
+                id="combo-box-demo"
                 options={this.state.options}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === "string") {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.name;
-                }}
-                renderOption={(props, option) => (
-                  <li {...props} name="category">
-                    {option.name}
-                  </li>
-                )}
-                freeSolo
-                size="small"
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     variant="standard"
-                    label={appcopy["input.category"][config.app.language]}
+                    label={
+                      appcopy["transaction"]["specific"]["category"][
+                        process.env.REACT_APP_LANGUAGE
+                      ]
+                    }
                   />
                 )}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
+                )}
+                defaultValue={this.state.transaction.category}
+                onOpen={this.hanldeOpenCategorySelector}
+                onChange={(event, newValue) => {
+                  /*console.log("event.target");
+                  console.log(event.target);
+                  console.log("newValue");
+                  console.log(newValue);*/
+                  event.target = {
+                    name: "category",
+                    value: newValue.name
+                  };
+                  this.handleChange(event, newValue.name);
+                }}
+                getOptionLabel={(option) => {
+                  var shorlist = this.state.options.filter(function (
+                    value,
+                    index,
+                    arr
+                  ) {
+                    /*console.log("value");
+                    console.log(value);
+                    console.log("value");
+                    console.log(value);*/
+                    if (typeof option === "string") {
+                      return value.name === option;
+                    } else {
+                      return value.name === option.name;
+                    }
+                  });
+                  if (shorlist.length === 1) {
+                    return shorlist[0].name;
+                  }
+                  /*console.log("option");
+                  console.log(option);
+                  console.log("shorlist");
+                  console.log(shorlist);*/
+                }}
               />
             </Box>
           </DialogContent>
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][config.app.language]}
+              {
+                appcopy["generic"]["button"]["cancel"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][config.app.language]}
+              {
+                appcopy["generic"]["button"]["save"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snack
+          snackOpen={this.state.snackOpen}
+          snack={this.state.snack}
+          onclose={this.handleCloseSnack}
+        />
       </div>
     );
   }
   componentDidUpdate(prevState) {
-    if (debug) {
-      console.log("Transaction.componentDidUpdate");
-      console.log("Transaction.state");
-      console.log(this.state);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("Transaction.componentDidUpdate");
+      //console.log("Transaction.state");
+      //console.log(this.state);
     }
     if (
       prevState.transactionOpen !== this.props.transactionOpen ||
       prevState.transactionID !== this.props.transactionID
     ) {
-      this.transaction = { ...emptyTransaction };
-      this.setState((prevState, props) => ({
-        transactionDate: Date()
-      }));
       if (this.props.transactionID !== "") {
         // Load
-        console.log(
-          "Transaction.componentDidUpdate.getTransaction " +
-            this.props.transactionID
-        );
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log(
+            "Transaction.componentDidUpdate.getTransaction " +
+              this.props.transactionID
+          );
+        }
         getTransaction(this.props.transactionID)
           .then((res) => {
-            this.transaction = { ...res };
-            console.log("this.transaction");
-            console.log(this.transaction);
+            this.setState((prevState, props) => ({
+              transaction: { ...res }
+            }));
           })
           .then(() => {
             this.setState((prevState, props) => ({
               transactionOpen: this.props.transactionOpen,
-              transactionDate: this.transaction.date
+              transactionDate: this.state.transaction.date
             }));
-            console.log("this.transaction after set state");
-            console.log(this.transaction);
           });
       } else {
         this.setState((prevState, props) => ({
-          transactionOpen: this.props.transactionOpen
+          transactionOpen: this.props.transactionOpen,
+          transactionDate: Date(),
+          transaction: { ...emptyTransaction }
         }));
       }
     }
@@ -298,30 +351,36 @@ export default class Transaction extends React.Component {
 
   // Handles
   handleClose() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleClose");
     }
-    this.transaction = { ...emptyTransaction };
-    this.props.onclose();
+    this.setState((prevState, props) => ({
+      transaction: { ...emptyTransaction }
+    }));
+    this.props.onclose(appcopy["transaction"]["snack"]["discarded"]);
   }
   handleChange(event, newValue) {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleChange");
     }
     const target = event.target;
-    if (debug) {
-      console.log(target);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("target");
+      //console.log(target);
+      console.log("target.name : " + target.name);
+      console.log("target.value : " + target.value);
+      console.log("newValue : " + newValue);
     }
-    var previousTransaction = this.transaction;
+    var previousTransaction = this.state.transaction;
     switch (target.name) {
       case "name":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
         previousTransaction.name = target.value;
         break;
       case "date":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change date : " + target.value);
         }
         previousTransaction.date = target.value;
@@ -330,19 +389,19 @@ export default class Transaction extends React.Component {
         }));
         break;
       case "amount":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change amount : " + target.value);
         }
         previousTransaction.amount = target.value;
         break;
       case "by":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change by : " + target.value);
         }
         previousTransaction.by = target.value;
         break;
       case "for":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change for : " + target.value + " " + target.checked);
         }
         previousTransaction.for = previousTransaction.for.filter(function (
@@ -357,101 +416,143 @@ export default class Transaction extends React.Component {
         }
         break;
       case "category":
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change category : " + target.value);
         }
         previousTransaction.category = target.value;
         break;
       default:
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
         }
     }
     // Update
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.transaction");
-      console.log(this.transaction);
+      console.log(this.state.transaction);
     }
-    this.transaction = previousTransaction;
+    this.setState((prevState, props) => ({
+      transaction: previousTransaction
+    }));
   }
   handleSave() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleSave");
+      console.log("this.state.transaction");
+      console.log(this.state.transaction);
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.transaction.name === "") {
+    if (this.state.transaction.name === undefined) {
       save = false;
-      errors.push("Nom vide");
+      errors.push(" Nom vide");
     }
-    if (this.transaction.date === null) {
+    if (this.state.transaction.date === undefined) {
       save = false;
-      errors.push("Date vide");
+      errors.push(" Date vide");
     }
-    if (this.transaction.amount === "") {
+    if (this.state.transaction.amount === undefined) {
       save = false;
-      errors.push("Montant vide");
+      errors.push(" Montant vide");
     }
-    if (this.transaction.by === "") {
+    if (this.state.transaction.by === undefined) {
       save = false;
-      errors.push("Payé par vide");
+      errors.push(" Payé par vide");
     }
-    if (this.transaction.for === []) {
+    if (this.state.transaction.for === []) {
       save = false;
-      errors.push("Payé pour vide");
+      errors.push(" Payé pour vide");
+    }
+    if (this.state.transaction.category === undefined) {
+      save = false;
+      errors.push(" Catégorie vide");
     }
     // Save or not?
-    if (errors !== []) {
+    if (errors !== [] && process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(errors);
     }
     // Post or publish
     if (save === true) {
-      if (debug) {
+      if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(this.props.transactionID);
-        console.log(this.transaction);
+        console.log(this.state.transaction);
       }
       if (this.props.transactionID === "") {
         // POST
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (debug === false) {
-          createTransaction(this.transaction).then(() => {
-            this.props.onsave();
-          });
-        }
-        this.props.onclose();
+        //if (process.env.REACT_APP_DEBUG === "FALSE") {
+        createTransaction(this.state.transaction).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "transaction enregistrée") {
+              this.props.onclose(appcopy["transaction"]["snack"]["saved"]);
+            } else {
+              this.props.onclose(
+                appcopy["transaction"]["snack"]["erroroncreation"]
+              );
+            }
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
+        }*/
       } else {
         // PUT
-        if (debug) {
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (debug === false) {
-          modifyTransaction(this.props.transactionID, this.transaction).then(
-            () => {
-              this.props.onsave();
+        //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
+        modifyTransaction(
+          this.props.transactionID,
+          this.state.transaction
+        ).then((res) => {
+          //this.props.onsave();
+          if (res !== undefined) {
+            if (res.message === "transaction modifiée") {
+              this.props.onclose(appcopy["transaction"]["snack"]["modified"]);
+            } else {
+              this.props.onclose(
+                appcopy["transaction"]["snack"]["erroroncreation"]
+              );
             }
-          );
-        }
-        this.props.onclose();
+          } else {
+            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+          }
+        });
+        /*} else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
+        }*/
       }
+    } else {
+      // Snack
+      var snack = appcopy["generic"]["snack"]["error"];
+      snack.message =
+        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+        errors;
+      this.setState((prevState, props) => ({
+        snackOpen: true,
+        snack: snack
+      }));
     }
   }
   hanldeOpenCategorySelector() {
     getCategoryTransactions().then((newOptions) => {
-      this.setState(
-        (prevState, props) => ({
-          transactionOpen: prevState.transactionOpen,
-          options: newOptions
-        }),
-        () => {
-          if (debug) {
-            console.log("Transaction.state");
-            console.log(this.state);
-          }
-        }
-      );
+      this.setState((prevState, props) => ({
+        options: newOptions
+      }));
     });
+  }
+  handleCloseSnack() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Transaction.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
   }
 }

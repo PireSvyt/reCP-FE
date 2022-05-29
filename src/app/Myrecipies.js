@@ -1,5 +1,4 @@
 import * as React from "react";
-import ReactDOM from "react-dom";
 import {
   Paper,
   List,
@@ -9,77 +8,163 @@ import {
   Fab
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import CachedIcon from "@mui/icons-material/Cached";
 
-import config from "../config";
 import appcopy from "./copy";
-import { getRecipes } from "./api/recipies";
-
-import { navigates } from "./navigation";
-import { recipeview_updateRecipe } from "./Recipeview";
-import { recipeedit_updateRecipe } from "./Recipeedit";
+import { getRecipies } from "./api/recipies";
+import Recipe from "./Recipe";
+import Snack from "./Snack";
 
 export default class Myrecipies extends React.Component {
   constructor(props) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Myrecipies.constructor");
+    }
     super(props);
     this.state = {
-      recipe: ""
+      recipiesHeight: 300,
+      recipeID: "",
+      recipeOpen: false,
+      recipies: [],
+      snack: undefined
     };
+    // Updates
+    this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
+    this.updateRecipies = this.updateRecipies.bind(this);
+    // Handles
+    this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
+    this.handleCloseRecipe = this.handleCloseRecipe.bind(this);
+    this.handleSaveRecipe = this.handleSaveRecipe.bind(this);
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
     return (
       <div>
-        <h2>{appcopy["title.section_myrecipies"][config.app.language]}</h2>
-        <Paper elevation={3}>
-          <div id="myrecipies_list" />
-        </Paper>
-        <Fab
-          color="secondary"
-          sx={{ position: "fixed", top: 20, right: 20 }}
-          onClick={updateMyrecipies}
-        >
-          <CachedIcon />
-        </Fab>
+        <h2>
+          {appcopy["myrecipies"]["title"][process.env.REACT_APP_LANGUAGE]}
+        </h2>
         <Fab
           color="primary"
-          sx={{ position: "fixed", bottom: 70, right: 20 }}
-          onClick={() => {
-            recipeedit_updateRecipe("");
-            navigates("recipeedit");
+          sx={{
+            position: "absolute",
+            top: 20,
+            right: 20
           }}
         >
-          <AddIcon />
+          <AddIcon
+            onClick={() => {
+              if (process.env.REACT_APP_DEBUG === "TRUE") {
+                console.log("Myrecipies.AddIcon.onClick");
+              }
+              this.handleOpenRecipe("");
+            }}
+          />
         </Fab>
+        <Paper
+          elevation={3}
+          style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}
+        >
+          <List dense={true}>
+            {this.state.recipies.map((value) => (
+              <ListItem key={`${value._id}`} id={`${value._id}`}>
+                <ListItemButton
+                  onClick={() => {
+                    if (process.env.REACT_APP_DEBUG === "TRUE") {
+                      console.log("Myrecipies.recipies.onClick " + value._id);
+                    }
+                    this.handleOpenRecipe(value._id);
+                  }}
+                >
+                  <ListItemText
+                    primary={`${value.name}`}
+                    secondary={`${value.portions} portions`}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+        <Recipe
+          recipeID={this.state.recipeID}
+          recipeOpen={this.state.recipeOpen}
+          onsave={() => {} /*this.handleSaveRecipe*/}
+          onclose={this.handleCloseRecipe}
+        />
+
+        <Snack
+          snackOpen={this.state.snackOpen}
+          snack={this.state.snack}
+          onclose={this.handleCloseSnack}
+        />
       </div>
     );
   }
   componentDidMount() {
-    updateMyrecipies();
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Myrecipies.componentDidMount");
+    }
+    // Update
+    this.updateRecipiesHeight();
+    this.updateRecipies();
   }
-}
 
-export function updateMyrecipies() {
-  getRecipes().then((res) => {
-    const container = document.getElementById("myrecipies_list");
-    ReactDOM.render(
-      <List dense={true}>
-        {res.map((value) => (
-          <ListItem key={`${value._id}`} id={`${value._id}`}>
-            <ListItemButton
-              onClick={() => {
-                recipeview_updateRecipe(value._id);
-                navigates("recipeview");
-              }}
-            >
-              <ListItemText
-                primary={`${value.name}`}
-                secondary={`${value.portions} portions`}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>,
-      container
-    );
-  });
+  // Updates
+  updateRecipiesHeight() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Myrecipies.updateTabHeight");
+    }
+    this.setState({
+      recipiesHeight: window.innerHeight - 180
+    });
+  }
+  updateRecipies() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Myrecipies.updateSummary");
+    }
+    getRecipies().then((res) => {
+      if (res !== undefined) {
+        this.setState({
+          recipies: res
+        });
+      } else {
+        // Snack
+        this.setState((prevState, props) => ({
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
+  }
+
+  // Handlers
+  handleOpenRecipe(id) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleOpenRecipe " + id);
+    }
+    this.setState({
+      recipeID: id,
+      recipeOpen: true
+    });
+  }
+  handleCloseRecipe() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleCloseRecipe");
+    }
+    this.setState({
+      recipeID: "",
+      recipeOpen: false
+    });
+  }
+  handleSaveRecipe() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleSaveRecipe");
+    }
+    this.updateRecipies();
+  }
+  handleCloseSnack() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
+  }
 }

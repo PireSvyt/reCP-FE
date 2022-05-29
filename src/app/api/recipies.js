@@ -1,17 +1,11 @@
 const axios = require("axios");
-const config = require("../../config");
-
-let serverUrl = "";
-if (config.env === "PROD") {
-  serverUrl = config.serverProdUrl;
-}
-if (config.env === "DEV") {
-  serverUrl = config.serverDevUrl;
-}
 
 export async function createRecipe(newRecipe) {
   try {
-    const res = await axios.post(serverUrl + "/api/recipe", newRecipe);
+    const res = await axios.post(
+      process.env.REACT_APP_SERVER_URL + "/api/recipe",
+      newRecipe
+    );
     return res;
   } catch (err) {
     // Handle Error Here
@@ -21,7 +15,9 @@ export async function createRecipe(newRecipe) {
 
 export async function getRecipe(id) {
   try {
-    const res = await axios.get(serverUrl + "/api/recipe/" + id);
+    const res = await axios.get(
+      process.env.REACT_APP_SERVER_URL + "/api/recipe/" + id
+    );
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -31,7 +27,9 @@ export async function getRecipe(id) {
 
 export async function deleteRecipe(id) {
   try {
-    const res = await axios.delete(serverUrl + "/api/recipe/" + id);
+    const res = await axios.delete(
+      process.env.REACT_APP_SERVER_URL + "/api/recipe/" + id
+    );
     return res.status;
   } catch (err) {
     // Handle Error Here
@@ -41,7 +39,10 @@ export async function deleteRecipe(id) {
 
 export async function modifyRecipe(id, newRecipe) {
   try {
-    const res = await axios.put(serverUrl + "/api/recipe/" + id, newRecipe);
+    const res = await axios.put(
+      process.env.REACT_APP_SERVER_URL + "/api/recipe/" + id,
+      newRecipe
+    );
     return res.status;
   } catch (err) {
     // Handle Error Here
@@ -49,9 +50,11 @@ export async function modifyRecipe(id, newRecipe) {
   }
 }
 
-export async function getRecipes() {
+export async function getRecipies() {
   try {
-    const res = await axios.get(serverUrl + "/api/recipe");
+    const res = await axios.get(
+      process.env.REACT_APP_SERVER_URL + "/api/recipe"
+    );
     return res.data;
   } catch (err) {
     // Handle Error Here

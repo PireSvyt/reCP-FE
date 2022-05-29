@@ -1,7 +1,7 @@
 import * as React from "react";
 import Moment from "moment";
 import {
-  Paper,
+  Button,
   List,
   ListItem,
   ListItemText,
@@ -14,17 +14,16 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
-import config from "../../config";
-import appcopy from "./copy";
+import appcopy from "../copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";
-
-let debug = false;
+import TransactionCategory from "./TransactionCategory";
+import Snack from "../Snack";
 
 export default class Balance extends React.Component {
   constructor(props) {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.constructor");
     }
     super(props);
@@ -34,22 +33,37 @@ export default class Balance extends React.Component {
       transactionID: "",
       transactionOpen: false,
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
-      transactions: []
+      transactions: [],
+      transactionCategoryOpen: false,
+      snackOpen: false,
+      snack: undefined
     };
+    // Updates
     this.updateTabHeight = this.updateTabHeight.bind(this);
+    this.updateSummary = this.updateSummary.bind(this);
+    this.updateTransactions = this.updateTransactions.bind(this);
+    // Handles
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
-    this.updateSummary = this.updateSummary.bind(this);
-    this.updateTransactions = this.updateTransactions.bind(this);
+    this.handleOpenTransactionCategory = this.handleOpenTransactionCategory.bind(
+      this
+    );
+    this.handleCloseTransactionCategory = this.handleCloseTransactionCategory.bind(
+      this
+    );
+    this.handleSaveTransactionCategory = this.handleSaveTransactionCategory.bind(
+      this
+    );
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.render");
     }
     return (
       <div>
-        <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
+        <h2>{appcopy["mybalance"]["title"][process.env.REACT_APP_LANGUAGE]}</h2>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -58,13 +72,19 @@ export default class Balance extends React.Component {
               variant="fullWidth"
             >
               <Tab
-                label={appcopy["title.subsection_balance"][config.app.language]}
+                label={
+                  appcopy["mybalance"]["subsection"]["summary"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
+                }
                 id="tab-0"
                 aria-controls="tabpanel-0"
               />
               <Tab
                 label={
-                  appcopy["title.subsection_transactions"][config.app.language]
+                  appcopy["mybalance"]["subsection"]["transactions"][
+                    process.env.REACT_APP_LANGUAGE
+                  ]
                 }
                 id="tab-1"
                 aria-controls="tabpanel-1"
@@ -76,113 +96,118 @@ export default class Balance extends React.Component {
             index={0}
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
-            <Paper>
-              <h3>
-                {
-                  appcopy["title.subsection_balanceperuser"][
-                    config.app.language
-                  ]
-                }
-              </h3>
-              <List>
-                <ListItem key={"Alice"}>
+            <h3>
+              {
+                appcopy["mybalance"]["subsection"]["balanceperuser"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
+            </h3>
+            <List>
+              <ListItem key={"Alice"}>
+                <ListItemText
+                  sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                  primary={`${
+                    Math.round(this.state.summary.users.Alice * 100) / 100
+                  } €`}
+                />
+                <ListItemText sx={{ width: 5 / 7 }} primary={"Alice"} />
+              </ListItem>
+              <ListItem key={"Pierre"}>
+                <ListItemText
+                  sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                  primary={`${
+                    Math.round(this.state.summary.users.Pierre * 100) / 100
+                  } €`}
+                />
+                <ListItemText sx={{ width: 5 / 7 }} primary={"Pierre"} />
+              </ListItem>
+            </List>
+            <h3>
+              {
+                appcopy["mybalance"]["subsection"]["balancepercategory"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
+            </h3>
+            <List dense={true}>
+              {Object.keys(this.state.summary.categories).map((value) => (
+                <ListItem
+                  key={`${this.state.summary.categories[value]._id}`}
+                  id={`${this.state.summary.categories[value]._id}`}
+                >
                   <ListItemText
-                    primary={`Alice : ${
-                      Math.round(this.state.summary.users.Alice * 100) / 100
+                    sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
+                    primary={`${
+                      Math.round(
+                        this.state.summary.categories[value].total * 100
+                      ) / 100
                     } €`}
                   />
-                </ListItem>
-                <ListItem key={"Pierre"}>
                   <ListItemText
-                    primary={`Pierre : ${
-                      Math.round(this.state.summary.users.Pierre * 100) / 100
-                    } €`}
+                    sx={{ width: 5 / 7 }}
+                    primary={`${this.state.summary.categories[value].name}`}
                   />
                 </ListItem>
-              </List>
-            </Paper>
-            <Paper>
-              <h3>
-                {
-                  appcopy["title.subsection_balancepercategory"][
-                    config.app.language
-                  ]
-                }
-              </h3>
-              <List dense={true}>
-                {Object.keys(this.state.summary.categories).map((value) => (
-                  <ListItem
-                    key={`${this.state.summary.categories[value]._id}`}
-                    id={`${this.state.summary.categories[value]._id}`}
-                  >
-                    <ListItemText
-                      sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
-                      primary={`${
-                        Math.round(
-                          this.state.summary.categories[value].total * 100
-                        ) / 100
-                      } €`}
-                    />
-                    <ListItemText
-                      sx={{ width: 5 / 7 }}
-                      primary={`${this.state.summary.categories[value].name}`}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+              ))}
+            </List>
+            <Button onClick={this.handleOpenTransactionCategory}>
+              {
+                appcopy["mybalance"]["specific"]["newTransactionCategory"][
+                  process.env.REACT_APP_LANGUAGE
+                ]
+              }
+            </Button>
           </TabPanel>
           <TabPanel
             value={this.state.selectedTab}
             index={1}
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
-            <Paper>
-              <List dense={true}>
-                {this.state.transactions.map((value) => (
-                  <ListItem key={`${value._id}`} id={`${value._id}`}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row"
+            <List dense={true}>
+              {this.state.transactions.map((value) => (
+                <ListItem key={`${value._id}`} id={`${value._id}`}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row"
+                    }}
+                  >
+                    <ListItemButton
+                      onClick={() => {
+                        if (process.env.REACT_APP_DEBUG === "TRUE") {
+                          console.log(
+                            "Balance.transactions.onClick " + value._id
+                          );
+                        }
+                        this.handleOpenTransaction(value._id);
                       }}
                     >
-                      <ListItemButton
-                        onClick={() => {
-                          if (debug) {
-                            console.log(
-                              "updateTransactions.onClick " + value._id
-                            );
-                          }
-                          this.handleOpenTransaction(value._id);
-                        }}
-                      >
-                        <EditIcon />
-                      </ListItemButton>
-                      <ListItemText
-                        primary={`${value.name}`}
-                        secondary={`${value.amount} €, le ${Moment(
-                          value.date
-                        ).format("DD/MM/YYYY")}`}
-                      />
-                    </Box>
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+                      <EditIcon />
+                    </ListItemButton>
+                    <ListItemText
+                      primary={`${value.name}`}
+                      secondary={`${value.amount} €, le ${Moment(
+                        value.date
+                      ).format("DD/MM/YYYY")}`}
+                    />
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
           </TabPanel>
         </Box>
         <Fab
           color="primary"
           sx={{
             position: "absolute",
-            top: 30,
+            top: 40,
             left: window.innerWidth / 2 - 28
           }}
         >
           <AddIcon
             onClick={() => {
-              if (debug) {
+              if (process.env.REACT_APP_DEBUG === "TRUE") {
                 console.log("Balance.AddIcon.onClick");
               }
               this.handleOpenTransaction("");
@@ -192,42 +217,35 @@ export default class Balance extends React.Component {
         <Transaction
           transactionID={this.state.transactionID}
           transactionOpen={this.state.transactionOpen}
-          onsave={() => {} /*this.handleSaveTransaction*/}
           onclose={this.handleCloseTransaction}
+          balanceSnack={this.handleSnack}
+        />
+        <TransactionCategory
+          open={this.state.transactionCategoryOpen}
+          onclose={this.handleCloseTransactionCategory}
+          balanceSnack={this.handleSnack}
+        />
+
+        <Snack
+          snackOpen={this.state.snackOpen}
+          snack={this.state.snack}
+          onclose={this.handleCloseSnack}
         />
       </div>
     );
   }
   componentDidMount() {
-    if (debug) {
-      console.log("Balance.componentDidMount");
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("Balance.componentDidMount");
     }
     // Update
-    this.updateSummary();
     this.updateTabHeight();
+    this.updateSummary();
   }
-  handleChangeTab(event, newTabIndex) {
-    if (debug) {
-      console.log("Balance.handleChangeTab " + newTabIndex);
-    }
-    switch (newTabIndex) {
-      case 0:
-        this.updateSummary();
-        break;
-      case 1:
-        this.updateTransactions();
-        break;
-      default:
-        if (debug) {
-          console.log("/!\\ no match tab index : " + newTabIndex);
-        }
-    }
-    this.setState({
-      selectedTab: newTabIndex
-    });
-  }
+
+  // Updates
   updateTabHeight() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
@@ -235,7 +253,7 @@ export default class Balance extends React.Component {
     });
   }
   updateSummary() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateSummary");
     }
     getBalance().then((res) => {
@@ -245,7 +263,7 @@ export default class Balance extends React.Component {
     });
   }
   updateTransactions() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateTransactions");
     }
     //
@@ -256,8 +274,30 @@ export default class Balance extends React.Component {
       });
     });
   }
+
+  // Handlers
+  handleChangeTab(event, newTabIndex) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleChangeTab " + newTabIndex);
+    }
+    switch (newTabIndex) {
+      case 0:
+        this.updateSummary();
+        break;
+      case 1:
+        this.updateTransactions();
+        break;
+      default:
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("/!\\ no match tab index : " + newTabIndex);
+        }
+    }
+    this.setState({
+      selectedTab: newTabIndex
+    });
+  }
   handleOpenTransaction(id) {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleOpenTransaction " + id);
     }
     this.setState({
@@ -265,20 +305,54 @@ export default class Balance extends React.Component {
       transactionOpen: true
     });
   }
-  handleCloseTransaction() {
-    if (debug) {
+  handleCloseTransaction(snack) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
       transactionID: "",
-      transactionOpen: false
+      transactionOpen: false,
+      snackOpen: true,
+      snack: snack
     });
   }
   handleSaveTransaction() {
-    if (debug) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleSaveTransaction");
     }
     this.updateBalance();
+  }
+  handleOpenTransactionCategory() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleOpenTransactionCategory");
+    }
+    this.setState({
+      transactionCategoryOpen: true
+    });
+  }
+  handleCloseTransactionCategory(snack) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleCloseTransactionCategory");
+    }
+    this.setState({
+      transactionCategoryOpen: false,
+      snackOpen: true,
+      snack: snack
+    });
+  }
+  handleSaveTransactionCategory() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleSaveTransactionCategory");
+    }
+    this.updateBalance();
+  }
+  handleCloseSnack() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
   }
 }
 
