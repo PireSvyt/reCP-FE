@@ -15,7 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
 import config from "../../config";
-import appcopy from "./copy";
+import appcopy from "../copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
 import Transaction from "./Transaction";

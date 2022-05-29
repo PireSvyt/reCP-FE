@@ -21,7 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
 
 import config from "../../config";
-import appcopy from "./copy";
+import appcopy from "../copy";
 import {
   getTransaction,
   createTransaction,

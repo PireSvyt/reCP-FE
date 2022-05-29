@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import config from "../../config";
-import appcopy from "./copy";
+import appcopy from "../copy";
 import { createCategoryTransaction } from "./api/categorytransactions";
 import Snack from "../Snack";
 
