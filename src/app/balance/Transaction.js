@@ -20,7 +20,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
 
-import config from "../../config";
 import appcopy from "../copy";
 import {
   getTransaction,
@@ -88,7 +87,7 @@ export default class Transaction extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["title.subsection_transaction"][config.app.language]}
+            {appcopy["title.subsection_transaction"][process.env.APP_LANGUAGE]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -100,7 +99,7 @@ export default class Transaction extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][config.app.language]}
+                label={appcopy["input.name"][process.env.APP_LANGUAGE]}
                 variant="standard"
                 defaultValue={this.state.transaction.name}
                 onChange={this.handleChange}
@@ -129,7 +128,7 @@ export default class Transaction extends React.Component {
 
               <TextField
                 name="amount"
-                label={appcopy["input.amount"][config.app.language]}
+                label={appcopy["input.amount"][process.env.APP_LANGUAGE]}
                 variant="standard"
                 defaultValue={this.state.transaction.amount}
                 onChange={this.handleChange}
@@ -150,7 +149,7 @@ export default class Transaction extends React.Component {
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.by"][config.app.language]}</h4>
+                <h4>{appcopy["text.by"][process.env.APP_LANGUAGE]}</h4>
                 <FormControlLabel
                   value="Alice"
                   control={<Radio />}
@@ -176,7 +175,7 @@ export default class Transaction extends React.Component {
                   justifyContent: "space-evenly"
                 }}
               >
-                <h4>{appcopy["text.for"][config.app.language]}</h4>
+                <h4>{appcopy["text.for"][process.env.APP_LANGUAGE]}</h4>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -209,7 +208,7 @@ export default class Transaction extends React.Component {
                   <TextField
                     {...params}
                     variant="standard"
-                    label={appcopy["input.category"][config.app.language]}
+                    label={appcopy["input.category"][process.env.APP_LANGUAGE]}
                   />
                 )}
                 renderOption={(props, option) => (
@@ -258,10 +257,10 @@ export default class Transaction extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][config.app.language]}
+              {appcopy["button.cancel"][process.env.APP_LANGUAGE]}
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][config.app.language]}
+              {appcopy["button.save"][process.env.APP_LANGUAGE]}
             </Button>
           </DialogActions>
         </Dialog>
@@ -461,7 +460,7 @@ export default class Transaction extends React.Component {
                 let snack = {
                   severity: appcopy["snack.transactionsaved"]["severity"],
                   message:
-                    appcopy["snack.transactionsaved"][config.app.language],
+                    appcopy["snack.transactionsaved"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -469,7 +468,9 @@ export default class Transaction extends React.Component {
                 let snack = {
                   severity: appcopy["snack.transactionduplicated"]["severity"],
                   message:
-                    appcopy["snack.transactionduplicated"][config.app.language],
+                    appcopy["snack.transactionduplicated"][
+                      process.env.APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -477,7 +478,8 @@ export default class Transaction extends React.Component {
             } else {
               let snack = {
                 severity: appcopy["snack.errornetwork"]["severity"],
-                message: appcopy["snack.errornetwork"][config.app.language],
+                message:
+                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -500,7 +502,9 @@ export default class Transaction extends React.Component {
                 let snack = {
                   severity: appcopy["snack.transactionmodified"]["severity"],
                   message:
-                    appcopy["snack.transactionmodified"][config.app.language],
+                    appcopy["snack.transactionmodified"][
+                      process.env.APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -508,7 +512,9 @@ export default class Transaction extends React.Component {
                 let snack = {
                   severity: appcopy["snack.transactionduplicated"]["severity"],
                   message:
-                    appcopy["snack.transactionduplicated"][config.app.language],
+                    appcopy["snack.transactionduplicated"][
+                      process.env.APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -516,7 +522,8 @@ export default class Transaction extends React.Component {
             } else {
               let snack = {
                 severity: appcopy["snack.errornetwork"]["severity"],
-                message: appcopy["snack.errornetwork"][config.app.language],
+                message:
+                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -529,7 +536,7 @@ export default class Transaction extends React.Component {
       this.setState((prevState, props) => ({
         snackOpen: true,
         snackSeverity: appcopy["snack.error"]["severity"],
-        snackMessage: appcopy["snack.error"][config.app.language] + errors,
+        snackMessage: appcopy["snack.error"][process.env.APP_LANGUAGE] + errors,
         snackDuration: 5000
       }));
     }

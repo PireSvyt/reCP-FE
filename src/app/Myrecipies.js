@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import config from "../config";
 import appcopy from "./copy";
 import { getRecipies } from "./api/recipies";
 import Recipe from "./Recipe";
@@ -38,7 +37,7 @@ export default class Myrecipies extends React.Component {
   render() {
     return (
       <div>
-        <h2>{appcopy["title.section_myrecipies"][config.app.language]}</h2>
+        <h2>{appcopy["title.section_myrecipies"][process.env.APP_LANGUAGE]}</h2>
         <Fab
           color="primary"
           sx={{

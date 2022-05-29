@@ -1,9 +1,0 @@
-{
-  "env": "PROD",
-  "serverProdUrl": "https://re-cp-be.vercel.app",
-  "serverDevUrl": "https://re-cp-be.vercel.app",
-  "app": {
-    "language": "FR"
-  },
-  "debug": true
-}

@@ -9,7 +9,6 @@ import {
   DialogTitle
 } from "@mui/material";
 
-import config from "../../config";
 import appcopy from "../copy";
 import { createCategoryTransaction } from "./api/categorytransactions";
 import Snack from "../Snack";
@@ -47,7 +46,7 @@ export default class TransactionCategory extends React.Component {
           <DialogTitle>
             {
               appcopy["title.subsection_transactioncategory"][
-                config.app.language
+                process.env.APP_LANGUAGE
               ]
             }
           </DialogTitle>
@@ -61,7 +60,7 @@ export default class TransactionCategory extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][config.app.language]}
+                label={appcopy["input.name"][process.env.APP_LANGUAGE]}
                 variant="standard"
                 defaultValue={this.state.transactionCategory}
                 onChange={this.handleChange}
@@ -71,10 +70,10 @@ export default class TransactionCategory extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][config.app.language]}
+              {appcopy["button.cancel"][process.env.APP_LANGUAGE]}
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][config.app.language]}
+              {appcopy["button.save"][process.env.APP_LANGUAGE]}
             </Button>
           </DialogActions>
         </Dialog>
@@ -107,7 +106,7 @@ export default class TransactionCategory extends React.Component {
     }));
     let snack = {
       severity: appcopy["snack.categoryclosed"]["severity"],
-      message: appcopy["snack.categoryclosed"][config.app.language],
+      message: appcopy["snack.categoryclosed"][process.env.APP_LANGUAGE],
       duration: 1500
     };
     this.props.onclose(snack);
@@ -173,7 +172,8 @@ export default class TransactionCategory extends React.Component {
             if (res.message === "catégorie enregistrée") {
               let snack = {
                 severity: appcopy["snack.categorysaved"]["severity"],
-                message: appcopy["snack.categorysaved"][config.app.language],
+                message:
+                  appcopy["snack.categorysaved"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -181,7 +181,7 @@ export default class TransactionCategory extends React.Component {
               let snack = {
                 severity: appcopy["snack.categoryduplicated"]["severity"],
                 message:
-                  appcopy["snack.categoryduplicated"][config.app.language],
+                  appcopy["snack.categoryduplicated"][process.env.APP_LANGUAGE],
                 duration: 1000
               };
               this.props.onclose(snack);
@@ -189,7 +189,7 @@ export default class TransactionCategory extends React.Component {
           } else {
             let snack = {
               severity: appcopy["snack.errornetwork"]["severity"],
-              message: appcopy["snack.errornetwork"][config.app.language],
+              message: appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
               duration: 1000
             };
             this.props.onclose(snack);
@@ -204,7 +204,7 @@ export default class TransactionCategory extends React.Component {
       this.setState((prevState, props) => ({
         snackOpen: true,
         snackSeverity: appcopy["snack.error"]["severity"],
-        snackMessage: appcopy["snack.error"][config.app.language] + errors,
+        snackMessage: appcopy["snack.error"][process.env.APP_LANGUAGE] + errors,
         snackDuration: 5000
       }));
     }

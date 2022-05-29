@@ -14,7 +14,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
-import config from "../../config";
 import appcopy from "../copy";
 import { getTransactions } from "./api/transactions";
 import getBalance from "./api/balance";
@@ -66,7 +65,7 @@ export default class Balance extends React.Component {
     }
     return (
       <div>
-        <h2>{appcopy["title.section_mybalance"][config.app.language]}</h2>
+        <h2>{appcopy["title.section_mybalance"][process.env.APP_LANGUAGE]}</h2>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -75,13 +74,17 @@ export default class Balance extends React.Component {
               variant="fullWidth"
             >
               <Tab
-                label={appcopy["title.subsection_balance"][config.app.language]}
+                label={
+                  appcopy["title.subsection_balance"][process.env.APP_LANGUAGE]
+                }
                 id="tab-0"
                 aria-controls="tabpanel-0"
               />
               <Tab
                 label={
-                  appcopy["title.subsection_transactions"][config.app.language]
+                  appcopy["title.subsection_transactions"][
+                    process.env.APP_LANGUAGE
+                  ]
                 }
                 id="tab-1"
                 aria-controls="tabpanel-1"
@@ -94,7 +97,11 @@ export default class Balance extends React.Component {
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
             <h3>
-              {appcopy["title.subsection_balanceperuser"][config.app.language]}
+              {
+                appcopy["title.subsection_balanceperuser"][
+                  process.env.APP_LANGUAGE
+                ]
+              }
             </h3>
             <List>
               <ListItem key={"Alice"}>
@@ -119,7 +126,7 @@ export default class Balance extends React.Component {
             <h3>
               {
                 appcopy["title.subsection_balancepercategory"][
-                  config.app.language
+                  process.env.APP_LANGUAGE
                 ]
               }
             </h3>
@@ -145,7 +152,11 @@ export default class Balance extends React.Component {
               ))}
             </List>
             <Button onClick={this.handleOpenTransactionCategory}>
-              {appcopy["button.newTransactionCategory"][config.app.language]}
+              {
+                appcopy["button.newTransactionCategory"][
+                  process.env.APP_LANGUAGE
+                ]
+              }
             </Button>
           </TabPanel>
           <TabPanel

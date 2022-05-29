@@ -3,7 +3,6 @@ import { Paper, Box, Tabs, Tab } from "@mui/material";
 import BalanceIcon from "@mui/icons-material/Balance";
 import BookIcon from "@mui/icons-material/Book";
 
-import config from "../config";
 import appcopy from "./copy";
 
 import Balance from "./balance/Balance";
@@ -12,14 +11,14 @@ import Myrecipies from "./Myrecipies";
 const pages = [
   {
     index: 0,
-    label: appcopy["title.section_myrecipies"][config.app.language],
+    label: appcopy["title.section_myrecipies"][process.env.APP_LANGUAGE],
     code: "myrecipies",
     icon: BookIcon,
     component: Myrecipies
   },
   {
     index: 1,
-    label: appcopy["title.section_mybalance"][config.app.language],
+    label: appcopy["title.section_mybalance"][process.env.APP_LANGUAGE],
     code: "mybalance",
     icon: BalanceIcon,
     component: Balance

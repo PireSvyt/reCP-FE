@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import config from "../config";
 import appcopy from "./copy";
 import { random_id } from "./toolkit";
 import { getRecipe, createRecipe, modifyRecipe } from "./api/recipies";
@@ -85,7 +84,7 @@ export default class Recipe extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["title.subsection_recipe"][config.app.language]}
+            {appcopy["title.subsection_recipe"][process.env.APP_LANGUAGE]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -97,7 +96,7 @@ export default class Recipe extends React.Component {
             >
               <TextField
                 name="name"
-                label={appcopy["input.name"][config.app.language]}
+                label={appcopy["input.name"][process.env.APP_LANGUAGE]}
                 variant="standard"
                 defaultValue={this.state.recipe.name}
                 onChange={this.handleChange}
@@ -105,14 +104,18 @@ export default class Recipe extends React.Component {
 
               <TextField
                 name="portions"
-                label={appcopy["input.portions"][config.app.language]}
+                label={appcopy["input.portions"][process.env.APP_LANGUAGE]}
                 variant="standard"
                 defaultValue={this.state.recipe.portions}
                 onChange={this.handleChange}
               />
 
               <h3>
-                {appcopy["title.subsection_ingredients"][config.app.language]}
+                {
+                  appcopy["title.subsection_ingredients"][
+                    process.env.APP_LANGUAGE
+                  ]
+                }
               </h3>
               <List dense={true} name="recipe-ingredientlist">
                 {this.state.recipe.ingredients.map((ingredient) => (
@@ -126,7 +129,11 @@ export default class Recipe extends React.Component {
               </List>
 
               <h3>
-                {appcopy["title.subsection_instructions"][config.app.language]}
+                {
+                  appcopy["title.subsection_instructions"][
+                    process.env.APP_LANGUAGE
+                  ]
+                }
               </h3>
               <List dense={true}></List>
             </Box>
@@ -134,10 +141,10 @@ export default class Recipe extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {appcopy["button.cancel"][config.app.language]}
+              {appcopy["button.cancel"][process.env.APP_LANGUAGE]}
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {appcopy["button.save"][config.app.language]}
+              {appcopy["button.save"][process.env.APP_LANGUAGE]}
             </Button>
           </DialogActions>
         </Dialog>
@@ -291,7 +298,7 @@ export default class Recipe extends React.Component {
                 let snack = {
                   severity: appcopy["snack.ingredientsaved"]["severity"],
                   message:
-                    appcopy["snack.ingredientsaved"][config.app.language],
+                    appcopy["snack.ingredientsaved"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -299,7 +306,9 @@ export default class Recipe extends React.Component {
                 let snack = {
                   severity: appcopy["snack.ingredientduplicated"]["severity"],
                   message:
-                    appcopy["snack.ingredientduplicated"][config.app.language],
+                    appcopy["snack.ingredientduplicated"][
+                      process.env.APP_LANGUAGE
+                    ],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -307,7 +316,8 @@ export default class Recipe extends React.Component {
             } else {
               let snack = {
                 severity: appcopy["snack.errornetwork"]["severity"],
-                message: appcopy["snack.errornetwork"][config.app.language],
+                message:
+                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -334,7 +344,8 @@ export default class Recipe extends React.Component {
               if (res.message === "recette enregistrée") {
                 let snack = {
                   severity: appcopy["snack.recipesaved"]["severity"],
-                  message: appcopy["snack.recipesaved"][config.app.language],
+                  message:
+                    appcopy["snack.recipesaved"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -342,7 +353,7 @@ export default class Recipe extends React.Component {
                 let snack = {
                   severity: appcopy["snack.recipeduplicated"]["severity"],
                   message:
-                    appcopy["snack.recipeduplicated"][config.app.language],
+                    appcopy["snack.recipeduplicated"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -350,7 +361,8 @@ export default class Recipe extends React.Component {
             } else {
               let snack = {
                 severity: appcopy["snack.errornetwork"]["severity"],
-                message: appcopy["snack.errornetwork"][config.app.language],
+                message:
+                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -370,7 +382,8 @@ export default class Recipe extends React.Component {
               if (res.message === "recette modifiée") {
                 let snack = {
                   severity: appcopy["snack.recipeedited"]["severity"],
-                  message: appcopy["snack.recipeedited"][config.app.language],
+                  message:
+                    appcopy["snack.recipeedited"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -378,7 +391,7 @@ export default class Recipe extends React.Component {
                 let snack = {
                   severity: appcopy["snack.recipeduplicated"]["severity"],
                   message:
-                    appcopy["snack.recipeduplicated"][config.app.language],
+                    appcopy["snack.recipeduplicated"][process.env.APP_LANGUAGE],
                   duration: 3000
                 };
                 this.props.onclose(snack);
@@ -386,7 +399,8 @@ export default class Recipe extends React.Component {
             } else {
               let snack = {
                 severity: appcopy["snack.errornetwork"]["severity"],
-                message: appcopy["snack.errornetwork"][config.app.language],
+                message:
+                  appcopy["snack.errornetwork"][process.env.APP_LANGUAGE],
                 duration: 3000
               };
               this.props.onclose(snack);
@@ -399,7 +413,7 @@ export default class Recipe extends React.Component {
       this.setState((prevState, props) => ({
         snackOpen: true,
         snackSeverity: appcopy["snack.error"]["severity"],
-        snackMessage: appcopy["snack.error"][config.app.language] + errors,
+        snackMessage: appcopy["snack.error"][process.env.APP_LANGUAGE] + errors,
         snackDuration: 5000
       }));
     }
@@ -485,21 +499,21 @@ class Ingredient extends React.Component {
         >
           <TextField
             name="name"
-            label={appcopy["input.name"][config.app.language]}
+            label={appcopy["input.name"][process.env.APP_LANGUAGE]}
             variant="standard"
             defaultValue={this.props.ingredient.name}
             onChange={this.handleChange}
           />
           <TextField
             name="count"
-            label={appcopy["input.count"][config.app.language]}
+            label={appcopy["input.count"][process.env.APP_LANGUAGE]}
             variant="standard"
             defaultValue={this.props.ingredient.quantity}
             onChange={this.handleChange}
           />
           <TextField
             name="unit"
-            label={appcopy["input.unit"][config.app.language]}
+            label={appcopy["input.unit"][process.env.APP_LANGUAGE]}
             variant="standard"
             defaultValue={this.props.ingredient.unit}
             onChange={this.handleChange}
