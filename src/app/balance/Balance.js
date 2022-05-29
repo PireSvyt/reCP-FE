@@ -36,9 +36,7 @@ export default class Balance extends React.Component {
       transactions: [],
       transactionCategoryOpen: false,
       snackOpen: false,
-      snackSeverity: "warning",
-      snackMessage: "Empty",
-      snackDuration: 5000
+      snack: undefined
     };
     // Updates
     this.updateTabHeight = this.updateTabHeight.bind(this);
@@ -230,9 +228,7 @@ export default class Balance extends React.Component {
 
         <Snack
           snackOpen={this.state.snackOpen}
-          snackMessage={this.state.snackMessage}
-          snackDuration={this.state.snackDuration}
-          snackSeverity={this.state.snackSeverity}
+          snack={this.state.snack}
           onclose={this.handleCloseSnack}
         />
       </div>
@@ -317,9 +313,7 @@ export default class Balance extends React.Component {
       transactionID: "",
       transactionOpen: false,
       snackOpen: true,
-      snackSeverity: snack.severity,
-      snackMessage: snack.message,
-      snackDuration: snack.duration
+      snack: snack
     });
   }
   handleSaveTransaction() {
@@ -343,9 +337,7 @@ export default class Balance extends React.Component {
     this.setState({
       transactionCategoryOpen: false,
       snackOpen: true,
-      snackSeverity: snack.severity,
-      snackMessage: snack.message,
-      snackDuration: snack.duration
+      snack: snack
     });
   }
   handleSaveTransactionCategory() {

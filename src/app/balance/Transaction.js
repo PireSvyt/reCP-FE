@@ -51,9 +51,7 @@ export default class Transaction extends React.Component {
       options: [],
       transaction: { ...emptyTransaction },
       snackOpen: false,
-      snackSeverity: "warning",
-      snackMessage: "Empty",
-      snackDuration: 5000
+      snack: undefined
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -303,9 +301,7 @@ export default class Transaction extends React.Component {
 
         <Snack
           snackOpen={this.state.snackOpen}
-          snackMessage={this.state.snackMessage}
-          snackDuration={this.state.snackDuration}
-          snackSeverity={this.state.snackSeverity}
+          snack={this.state.snack}
           onclose={this.handleCloseSnack}
         />
       </div>
@@ -357,15 +353,7 @@ export default class Transaction extends React.Component {
     this.setState((prevState, props) => ({
       transaction: { ...emptyTransaction }
     }));
-    let snack = {
-      severity: appcopy["transaction"]["snack"]["discarded"]["severity"],
-      message:
-        appcopy["transaction"]["snack"]["discarded"][
-          process.env.REACT_APP_LANGUAGE
-        ],
-      duration: 1500
-    };
-    this.props.onclose(snack);
+    this.props.onclose(appcopy["transaction"]["snack"]["discarded"]);
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -491,46 +479,19 @@ export default class Transaction extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.REACT_APP_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === "FALSE") {
           createTransaction(this.state.transaction).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "transaction enregistrée") {
-                let snack = {
-                  severity:
-                    appcopy["transaction"]["snack"]["saved"]["severity"],
-                  message:
-                    appcopy["transaction"]["snack"]["saved"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(appcopy["transaction"]["snack"]["saved"]);
               } else {
-                let snack = {
-                  severity:
-                    appcopy["transaction"]["snack"]["erroroncreation"][
-                      "severity"
-                    ],
-                  message:
-                    appcopy["transaction"]["snack"]["erroroncreation"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(
+                  appcopy["transaction"]["snack"]["erroroncreation"]
+                );
               }
             } else {
-              let snack = {
-                severity:
-                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
-                message:
-                  appcopy["generic"]["snack"]["errornetwork"][
-                    process.env.REACT_APP_LANGUAGE
-                  ],
-                duration: 3000
-              };
-              this.props.onclose(snack);
+              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
             }
           });
         }
@@ -539,7 +500,7 @@ export default class Transaction extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.REACT_APP_DEBUG === false) {
+        if (process.env.REACT_APP_MOCKAPI === "FALSE") {
           modifyTransaction(
             this.props.transactionID,
             this.state.transaction
@@ -547,54 +508,25 @@ export default class Transaction extends React.Component {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "transaction modifiée") {
-                let snack = {
-                  severity:
-                    appcopy["transaction"]["snack"]["modified"]["severity"],
-                  message:
-                    appcopy["transaction"]["snack"]["modified"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(appcopy["transaction"]["snack"]["modified"]);
               } else {
-                let snack = {
-                  severity:
-                    appcopy["transaction"]["snack"]["erroroncreation"][
-                      "severity"
-                    ],
-                  message:
-                    appcopy["transaction"]["snack"]["erroroncreation"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(
+                  appcopy["transaction"]["snack"]["erroroncreation"]
+                );
               }
             } else {
-              let snack = {
-                severity:
-                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
-                message:
-                  appcopy["generic"]["snack"]["errornetwork"][
-                    process.env.REACT_APP_LANGUAGE
-                  ],
-                duration: 3000
-              };
-              this.props.onclose(snack);
+              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
             }
           });
+        } else {
+          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
         }
       }
     } else {
       // Snack
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snackSeverity: appcopy["generic"]["snack"]["error"]["severity"],
-        snackMessage:
-          appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
-          errors,
-        snackDuration: 5000
+        snack: appcopy["generic"]["snack"]["error"]
       }));
     }
   }

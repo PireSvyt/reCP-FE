@@ -16,6 +16,14 @@ success
 
 */
 
+function getDymmySnack() {
+  return {
+    severity: "warning",
+    FR: "DUMMY SNACK FR",
+    EN: "DUMMY SNACK EN"
+  };
+}
+
 export default class Snack extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -23,7 +31,8 @@ export default class Snack extends React.Component {
     }
     super(props);
     this.state = {
-      snackOpen: this.props.snackOpen
+      snackOpen: this.props.snackOpen,
+      snack: getDymmySnack()
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -47,6 +56,32 @@ export default class Snack extends React.Component {
         </Alert>
       </Snackbar>
     );
+  }
+  componentDidUpdate(prevState) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.componentDidUpdate");
+      console.log("Recipe.state");
+      console.log(this.state);
+    }
+    if (
+      prevState.snackOpen !== this.props.snackOpen ||
+      prevState.snack !== this.props.snack
+    ) {
+      // Add optional inputs
+      var newSnack = this.props.snack;
+      if (!newSnack.duration) {
+        newSnack.duration = 3000;
+      }
+      if (!newSnack.severity) {
+        newSnack.severity = "info";
+      }
+      if (!newSnack.message) {
+        newSnack.message = newSnack[process.env.REACT_APP_LANGUAGE];
+      }
+      this.setState((prevState, props) => ({
+        snack: newSnack
+      }));
+    }
   }
 
   // Handles

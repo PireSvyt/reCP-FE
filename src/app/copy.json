@@ -10,10 +10,10 @@
         "FR": "Recette enregistrée",
         "EN": "Recipe saved"
       },
-      "recipeduplicated": {
+      "erroroncreation": {
         "severity": "success",
-        "FR": "Recette existante",
-        "EN": "Existing recipe"
+        "FR": "Recette modifiée",
+        "EN": "Recipe edited"
       },
       "recipemodified": {
         "severity": "success",
@@ -38,17 +38,17 @@
       }
     },
     "snack": {
-      "ingredientsaved": {
+      "saved": {
         "severity": "success",
         "FR": "Ingrédient enregistré",
         "EN": "Ingredient saved"
       },
-      "ingredientduplicated": {
+      "erroroncreation": {
         "severity": "success",
-        "FR": "Ingrédient existante",
-        "EN": "Existing ingredient"
+        "FR": "Ingrédient non créé",
+        "EN": "Ingredient not created"
       },
-      "ingredientmodified": {
+      "modified": {
         "severity": "success",
         "FR": "Ingrédient modifié",
         "EN": "Ingredient edited"
@@ -96,35 +96,20 @@
         "FR": "Balance à jour",
         "EN": "Balance up to date"
       },
-      "categoryclosed": {
+      "discarded": {
         "severity": "info",
-        "FR": "Catégorie fermée",
-        "EN": "Category closed"
+        "FR": "Catégorie abandonnée",
+        "EN": "Category discarded"
       },
-      "categorysaved": {
+      "saved": {
         "severity": "success",
         "FR": "Catégorie enregistrée",
         "EN": "Category saved"
       },
-      "categoryduplicated": {
+      "erroroncreation": {
         "severity": "warning",
-        "FR": "Catégorie existante",
-        "EN": "Existing category"
-      },
-      "transactionsaved": {
-        "severity": "success",
-        "FR": "Transaction enregistrée",
-        "EN": "Transaction saved"
-      },
-      "transactionduplicated": {
-        "severity": "success",
-        "FR": "Transaction existante",
-        "EN": "Existing transaction"
-      },
-      "transactionmodified": {
-        "severity": "success",
-        "FR": "Transaction modifiée",
-        "EN": "Transaction edited"
+        "FR": "Catégorie non créée",
+        "EN": "Category not created"
       }
     }
   },
@@ -159,7 +144,7 @@
         "EN": "Transaction saved"
       },
       "erroroncreation": {
-        "severity": "warning",
+        "severity": "error",
         "FR": "Transaction non créée",
         "EN": "Transaction not created"
       }
@@ -182,7 +167,7 @@
         "EN": "Category saved"
       },
       "erroroncreation": {
-        "severity": "warning",
+        "severity": "error",
         "FR": "Catégorie non créée",
         "EN": "Ccategory not created"
       }
@@ -246,18 +231,23 @@
       }
     },
     "snack": {
+      "mockedassaved": {
+        "severity": "warning",
+        "FR": "Factis : Sauvé",
+        "EN": "Mocked : Saved"
+      },
       "saving": {
         "severity": "info",
         "FR": "Sauvergarde en cours",
         "EN": "Saving in progress"
       },
       "errornetwork": {
-        "severity": "warning",
+        "severity": "error",
         "FR": "Erreur : Problème réseau",
         "EN": "Error : Network issue"
       },
       "error": {
-        "severity": "warning",
+        "severity": "error",
         "FR": "Erreur :",
         "EN": "Error :"
       }

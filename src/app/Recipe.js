@@ -55,9 +55,7 @@ export default class Recipe extends React.Component {
       recipeOpen: this.props.recipeOpen,
       recipe: { ...emptyRecipe },
       snackOpen: false,
-      snackSeverity: "warning",
-      snackMessage: "Empty",
-      snackDuration: 5000
+      snack: undefined
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -167,9 +165,7 @@ export default class Recipe extends React.Component {
 
         <Snack
           snackOpen={this.state.snackOpen}
-          snackMessage={this.state.snackMessage}
-          snackDuration={this.state.snackDuration}
-          snackSeverity={this.state.snackSeverity}
+          snack={this.state.snack}
           onclose={this.handleCloseSnack}
         />
       </div>
@@ -311,38 +307,14 @@ export default class Recipe extends React.Component {
           createIngredient(newIngredient).then((res) => {
             if (res !== undefined) {
               if (res.message === "ingredient enregistré") {
-                let snack = {
-                  severity: appcopy["recipe"]["snack"]["saved"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["saved"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
               } else {
-                let snack = {
-                  severity:
-                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["erroroncreation"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(
+                  appcopy["recipe"]["snack"]["erroroncreation"]
+                );
               }
             } else {
-              let snack = {
-                severity:
-                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
-                message:
-                  appcopy["generic"]["snack"]["errornetwork"][
-                    process.env.REACT_APP_LANGUAGE
-                  ],
-                duration: 3000
-              };
-              this.props.onclose(snack);
+              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
             }
           });
         }
@@ -359,43 +331,19 @@ export default class Recipe extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
-        if (process.env.REACT_APP_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === "FALSE") {
           createRecipe(recipe).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "recette enregistrée") {
-                let snack = {
-                  severity: appcopy["recipe"]["snack"]["saved"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["saved"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
               } else {
-                let snack = {
-                  severity:
-                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["erroroncreation"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(
+                  appcopy["recipe"]["snack"]["erroroncreation"]
+                );
               }
             } else {
-              let snack = {
-                severity:
-                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
-                message:
-                  appcopy["generic"]["snack"]["errornetwork"][
-                    process.env.REACT_APP_LANGUAGE
-                  ],
-                duration: 3000
-              };
-              this.props.onclose(snack);
+              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
             }
           });
         }
@@ -405,43 +353,19 @@ export default class Recipe extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("PUT");
         }
-        if (process.env.REACT_APP_DEBUG === false) {
+        if (process.env.REACT_APP_DEBUG === "FALSE") {
           modifyRecipe(this.props.recipeID, recipe).then((res) => {
             //this.props.onsave();
             if (res !== undefined) {
               if (res.message === "recette modifiée") {
-                let snack = {
-                  severity: appcopy["recipe"]["snack"]["modified"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["modified"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(appcopy["recipe"]["snack"]["modified"]);
               } else {
-                let snack = {
-                  severity:
-                    appcopy["recipe"]["snack"]["erroroncreation"]["severity"],
-                  message:
-                    appcopy["recipe"]["snack"]["erroroncreation"][
-                      process.env.REACT_APP_LANGUAGE
-                    ],
-                  duration: 3000
-                };
-                this.props.onclose(snack);
+                this.props.onclose(
+                  appcopy["recipe"]["snack"]["erroroncreation"]
+                );
               }
             } else {
-              let snack = {
-                severity:
-                  appcopy["generic"]["snack"]["errornetwork"]["severity"],
-                message:
-                  appcopy["generic"]["snack"]["errornetwork"][
-                    process.env.REACT_APP_LANGUAGE
-                  ],
-                duration: 3000
-              };
-              this.props.onclose(snack);
+              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
             }
           });
         }
@@ -450,11 +374,7 @@ export default class Recipe extends React.Component {
       // Snack
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snackSeverity: appcopy["generic"]["snack"]["error"]["severity"],
-        snackMessage:
-          appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
-          errors,
-        snackDuration: 5000
+        snack: appcopy["generic"]["snack"]["error"]
       }));
     }
   }

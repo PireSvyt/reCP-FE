@@ -24,7 +24,8 @@ export default class Myrecipies extends React.Component {
       recipiesHeight: 300,
       recipeID: "",
       recipeOpen: false,
-      recipies: []
+      recipies: [],
+      snack: undefined
     };
     // Updates
     this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
@@ -91,9 +92,7 @@ export default class Myrecipies extends React.Component {
 
         <Snack
           snackOpen={this.state.snackOpen}
-          snackMessage={this.state.snackMessage}
-          snackDuration={this.state.snackDuration}
-          snackSeverity={this.state.snackSeverity}
+          snack={this.state.snack}
           onclose={this.handleCloseSnack}
         />
       </div>
@@ -129,14 +128,7 @@ export default class Myrecipies extends React.Component {
       } else {
         // Snack
         this.setState((prevState, props) => ({
-          snackOpen: true,
-          snackSeverity:
-            appcopy["generic"]["snack"]["errornetwork"]["severity"],
-          snackMessage:
-            appcopy["generic"]["snack"]["errornetwork"][
-              process.env.REACT_APP_LANGUAGE
-            ] + " (Myrecipies.updateSummary)",
-          snackDuration: 5000
+          snack: appcopy["generic"]["snack"]["errornetwork"]
         }));
       }
     });
