@@ -465,7 +465,7 @@ export default class Transaction extends React.Component {
       errors.push(" Catégorie vide");
     }
     // Save or not?
-    if (errors !== []) {
+    if (errors !== [] && process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(errors);
     }
     // Post or publish
@@ -526,9 +526,13 @@ export default class Transaction extends React.Component {
       }
     } else {
       // Snack
+      var snack = appcopy["generic"]["snack"]["error"];
+      snack.message =
+        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+        errors;
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snack: appcopy["generic"]["snack"]["error"]
+        snack: snack
       }));
     }
   }

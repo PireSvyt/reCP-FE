@@ -155,18 +155,16 @@ export default class TransactionCategory extends React.Component {
       errors.push(" Nom vide");
     }
     // Save or not?
-    if (errors !== []) {
+    if (errors !== [] && process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(errors);
     }
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(this.state.transactionCategory);
-      }
-      // POST
-      if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log("POST");
       }
+      // POST
       //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
       createCategoryTransaction({
         name: this.state.transactionCategory
@@ -196,9 +194,13 @@ export default class TransactionCategory extends React.Component {
       }));
     } else {
       // Snack
+      var snack = appcopy["generic"]["snack"]["error"];
+      snack.message =
+        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
+        errors;
       this.setState((prevState, props) => ({
         snackOpen: true,
-        snack: appcopy["generic"]["snack"]["errornetwork"]
+        snack: snack
       }));
     }
   }
