@@ -255,6 +255,7 @@ export default class Recipe extends React.Component {
       save = false;
       errors.push("Portions vide");
     }
+    // Ingredients
 
     // Save or not?
     if (errors !== []) {
@@ -265,6 +266,18 @@ export default class Recipe extends React.Component {
       // Polish
       let recipe = this.state.recipe;
       recipe.ingredients.forEach((ingredient) => {
+        // Remove ingredient if not complete
+        if (
+          ingredient.name === undefined ||
+          ingredient.name === "" ||
+          ingredient.quantity === undefined ||
+          ingredient.quantity === "" ||
+          ingredient.unit === undefined ||
+          ingredient.unit === ""
+        ) {
+          delete recipe[ingredient];
+        }
+        // Delete UI attributes
         delete ingredient["uid"];
         delete ingredient["nextable"];
         // Save ingredient if new

@@ -1,0 +1,160 @@
+{
+  "title.section_myrecipies": {
+    "FR": "Mes recettes",
+    "EN": "My recipies"
+  },
+  "title.subsection_recipe": {
+    "FR": "Ma recette",
+    "EN": "My recipe"
+  },
+  "title.section_recipieedit": {
+    "FR": "Editer ma recette",
+    "EN": "Edit my recipe"
+  },
+  "title.section_recipeview": {
+    "FR": "Ma recette",
+    "EN": "My recipe"
+  },
+  "title.subsection_ingredients": {
+    "FR": "Ingrédients",
+    "EN": "Ingredients"
+  },
+  "title.subsection_instructions": {
+    "FR": "Instructions",
+    "EN": "Instructions"
+  },
+  "title.section_thisweek": {
+    "FR": "Ma semaine",
+    "EN": "My week"
+  },
+  "title.section_myfridge": {
+    "FR": "Mon frigo",
+    "EN": "My fridge"
+  },
+  "title.section_myshopping": {
+    "FR": "Mes courses",
+    "EN": "My groceries"
+  },
+  "title.section_mybalance": {
+    "FR": "Ma balance",
+    "EN": "My balance"
+  },
+  "button.add": {
+    "FR": "Ajouter",
+    "EN": "Add"
+  },
+  "button.save": {
+    "FR": "Sauver",
+    "EN": "Save"
+  },
+  "button.delete": {
+    "FR": "Supprimer",
+    "EN": "Delete"
+  },
+  "button.edit": {
+    "FR": "Editer",
+    "EN": "Edit"
+  },
+  "button.renew": {
+    "FR": "Renouveler",
+    "EN": "Renew"
+  },
+  "button.transactions": {
+    "FR": "Transactions",
+    "EN": "Transactions"
+  },
+  "button.select": {
+    "FR": "Selectionner",
+    "EN": "Select"
+  },
+  "button.cancel": {
+    "FR": "Annuler",
+    "EN": "Cancel"
+  },
+  "input.name": {
+    "FR": "Nom",
+    "EN": "Name"
+  },
+  "input.portions": {
+    "FR": "Portions",
+    "EN": "Portions"
+  },
+  "input.date": {
+    "FR": "Date",
+    "EN": "Date"
+  },
+  "input.amount": {
+    "FR": "Montant",
+    "EN": "Amount"
+  },
+  "input.category": {
+    "FR": "Catégorie",
+    "EN": "Category"
+  },
+  "input.count": {
+    "FR": "Quantité",
+    "EN": "Quantity"
+  },
+  "input.unit": {
+    "FR": "Unité",
+    "EN": "Unit"
+  },
+  "text.by": {
+    "FR": "Par",
+    "EN": "By"
+  },
+  "text.for": {
+    "FR": "Pour",
+    "EN": "For"
+  },
+  "snack.balance_summary_uptodate": {
+    "severity": "info",
+    "FR": "Balance à jour",
+    "EN": "Balance up to date"
+  },
+  "snack.saving": {
+    "severity": "info",
+    "FR": "Sauvergarde en cours",
+    "EN": "Saving in progress"
+  },
+  "snack.categoryclosed": {
+    "severity": "info",
+    "FR": "Catégorie fermée",
+    "EN": "Category closed"
+  },
+  "snack.categorysaved": {
+    "severity": "success",
+    "FR": "Catégorie enregistrée",
+    "EN": "Category saved"
+  },
+  "snack.categoryduplicated": {
+    "severity": "warning",
+    "FR": "Catégorie existante",
+    "EN": "Existing category"
+  },
+  "snack.transactionsaved": {
+    "severity": "success",
+    "FR": "Transaction enregistrée",
+    "EN": "Transaction saved"
+  },
+  "snack.transactionduplicated": {
+    "severity": "success",
+    "FR": "Transaction existante",
+    "EN": "Existing transaction"
+  },
+  "snack.transactionmodified": {
+    "severity": "success",
+    "FR": "Transaction modifiée",
+    "EN": "Transaction edited"
+  },
+  "snack.errornetwork": {
+    "severity": "warning",
+    "FR": "Problème réseau",
+    "EN": "Network issue"
+  },
+  "snack.error": {
+    "severity": "warning",
+    "FR": "Erreur :",
+    "EN": "Error :"
+  }
+}
