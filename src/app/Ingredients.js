@@ -1,8 +1,6 @@
 import * as React from "react";
 import {
   Button,
-  TextField,
-  Box,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,10 +13,6 @@ import {
 
 import appcopy from "./copy";
 import Snack from "./Snack";
-import { getIngredients } from "./api/ingredients";
-
-var ingredientList = [];
-export { ingredientList };
 
 export default class Ingredients extends React.Component {
   constructor(props) {
@@ -30,11 +24,8 @@ export default class Ingredients extends React.Component {
       console.log("Ingredients language = " + this.props.language);
     }
     this.state = {
-      open: false,
-      ingredients: ingredientList
+      open: false
     };
-    // Updates
-    this.updateIngredients = this.updateIngredients.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
@@ -59,7 +50,7 @@ export default class Ingredients extends React.Component {
           </DialogTitle>
           <DialogContent></DialogContent>
           <List dense={true}>
-            {this.state.ingredients.map((ingredient) => (
+            {this.props.values.map((ingredient) => (
               <ListItem key={`${ingredient._id}`} id={`${ingredient._id}`}>
                 <ListItemButton
                   onClick={() => {
@@ -99,36 +90,14 @@ export default class Ingredients extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredients.componentDidMount");
     }
-    // Update
-    this.updateIngredients();
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Ingredients.componentDidUpdate");
     }
-    if (prevState.open !== this.props.open) {
+    if (prevState.open !== this.props.open && this.props.open) {
       // Update
-      this.updateIngredients();
     }
-  }
-
-  // Updates
-  updateIngredients() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredients.updateIngredients");
-    }
-    loadIngredients().then((outcome) => {
-      console.log(outcome);
-      if (outcome.status === "loaded") {
-        this.setState({
-          ingredients: outcome.res
-        });
-      } else {
-        this.setState((prevState, props) => ({
-          snack: appcopy["generic"]["snack"]["errornetwork"]
-        }));
-      }
-    });
   }
 
   // Handles
@@ -136,28 +105,19 @@ export default class Ingredients extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredients.handleClose");
     }
-    this.setState((prevState, props) => ({
-      Ingredients: ""
-    }));
     this.props.onclose(undefined);
   }
   handleOpenIngredient(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredients.handleOpenIngredient " + id);
     }
-    this.setState({
-      recipeID: id,
-      recipeOpen: true
-    });
+    this.setState({});
   }
   handleCloseIngredient() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredients.handleCloseIngredient");
     }
-    this.setState({
-      recipeID: "",
-      recipeOpen: false
-    });
+    this.setState({});
   }
   handleSaveIngredient() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -173,18 +133,4 @@ export default class Ingredients extends React.Component {
       snackOpen: false
     }));
   }
-}
-
-export async function loadIngredients() {
-  if (process.env.REACT_APP_DEBUG === "TRUE") {
-    console.log("Ingredients.loadIngredients");
-  }
-  getIngredients().then((res) => {
-    if (res !== undefined) {
-      return { status: "success", res: res };
-    } else {
-      // Snack
-      return { status: "error", res: [] };
-    }
-  });
 }

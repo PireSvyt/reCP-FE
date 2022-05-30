@@ -34,5 +34,7 @@ console.log(
 
 console.log(process.env);
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App language={SELECTED_LANGUAGE} />, rootElement);
+ReactDOM.render(
+  <App language={SELECTED_LANGUAGE} />,
+  document.getElementById("root")
+);

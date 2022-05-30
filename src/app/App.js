@@ -5,11 +5,16 @@ import BookIcon from "@mui/icons-material/Book";
 
 import appcopy from "./copy";
 
+// UIs
 import AppMenu from "./AppMenu";
 import Ingredients from "./Ingredients";
 import Balance from "./balance/Balance";
 import Myrecipies from "./Myrecipies";
-import { TrafficRounded } from "@mui/icons-material";
+import Snack from "./Snack";
+
+// APIs
+import { getIngredients } from "./api/ingredients";
+import { getRecipies } from "./api/recipies";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,24 +27,14 @@ export default class App extends React.Component {
     }
     this.state = {
       selectedTab: 0,
+      snack: undefined,
+      openSnack: null,
       openIngredients: false,
       menulist: [],
-      pages: [
-        {
-          index: 0,
-          label: appcopy["myrecipies"]["title"][this.props.language],
-          code: "myrecipies",
-          icon: BookIcon,
-          component: Myrecipies
-        },
-        {
-          index: 1,
-          label: appcopy["mybalance"]["title"][this.props.language],
-          code: "mybalance",
-          icon: BalanceIcon,
-          component: Balance
-        }
-      ]
+      apiIngredients: [],
+      apiMyrecipies: []
+      //api_Transactions: [],
+      //api_TransactionCategories: [],
     };
     // Updates
 
@@ -47,6 +42,11 @@ export default class App extends React.Component {
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenIngredients = this.handleOpenIngredients.bind(this);
     this.handleCloseIngredients = this.handleCloseIngredients.bind(this);
+    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+
+    // APIs
+    this.apiLoadIngredients = this.apiLoadIngredients.bind(this);
+    this.apiLoadMyrecipies = this.apiLoadMyrecipies.bind(this);
   }
   render() {
     return (
@@ -59,16 +59,24 @@ export default class App extends React.Component {
           language={this.props.language}
           open={this.state.openIngredients}
           onclose={this.handleCloseIngredients}
+          values={this.state.apiIngredients}
+          refreshvalues={this.apiLoadIngredients}
         />
-        {this.state.pages.map((page) => (
-          <AppTabPanel
-            value={this.state.selectedTab}
-            index={page.index}
-            key={page.code}
-          >
-            <page.component language={this.props.language} />
-          </AppTabPanel>
-        ))}
+
+        <AppTabPanel
+          value={this.state.selectedTab}
+          index={0}
+          key={"myrecipies"}
+        >
+          <Myrecipies
+            language={this.props.language}
+            values={this.state.apiMyrecipies}
+            refreshvalues={this.apiLoadMyrecipies}
+          />
+        </AppTabPanel>
+        <AppTabPanel value={this.state.selectedTab} index={1} key={"mybalance"}>
+          <Balance language={this.props.language} />
+        </AppTabPanel>
         <Paper
           sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
           elevation={3}
@@ -79,17 +87,28 @@ export default class App extends React.Component {
               onChange={this.handleChangeTab}
               variant="fullWidth"
             >
-              {this.state.pages.map((page) => (
-                <Tab
-                  icon={<page.icon />}
-                  id={"navtab-" + page.index}
-                  aria-controls={"navtabpanel-" + page.index}
-                  key={page.code}
-                />
-              ))}
+              <Tab
+                icon={<BookIcon />}
+                id={"navtab-" + 0}
+                aria-controls={"navtabpanel-" + 0}
+                key={"myrecipies"}
+              />
+              <Tab
+                icon={<BalanceIcon />}
+                id={"navtab-" + 1}
+                aria-controls={"navtabpanel-" + 1}
+                key={"mybalance"}
+              />
             </Tabs>
           </Box>
         </Paper>
+
+        <Snack
+          snackOpen={this.state.openSnack}
+          snack={this.state.snack}
+          onclose={this.handleCloseSnack}
+          language={this.props.language}
+        />
       </Box>
     );
   }
@@ -101,6 +120,8 @@ export default class App extends React.Component {
     this.setState((prevState, props) => ({
       menulist: [{ name: "INGREDIENTS", callback: this.handleOpenIngredients }]
     }));
+    this.apiLoadIngredients();
+    this.apiLoadMyrecipies();
   }
 
   // Handlers
@@ -119,6 +140,7 @@ export default class App extends React.Component {
     });
   }
   handleOpenIngredients() {
+    this.apiLoadIngredients();
     this.setState((prevState, props) => ({
       openIngredients: true
     }));
@@ -127,6 +149,47 @@ export default class App extends React.Component {
     this.setState((prevState, props) => ({
       openIngredients: false
     }));
+  }
+  handleCloseSnack() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleCloseSnack");
+    }
+    this.setState((prevState, props) => ({
+      snackOpen: false
+    }));
+  }
+  // APIs
+  apiLoadIngredients() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.apiLoadIngredients");
+    }
+    getIngredients().then((res) => {
+      if (res !== undefined) {
+        this.setState({
+          apiIngredients: res
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
+  }
+  apiLoadMyrecipies() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.apiLoadMyrecipies");
+    }
+    getRecipies().then((res) => {
+      if (res !== undefined) {
+        this.setState({
+          apiMyrecipies: res
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
   }
 }
 
