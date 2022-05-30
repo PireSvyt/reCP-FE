@@ -1,24 +1,15 @@
 import * as React from "react";
 import {
   Paper,
-  Button,
   Fab,
   Box,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
-  Divider,
-  Menu,
-  MenuItem,
-  SwipeableDrawer,
-  Toolbar
+  SwipeableDrawer
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import ListIcon from "@mui/icons-material/List";
 
 export default class AppMenu extends React.Component {
   constructor(props) {
@@ -62,7 +53,12 @@ export default class AppMenu extends React.Component {
             <List>
               {this.props.menulist.map((menuitem) => (
                 <ListItem key={menuitem.name} disablePadding>
-                  <ListItemButton onClick={menuitem.callback}>
+                  <ListItemButton
+                    onClick={() => {
+                      this.handleClose();
+                      menuitem.callback();
+                    }}
+                  >
                     <ListItemText primary={menuitem.name} />
                   </ListItemButton>
                 </ListItem>

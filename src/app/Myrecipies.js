@@ -140,7 +140,7 @@ export default class Myrecipies extends React.Component {
   // Handlers
   handleOpenRecipe(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleOpenRecipe " + id);
+      console.log("Myrecipies.handleOpenRecipe " + id);
     }
     this.setState({
       recipeID: id,
@@ -149,7 +149,7 @@ export default class Myrecipies extends React.Component {
   }
   handleCloseRecipe() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleCloseRecipe");
+      console.log("Myrecipies.handleCloseRecipe");
     }
     this.setState({
       recipeID: "",
@@ -158,13 +158,13 @@ export default class Myrecipies extends React.Component {
   }
   handleSaveRecipe() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleSaveRecipe");
+      console.log("Myrecipies.handleSaveRecipe");
     }
     this.updateRecipies();
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.handleCloseSnack");
+      console.log("Myrecipies.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
       snackOpen: false
