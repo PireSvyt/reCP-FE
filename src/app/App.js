@@ -6,8 +6,10 @@ import BookIcon from "@mui/icons-material/Book";
 import appcopy from "./copy";
 
 import AppMenu from "./AppMenu";
+import Ingredients from "./Ingredients";
 import Balance from "./balance/Balance";
 import Myrecipies from "./Myrecipies";
+import { TrafficRounded } from "@mui/icons-material";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,6 +22,8 @@ export default class App extends React.Component {
     }
     this.state = {
       selectedTab: 0,
+      openIngredients: false,
+      menulist: [],
       pages: [
         {
           index: 0,
@@ -41,11 +45,21 @@ export default class App extends React.Component {
 
     // Handles
     this.handleChangeTab = this.handleChangeTab.bind(this);
+    this.handleOpenIngredients = this.handleOpenIngredients.bind(this);
+    this.handleCloseIngredients = this.handleCloseIngredients.bind(this);
   }
   render() {
     return (
       <Box sx={{ width: "100%" }}>
-        <AppMenu language={this.props.language} />
+        <AppMenu
+          language={this.props.language}
+          menulist={this.state.menulist}
+        />
+        <Ingredients
+          language={this.props.language}
+          open={this.state.openIngredients}
+          onclose={this.handleCloseIngredients}
+        />
         {this.state.pages.map((page) => (
           <AppTabPanel
             value={this.state.selectedTab}
@@ -79,6 +93,15 @@ export default class App extends React.Component {
       </Box>
     );
   }
+  componentDidMount() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.componentDidMount");
+    }
+    // Update
+    this.setState((prevState, props) => ({
+      menulist: [{ name: "INGREDIENTS", callback: this.handleOpenIngredients }]
+    }));
+  }
 
   // Handlers
   handleChangeTab(event, newTabIndex) {
@@ -94,6 +117,16 @@ export default class App extends React.Component {
     this.setState({
       selectedTab: newTabIndex
     });
+  }
+  handleOpenIngredients() {
+    this.setState((prevState, props) => ({
+      openIngredients: true
+    }));
+  }
+  handleCloseIngredients() {
+    this.setState((prevState, props) => ({
+      openIngredients: false
+    }));
   }
 }
 

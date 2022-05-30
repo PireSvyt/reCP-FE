@@ -178,6 +178,12 @@
       }
     }
   },
+  "ingredients": {
+    "title": {
+      "FR": "Ingrédients",
+      "EN": "Ingredients"
+    }
+  },
   "generic": {
     "button": {
       "add": {
@@ -203,6 +209,10 @@
       "cancel": {
         "FR": "Annuler",
         "EN": "Cancel"
+      },
+      "close": {
+        "FR": "Fermer",
+        "EN": "Close"
       }
     },
     "input": {

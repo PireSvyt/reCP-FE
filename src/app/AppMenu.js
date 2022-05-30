@@ -60,14 +60,13 @@ export default class AppMenu extends React.Component {
         >
           <Paper>
             <List>
-              <ListItem key={"ingredients"} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"Ingredients"} />
-                </ListItemButton>
-              </ListItem>
+              {this.props.menulist.map((menuitem) => (
+                <ListItem key={menuitem.name} disablePadding>
+                  <ListItemButton onClick={menuitem.callback}>
+                    <ListItemText primary={menuitem.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </Paper>
         </SwipeableDrawer>
