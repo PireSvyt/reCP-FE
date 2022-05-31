@@ -10,7 +10,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "./copy";
-import { getRecipies } from "./api/recipies";
 import Recipe from "./Recipe";
 import Snack from "./Snack";
 
@@ -27,12 +26,10 @@ export default class Myrecipies extends React.Component {
       recipiesHeight: 300,
       recipeID: "",
       recipeOpen: false,
-      recipies: [],
       snack: undefined
     };
     // Updates
     this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
-    this.updateRecipies = this.updateRecipies.bind(this);
     // Handles
     this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
     this.handleCloseRecipe = this.handleCloseRecipe.bind(this);
@@ -65,7 +62,7 @@ export default class Myrecipies extends React.Component {
           style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}
         >
           <List dense={true}>
-            {this.state.recipies.map((value) => (
+            {this.props.values.map((value) => (
               <ListItem key={`${value._id}`} id={`${value._id}`}>
                 <ListItemButton
                   onClick={() => {
@@ -107,7 +104,6 @@ export default class Myrecipies extends React.Component {
     }
     // Update
     this.updateRecipiesHeight();
-    this.updateRecipies();
   }
 
   // Updates
@@ -117,23 +113,6 @@ export default class Myrecipies extends React.Component {
     }
     this.setState({
       recipiesHeight: window.innerHeight - 180
-    });
-  }
-  updateRecipies() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Myrecipies.updateSummary");
-    }
-    getRecipies().then((res) => {
-      if (res !== undefined) {
-        this.setState({
-          recipies: res
-        });
-      } else {
-        // Snack
-        this.setState((prevState, props) => ({
-          snack: appcopy["generic"]["snack"]["errornetwork"]
-        }));
-      }
     });
   }
 
@@ -160,7 +139,7 @@ export default class Myrecipies extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Myrecipies.handleSaveRecipe");
     }
-    this.updateRecipies();
+    this.props.refreshvalues();
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
