@@ -53,7 +53,7 @@ export default class Transaction extends React.Component {
       transactionDate: Date(),
       options: [],
       transaction: { ...emptyTransaction },
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Handles
@@ -289,7 +289,7 @@ export default class Transaction extends React.Component {
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
           language={this.props.language}
@@ -522,7 +522,7 @@ export default class Transaction extends React.Component {
       snack.message =
         appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
-        snackOpen: true,
+        openSnack: true,
         snack: snack
       }));
     }
@@ -539,7 +539,7 @@ export default class Transaction extends React.Component {
       console.log("Transaction.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

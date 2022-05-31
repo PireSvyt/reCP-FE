@@ -38,7 +38,7 @@ export default class Balance extends React.Component {
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
       transactions: [],
       transactionCategoryOpen: false,
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Updates
@@ -232,7 +232,7 @@ export default class Balance extends React.Component {
         />
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
           language={this.props.language}
@@ -318,7 +318,7 @@ export default class Balance extends React.Component {
     this.setState({
       transactionID: "",
       transactionOpen: false,
-      snackOpen: true,
+      openSnack: true,
       snack: snack
     });
   }
@@ -342,7 +342,7 @@ export default class Balance extends React.Component {
     }
     this.setState({
       transactionCategoryOpen: false,
-      snackOpen: true,
+      openSnack: true,
       snack: snack
     });
   }
@@ -357,7 +357,7 @@ export default class Balance extends React.Component {
       console.log("Balance.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

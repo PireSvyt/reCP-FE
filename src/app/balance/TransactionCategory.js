@@ -24,7 +24,7 @@ export default class TransactionCategory extends React.Component {
     }
     this.state = {
       transactionCategory: "",
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Handles
@@ -80,7 +80,7 @@ export default class TransactionCategory extends React.Component {
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
           language={this.props.language}
@@ -185,7 +185,7 @@ export default class TransactionCategory extends React.Component {
       snack.message =
         appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
-        snackOpen: true,
+        openSnack: true,
         snack: snack
       }));
     }
@@ -195,7 +195,7 @@ export default class TransactionCategory extends React.Component {
       console.log("TransactionCategory.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

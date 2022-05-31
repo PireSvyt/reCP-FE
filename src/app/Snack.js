@@ -7,13 +7,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 /*
-
 SEVERITY
 error
 warning
 info
 success
-
 */
 
 function getDymmySnack() {
@@ -36,7 +34,6 @@ export default class Snack extends React.Component {
       console.log("Snack language = " + this.props.language);
     }
     this.state = {
-      snackOpen: this.props.snackOpen,
       snack: getDymmySnack()
     };
     // Handles
@@ -48,7 +45,7 @@ export default class Snack extends React.Component {
     }
     return (
       <Snackbar
-        open={this.props.snackOpen}
+        open={this.props.open}
         autoHideDuration={this.state.snack.duration}
         onClose={this.handleClose}
       >

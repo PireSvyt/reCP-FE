@@ -26,14 +26,12 @@ export default class Myrecipies extends React.Component {
       recipiesHeight: 300,
       recipeID: "",
       recipeOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Updates
     this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
     // Handles
-    this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
-    this.handleCloseRecipe = this.handleCloseRecipe.bind(this);
-    this.handleSaveRecipe = this.handleSaveRecipe.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
@@ -53,7 +51,7 @@ export default class Myrecipies extends React.Component {
               if (process.env.REACT_APP_DEBUG === "TRUE") {
                 console.log("Myrecipies.AddIcon.onClick");
               }
-              this.handleOpenRecipe("");
+              this.props.openrecipe("");
             }}
           />
         </Fab>
@@ -69,7 +67,7 @@ export default class Myrecipies extends React.Component {
                     if (process.env.REACT_APP_DEBUG === "TRUE") {
                       console.log("Myrecipies.recipies.onClick " + value._id);
                     }
-                    this.handleOpenRecipe(value._id);
+                    this.props.openrecipe(value._id);
                   }}
                 >
                   <ListItemText
@@ -81,16 +79,9 @@ export default class Myrecipies extends React.Component {
             ))}
           </List>
         </Paper>
-        <Recipe
-          recipeID={this.state.recipeID}
-          recipeOpen={this.state.recipeOpen}
-          onsave={() => {} /*this.handleSaveRecipe*/}
-          onclose={this.handleCloseRecipe}
-          language={this.props.language}
-        />
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
           language={this.props.language}
@@ -117,36 +108,12 @@ export default class Myrecipies extends React.Component {
   }
 
   // Handlers
-  handleOpenRecipe(id) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Myrecipies.handleOpenRecipe " + id);
-    }
-    this.setState({
-      recipeID: id,
-      recipeOpen: true
-    });
-  }
-  handleCloseRecipe() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Myrecipies.handleCloseRecipe");
-    }
-    this.setState({
-      recipeID: "",
-      recipeOpen: false
-    });
-  }
-  handleSaveRecipe() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Myrecipies.handleSaveRecipe");
-    }
-    this.props.refreshvalues();
-  }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Myrecipies.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

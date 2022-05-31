@@ -15,22 +15,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import appcopy from "./copy";
 import { random_id } from "./toolkit";
-import { getRecipe, createRecipe, modifyRecipe } from "./api/recipies";
+import { createRecipe, modifyRecipe } from "./api/recipies";
 import { createIngredient } from "./api/ingredients";
 import Snack from "./Snack";
 
-let emptyRecipe = {
-  _id: "",
-  name: undefined,
-  portions: undefined,
-  ingredients: [],
-  instructions: [],
-  scale: 1,
-  state: {
-    selected: false,
-    cooked: false
-  }
-};
 function getEmptyIngredient() {
   return {
     uid: random_id(),
@@ -55,9 +43,7 @@ export default class Recipe extends React.Component {
       console.log("Recipe language = " + this.props.language);
     }
     this.state = {
-      recipeOpen: this.props.recipeOpen,
-      recipe: { ...emptyRecipe },
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Handles
@@ -71,16 +57,13 @@ export default class Recipe extends React.Component {
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.render");
-      console.log("Recipe.props.recipeID");
-      console.log(this.props.recipeID);
-      console.log("Recipe.state.recipe");
-      console.log(this.state.recipe);
+      console.log(this.props.values);
     }
     return (
       <div>
         <Dialog
           id="dialog_recipe"
-          open={this.state.recipeOpen}
+          open={this.props.open}
           onClose={this.handleClose}
           fullWidth={true}
         >
@@ -99,7 +82,7 @@ export default class Recipe extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                defaultValue={this.state.recipe.name}
+                defaultValue={this.props.values.name}
                 onChange={this.handleChange}
               />
 
@@ -109,7 +92,7 @@ export default class Recipe extends React.Component {
                   appcopy["generic"]["input"]["portions"][this.props.language]
                 }
                 variant="standard"
-                defaultValue={this.state.recipe.portions}
+                defaultValue={this.props.values.portions}
                 onChange={this.handleChange}
               />
 
@@ -121,7 +104,7 @@ export default class Recipe extends React.Component {
                 }
               </h3>
               <List dense={true} name="recipe-ingredientlist">
-                {this.state.recipe.ingredients.map((ingredient) => (
+                {this.props.values.ingredients.map((ingredient) => (
                   <Ingredient
                     key={ingredient.uid}
                     ingredient={ingredient}
@@ -154,7 +137,7 @@ export default class Recipe extends React.Component {
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
           language={this.props.language}
@@ -164,40 +147,16 @@ export default class Recipe extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.componentDidUpdate");
-      console.log("Recipe.state");
-      console.log(this.state);
+      //console.log("Recipe.componentDidUpdate");
     }
-    if (
-      prevState.recipeOpen !== this.props.recipeOpen ||
-      prevState.recipeID !== this.props.recipeID
-    ) {
-      if (this.props.recipeID !== "") {
-        // Load
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log(
-            "Recipe.componentDidUpdate.getRecipe " + this.props.recipeID
-          );
-        }
-        getRecipe(this.props.recipeID).then((res) => {
-          res.ingredients.forEach((ingredient) => {
-            ingredient.uid = random_id();
-            ingredient.nextable = false;
-            ingredient.name = undefined;
-            ingredient.unit = undefined;
-          });
-          res.ingredients.push(getEmptyIngredient());
-          this.setState((prevState, props) => ({
-            recipe: res,
-            recipeOpen: this.props.recipeOpen
-          }));
-        });
-      } else {
-        this.setState((prevState, props) => ({
-          recipeOpen: this.props.recipeOpen,
-          recipe: { ...emptyRecipe }
-        }));
-      }
+    if (prevState.open !== this.props.open) {
+      this.props.values.ingredients.forEach((ingredient) => {
+        ingredient.uid = random_id();
+        ingredient.nextable = false;
+        ingredient.name = undefined;
+        ingredient.unit = undefined;
+      });
+      //this.props.values.ingredients.push(getEmptyIngredient());
     }
   }
 
@@ -206,9 +165,6 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleClose");
     }
-    this.setState({
-      recipe: { ...emptyRecipe }
-    });
     this.props.onclose();
   }
   handleChange(event) {
@@ -219,7 +175,7 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(target);
     }
-    var previousRecipe = this.state.recipe;
+    var previousRecipe = this.props.values;
     switch (target.name) {
       case "name":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -241,11 +197,9 @@ export default class Recipe extends React.Component {
     // Update
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.recipe");
-      console.log(this.state.recipe);
+      console.log(this.props.values);
     }
-    this.setState({
-      recipe: previousRecipe
-    });
+    this.props.onchange(previousRecipe);
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -254,11 +208,11 @@ export default class Recipe extends React.Component {
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.recipe.name === undefined) {
+    if (this.props.values.name === undefined) {
       save = false;
       errors.push("Nom vide");
     }
-    if (this.state.recipe.portions === undefined) {
+    if (this.props.values.portions === undefined) {
       save = false;
       errors.push("Portions vide");
     }
@@ -271,7 +225,7 @@ export default class Recipe extends React.Component {
     // Post or publish
     if (save === true) {
       // Polish
-      let recipe = this.state.recipe;
+      let recipe = this.props.values;
       recipe.ingredients.forEach((ingredient) => {
         // Remove ingredient if not complete
         if (
@@ -311,16 +265,15 @@ export default class Recipe extends React.Component {
         delete ingredient["unit"];
       });
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.recipeID);
-        console.log(this.state.recipe);
+        console.log(this.props.values);
       }
-      if (this.props.recipeID === "") {
+      if (this.props.values._id === "") {
         // POST
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("POST");
         }
         //if (process.env.REACT_APP_DEBUG === "FALSE") {
-        createRecipe(recipe).then((res) => {
+        createRecipe(this.props.values).then((res) => {
           //this.props.onsave();
           if (res !== undefined) {
             if (res.message === "recette enregistrée") {
@@ -341,7 +294,7 @@ export default class Recipe extends React.Component {
           console.log("PUT");
         }
         //if (process.env.REACT_APP_DEBUG === "FALSE") {
-        modifyRecipe(this.props.recipeID, recipe).then((res) => {
+        modifyRecipe(this.props.values._id, this.props.values).then((res) => {
           //this.props.onsave();
           if (res !== undefined) {
             if (res.message === "recette modifiée") {
@@ -363,7 +316,7 @@ export default class Recipe extends React.Component {
       snack.message =
         appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
-        snackOpen: true,
+        openSnack: true,
         snack: snack
       }));
     }
@@ -372,14 +325,12 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleIngredientDelete " + uid);
     }
-    let ingredients = this.state.recipe.ingredients.filter(
+    let ingredients = this.props.values.ingredients.filter(
       (ingredient) => ingredient.uid !== uid
     );
-    let recipe = this.state.recipe;
+    let recipe = this.props.values;
     recipe.ingredients = ingredients;
-    this.setState({
-      recipe: recipe
-    });
+    this.props.onchange(recipe);
   }
   handleIngredientChange(newIngredientValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -387,7 +338,7 @@ export default class Recipe extends React.Component {
       console.log("newIngredientValue");
       console.log(newIngredientValue);
     }
-    let currentIngredients = this.state.recipe.ingredients;
+    let currentIngredients = this.props.values.ingredients;
     // Nextable management
     if (newIngredientValue.nextable === true) {
       newIngredientValue.nextable = false;
@@ -397,16 +348,16 @@ export default class Recipe extends React.Component {
     }
     // Update
     currentIngredients[newIngredientValue.uid] = newIngredientValue;
-    this.setState({
-      ingredients: currentIngredients
-    });
+    let recipe = this.props.values;
+    recipe.ingredients = currentIngredients;
+    this.props.onchange(recipe);
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }
