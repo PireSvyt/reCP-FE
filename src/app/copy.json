@@ -37,6 +37,16 @@
         "EN": "Instructions"
       }
     },
+    "specific": {
+      "deletionconfirmtitle": {
+        "FR": "Suppression de recette",
+        "EN": "Recipe deletion"
+      },
+      "deletionconfirmtext": {
+        "FR": "Ah, on en a plus besoin de cette recette ?",
+        "EN": "Hum, don't we still need it?"
+      }
+    },
     "snack": {
       "saved": {
         "severity": "success",
@@ -220,6 +230,10 @@
       "select": {
         "FR": "Selectionner",
         "EN": "Select"
+      },
+      "confirm": {
+        "FR": "Je confirme",
+        "EN": "I confirm"
       },
       "cancel": {
         "FR": "Annuler",

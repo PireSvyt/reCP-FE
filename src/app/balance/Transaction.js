@@ -144,6 +144,7 @@ export default class Transaction extends React.Component {
                   )
                 }}
                 autoComplete="off"
+                type="number"
               />
 
               <RadioGroup
