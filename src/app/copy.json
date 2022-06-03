@@ -40,18 +40,33 @@
     "snack": {
       "saved": {
         "severity": "success",
-        "FR": "Ingrédient enregistré",
-        "EN": "Ingredient saved"
+        "FR": "Recette enregistrée",
+        "EN": "Recipe saved"
       },
       "erroroncreation": {
         "severity": "success",
-        "FR": "Ingrédient non créé",
-        "EN": "Ingredient not created"
+        "FR": "Recette non créée",
+        "EN": "Recipe not created"
       },
       "edited": {
         "severity": "success",
-        "FR": "Ingrédient modifié",
-        "EN": "Ingredient edited"
+        "FR": "Recette modifié",
+        "EN": "Recipe edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Recette supprimée",
+        "EN": "Recipe deleted"
+      },
+      "206 - inconsistency on load": {
+        "severity": "error",
+        "FR": "Inconsistances dans les ingrédients",
+        "EN": "Inconsistencies within ingredients"
+      },
+      "406 - issue on new ingredient save": {
+        "severity": "error",
+        "FR": "Impossible de sauver les ingrédients",
+        "EN": "Ingredients could not be saved"
       }
     }
   },
@@ -213,6 +228,14 @@
       "close": {
         "FR": "Fermer",
         "EN": "Close"
+      },
+      "view": {
+        "FR": "Voir",
+        "EN": "View"
+      },
+      "edit": {
+        "FR": "Modifer",
+        "EN": "Edit"
       }
     },
     "input": {
@@ -260,6 +283,11 @@
         "severity": "error",
         "FR": "Erreur : Problème réseau",
         "EN": "Error : Network issue"
+      },
+      "errorunknown": {
+        "severity": "error",
+        "FR": "Erreur inconnue :/",
+        "EN": "Unknown error :/"
       },
       "error": {
         "severity": "error",

@@ -4,7 +4,6 @@ import BalanceIcon from "@mui/icons-material/Balance";
 import BookIcon from "@mui/icons-material/Book";
 
 import appcopy from "./copy";
-import { random_id } from "./toolkit";
 
 // UIs
 import AppMenu from "./AppMenu";
@@ -15,9 +14,7 @@ import Recipe from "./Recipe";
 import Snack from "./Snack";
 
 // APIs
-import { getIngredients } from "./api/ingredients";
-import { getRecipies, getRecipe } from "./api/recipies";
-import { TrendingUpTwoTone } from "@mui/icons-material";
+import { apiGetIngredients, apiGetRecipies } from "./api/gets";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -36,8 +33,7 @@ export default class App extends React.Component {
       openRecipe: false,
       menulist: [],
       apiIngredients: [],
-      apiMyrecipies: [],
-      apiRecipe: getEmptyComponent("recipe")
+      apiMyrecipies: []
       //api_Transactions: [],
       //api_TransactionCategories: [],
     };
@@ -48,14 +44,12 @@ export default class App extends React.Component {
     this.handleOpenIngredients = this.handleOpenIngredients.bind(this);
     this.handleCloseIngredients = this.handleCloseIngredients.bind(this);
     this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
-    this.handleChangeRecipe = this.handleChangeRecipe.bind(this);
     this.handleCloseRecipe = this.handleCloseRecipe.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
 
     // APIs
     this.apiLoadIngredients = this.apiLoadIngredients.bind(this);
     this.apiLoadMyrecipies = this.apiLoadMyrecipies.bind(this);
-    this.apiLoadRecipe = this.apiLoadRecipe.bind(this);
   }
   render() {
     return (
@@ -74,11 +68,9 @@ export default class App extends React.Component {
         <Recipe
           language={this.props.language}
           open={this.state.openRecipe}
-          onchange={this.handleChangeRecipe}
-          onsave={() => {} /*this.handleSaveRecipe*/}
+          recipeid={this.state.recipeid}
           onclose={this.handleCloseRecipe}
-          values={this.state.apiRecipe}
-          refreshvalues={this.apiLoadRecipe}
+          onsedit={this.apiLoadMyrecipies}
         />
 
         <AppTabPanel
@@ -170,20 +162,18 @@ export default class App extends React.Component {
     }));
   }
   handleOpenRecipe(id) {
-    this.apiLoadRecipe(id);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleOpenRecipe " + id);
+    }
     this.setState((prevState, props) => ({
-      openRecipe: true
+      openRecipe: true,
+      recipeid: id
     }));
   }
-  handleChangeRecipe(newRecipe) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleChangeRecipe");
-    }
-    this.setState({
-      apiRecipe: newRecipe
-    });
-  }
   handleCloseRecipe() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleCloseRecipe");
+    }
     this.setState((prevState, props) => ({
       openRecipe: false
     }));
@@ -202,10 +192,12 @@ export default class App extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("App.apiLoadIngredients");
     }
-    getIngredients().then((res) => {
-      if (res !== undefined) {
+    apiGetIngredients({
+      need: "ingredients"
+    }).then((res) => {
+      if (res.status === 200) {
         this.setState({
-          apiIngredients: res
+          apiIngredients: res.ingredients
         });
       } else {
         this.setState((prevState, props) => ({
@@ -220,32 +212,16 @@ export default class App extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("App.apiLoadMyrecipies");
     }
-    getRecipies().then((res) => {
-      if (res !== undefined) {
+    apiGetRecipies({
+      need: "myrecipies"
+    }).then((res) => {
+      if (res.status === 200) {
         this.setState({
-          apiMyrecipies: res
+          apiMyrecipies: res.recipies
         });
       } else {
         this.setState((prevState, props) => ({
           apiMyrecipies: [],
-          openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
-        }));
-      }
-    });
-  }
-  apiLoadRecipe(id) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiLoadRecipe");
-    }
-    getRecipe(id).then((res) => {
-      if (res !== undefined) {
-        this.setState({
-          apiRecipe: res
-        });
-      } else {
-        this.setState((prevState, props) => ({
-          apiRecipe: getEmptyComponent("recipe"),
           openSnack: true,
           snack: appcopy["generic"]["snack"]["errornetwork"]
         }));
@@ -267,32 +243,4 @@ function AppTabPanel(props) {
       {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
     </div>
   );
-}
-function getEmptyComponent(type) {
-  switch (type) {
-    case "recipe":
-      return {
-        _id: "",
-        name: undefined,
-        portions: undefined,
-        ingredients: [],
-        instructions: [],
-        scale: 1,
-        state: {
-          selected: false,
-          cooked: false
-        }
-      };
-    case "ingredient":
-      return {
-        uid: random_id(),
-        _id: "",
-        name: undefined,
-        quantity: undefined,
-        unit: undefined,
-        nextable: true
-      };
-    default:
-      return undefined;
-  }
 }

@@ -10,7 +10,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "./copy";
-import Recipe from "./Recipe";
 import Snack from "./Snack";
 
 export default class Myrecipies extends React.Component {

@@ -64,7 +64,7 @@ export default class Ingredients extends React.Component {
                 >
                   <ListItemText
                     primary={`${ingredient.name}`}
-                    secondary={`${ingredient.unit}, ${ingredient.category}, ${ingredient.shops}`}
+                    secondary={`${ingredient.unit}, ${ingredient.category}`}
                   />
                 </ListItemButton>
               </ListItem>

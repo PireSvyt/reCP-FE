@@ -32,7 +32,7 @@ console.log(
     appcopy["generic"]["snack"]["errornetwork"][SELECTED_LANGUAGE]
 );
 
-console.log(process.env);
+//console.log(process.env);
 
 ReactDOM.render(
   <App language={SELECTED_LANGUAGE} />,
