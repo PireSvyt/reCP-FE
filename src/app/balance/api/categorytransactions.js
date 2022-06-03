@@ -1,9 +1,14 @@
 const axios = require("axios");
 
+let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
+if (process.env.NODE_ENV === "development") {
+  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
+}
+
 export async function createCategoryTransaction(newCategoryTransaction) {
   try {
     const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/",
+      apiURL + "/api/categorytransaction/",
       newCategoryTransaction
     );
     return res.data;
@@ -15,9 +20,7 @@ export async function createCategoryTransaction(newCategoryTransaction) {
 
 export async function getCategoryTransaction(id) {
   try {
-    const res = await axios.get(
-      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id
-    );
+    const res = await axios.get(apiURL + "/api/categorytransaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -27,9 +30,7 @@ export async function getCategoryTransaction(id) {
 
 export async function deleteCategoryTransaction(id) {
   try {
-    const res = await axios.delete(
-      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id
-    );
+    const res = await axios.delete(apiURL + "/api/categorytransaction/" + id);
     return res.data;
   } catch (err) {
     // Handle Error Here
@@ -40,7 +41,7 @@ export async function deleteCategoryTransaction(id) {
 export async function modifyCategoryTransaction(id, newCategoryTransaction) {
   try {
     const res = await axios.put(
-      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction/" + id,
+      apiURL + "/api/categorytransaction/" + id,
       newCategoryTransaction
     );
     return res.data;
@@ -52,9 +53,7 @@ export async function modifyCategoryTransaction(id, newCategoryTransaction) {
 
 export async function getCategoryTransactions() {
   try {
-    const res = await axios.get(
-      process.env.REACT_APP_SERVER_URL + "/api/categorytransaction"
-    );
+    const res = await axios.get(apiURL + "/api/categorytransaction");
     return res.data;
   } catch (err) {
     // Handle Error Here

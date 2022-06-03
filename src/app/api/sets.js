@@ -1,10 +1,15 @@
 const axios = require("axios");
 
+let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
+if (process.env.NODE_ENV === "development") {
+  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
+}
+
 // Ingredients
 export async function apiSetIngredientSave(ingredient) {
   try {
     const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/ingredient/save",
+      apiURL + "/api/set/ingredient/save",
       ingredient
     );
     return res.data;
@@ -23,10 +28,7 @@ export async function apiSetIngredientSave(ingredient) {
 // Recipies
 export async function apiSetRecipeSave(recipe) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/save",
-      recipe
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/save", recipe);
     return res.data;
   } catch (err) {
     const res = {
@@ -41,9 +43,7 @@ export async function apiSetRecipeSave(recipe) {
 }
 export async function apiSetRecipeSelect(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/select/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/select/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -57,9 +57,7 @@ export async function apiSetRecipeSelect(id) {
 }
 export async function apiSetRecipePrepare(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/prepare/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/prepare/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -73,9 +71,7 @@ export async function apiSetRecipePrepare(id) {
 }
 export async function apiSetRecipeDelete(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/delete/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/delete/" + id);
     return res.data;
   } catch (err) {
     const res = {
