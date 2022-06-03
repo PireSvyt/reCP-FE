@@ -9,41 +9,59 @@ import {
   DialogTitle,
   List,
   ListItem,
-  IconButton
+  IconButton,
+  AppBar,
+  Toolbar,
+  Typography
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
 import appcopy from "./copy";
 import { random_id } from "./toolkit";
-import { getRecipe, createRecipe, modifyRecipe } from "./api/recipies";
-import { createIngredient } from "./api/ingredients";
 import Snack from "./Snack";
+import { apiGetRecipe } from "./api/gets";
+import { apiSetRecipeSave, apiSetRecipeDelete } from "./api/sets";
 
-let emptyRecipe = {
-  _id: "",
-  name: undefined,
-  portions: undefined,
-  ingredients: [],
-  instructions: [],
-  scale: 1,
-  state: {
-    selected: false,
-    cooked: false
+function getEmptyComponent(type) {
+  switch (type) {
+    case "recipe":
+      return {
+        _id: undefined,
+        name: undefined,
+        portions: undefined,
+        ingredients: [
+          {
+            uid: random_id(),
+            _id: "",
+            name: undefined,
+            quantity: undefined,
+            unit: undefined,
+            nextable: true
+          }
+        ],
+        instructions: [],
+        scale: 1,
+        state: {
+          selected: false,
+          cooked: false
+        }
+      };
+    case "ingredient":
+      return {
+        uid: random_id(),
+        _id: "",
+        name: undefined,
+        quantity: undefined,
+        unit: undefined,
+        nextable: true
+      };
+    default:
+      return undefined;
   }
-};
-function getEmptyIngredient() {
-  return {
-    uid: random_id(),
-    _id: "",
-    name: undefined,
-    quantity: undefined,
-    unit: undefined,
-    nextable: true
-  };
 }
-
-// NEED TO SET RECIPE AS THIS INSTEAD OF STATE
-// NEED TO REWORK COMPONENT DID MOUNT
 
 export default class Recipe extends React.Component {
   constructor(props) {
@@ -51,16 +69,19 @@ export default class Recipe extends React.Component {
       console.log("Recipe.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe language = " + this.props.language);
+    }
     this.state = {
-      recipeOpen: this.props.recipeOpen,
-      recipe: { ...emptyRecipe },
-      snackOpen: false,
+      recipe: getEmptyComponent("recipe"),
+      openSnack: false,
       snack: undefined
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleIngredientDelete = this.handleIngredientDelete.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
@@ -68,22 +89,47 @@ export default class Recipe extends React.Component {
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.render");
-      console.log("Recipe.props.recipeID");
-      console.log(this.props.recipeID);
-      console.log("Recipe.state.recipe");
-      console.log(this.state.recipe);
+      //console.log(this.state.recipe);
     }
     return (
       <div>
         <Dialog
           id="dialog_recipe"
-          open={this.state.recipeOpen}
+          open={this.props.open}
           onClose={this.handleClose}
-          fullWidth={true}
+          fullScreen
         >
-          <DialogTitle>
-            {appcopy["recipe"]["title"][process.env.REACT_APP_LANGUAGE]}
-          </DialogTitle>
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={this.handleClose}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                {appcopy["recipe"]["title"][this.props.language]}
+              </Typography>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={this.handleDelete}
+                sx={{ m: 1 }}
+              >
+                <DeleteIcon />
+              </IconButton>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={this.handleSave}
+                sx={{ m: 1 }}
+              >
+                <SaveIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
           <DialogContent>
             <Box
               sx={{
@@ -94,11 +140,7 @@ export default class Recipe extends React.Component {
             >
               <TextField
                 name="name"
-                label={
-                  appcopy["generic"]["input"]["name"][
-                    process.env.REACT_APP_LANGUAGE
-                  ]
-                }
+                label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
                 defaultValue={this.state.recipe.name}
                 onChange={this.handleChange}
@@ -107,9 +149,7 @@ export default class Recipe extends React.Component {
               <TextField
                 name="portions"
                 label={
-                  appcopy["generic"]["input"]["portions"][
-                    process.env.REACT_APP_LANGUAGE
-                  ]
+                  appcopy["generic"]["input"]["portions"][this.props.language]
                 }
                 variant="standard"
                 defaultValue={this.state.recipe.portions}
@@ -119,7 +159,7 @@ export default class Recipe extends React.Component {
               <h3>
                 {
                   appcopy["recipe"]["subsection"]["ingredients"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
               </h3>
@@ -130,6 +170,7 @@ export default class Recipe extends React.Component {
                     ingredient={ingredient}
                     onchange={this.handleIngredientChange}
                     ondelete={this.handleIngredientDelete}
+                    language={this.props.language}
                   />
                 ))}
               </List>
@@ -137,80 +178,72 @@ export default class Recipe extends React.Component {
               <h3>
                 {
                   appcopy["recipe"]["subsection"]["instructions"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
               </h3>
               <List dense={true}></List>
             </Box>
           </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this.handleClose}>
-              {
-                appcopy["generic"]["button"]["cancel"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
-            </Button>
-            <Button variant="contained" onClick={this.handleSave}>
-              {
-                appcopy["generic"]["button"]["save"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
-            </Button>
-          </DialogActions>
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
+          language={this.props.language}
         />
       </div>
     );
   }
-  componentDidMount() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.componentDidMount");
-    }
-  }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.componentDidUpdate");
-      console.log("Recipe.state");
-      console.log(this.state);
+      //console.log("Recipe.componentDidUpdate");
     }
-    if (
-      prevState.recipeOpen !== this.props.recipeOpen ||
-      prevState.recipeID !== this.props.recipeID
-    ) {
-      if (this.props.recipeID !== "") {
-        // Load
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log(
-            "Recipe.componentDidUpdate.getRecipe " + this.props.recipeID
-          );
-        }
-        getRecipe(this.props.recipeID).then((res) => {
-          res.ingredients.forEach((ingredient) => {
-            ingredient.uid = random_id();
-            ingredient.nextable = false;
-            ingredient.name = undefined;
-            ingredient.unit = undefined;
-          });
-          res.ingredients.push(getEmptyIngredient());
-          this.setState((prevState, props) => ({
-            recipe: res,
-            recipeOpen: this.props.recipeOpen
-          }));
-        });
-      } else {
+    if (prevState.open !== this.props.open && this.props.open) {
+      if (this.props.recipeid === "") {
         this.setState((prevState, props) => ({
-          recipeOpen: this.props.recipeOpen,
-          recipe: { ...emptyRecipe }
+          recipe: getEmptyComponent("recipe")
         }));
+      } else {
+        apiGetRecipe(this.props.recipeid).then((res) => {
+          switch (res.status) {
+            case 200:
+              res.recipe.ingredients.forEach((ingredient) => {
+                ingredient.uid = random_id();
+                ingredient.nextable = false;
+              });
+              res.recipe.ingredients.push(getEmptyComponent("ingredient"));
+              this.setState({
+                recipe: res.recipe
+              });
+
+              break;
+            case 206:
+              this.setState({
+                //recipe: getEmptyComponent("recipe"),
+                openSnack: true,
+                snack: appcopy["recipe"]["snack"]["206 - inconsistency on load"]
+              });
+              this.props.onclose();
+              break;
+            case 400:
+              this.setState((prevState, props) => ({
+                //recipe: getEmptyComponent("recipe"),
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              }));
+              this.props.onclose();
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                //recipe: getEmptyComponent("recipe"),
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+              this.props.onclose();
+          }
+        });
       }
     }
   }
@@ -220,9 +253,9 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleClose");
     }
-    this.setState({
-      recipe: { ...emptyRecipe }
-    });
+    this.setState((prevState, props) => ({
+      recipe: getEmptyComponent("recipe")
+    }));
     this.props.onclose();
   }
   handleChange(event) {
@@ -253,13 +286,13 @@ export default class Recipe extends React.Component {
         }
     }
     // Update
+    this.setState((prevState, props) => ({
+      recipe: previousRecipe
+    }));
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.recipe");
       console.log(this.state.recipe);
     }
-    this.setState({
-      recipe: previousRecipe
-    });
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -276,112 +309,115 @@ export default class Recipe extends React.Component {
       save = false;
       errors.push("Portions vide");
     }
-    // Ingredient checks
-
     // Save or not?
     if (errors !== []) {
       console.log(errors);
     }
     // Post or publish
     if (save === true) {
-      // Polish
-      let recipe = this.state.recipe;
-      recipe.ingredients.forEach((ingredient) => {
-        // Remove ingredient if not complete
-        if (
-          ingredient.name === undefined ||
-          ingredient.name === "" ||
-          ingredient.quantity === undefined ||
-          ingredient.quantity === "" ||
-          ingredient.unit === undefined ||
-          ingredient.unit === ""
-        ) {
-          delete recipe[ingredient];
-        }
-        // Delete UI attributes
-        delete ingredient["uid"];
-        delete ingredient["nextable"];
-        // Save ingredient if new
-        if (ingredient._id === undefined || ingredient._id === "") {
-          let newIngredient = ingredient;
-          newIngredient.category = "";
-          newIngredient.shops = [];
-          createIngredient(newIngredient).then((res) => {
-            if (res !== undefined) {
-              if (res.message === "ingredient enregistré") {
-                this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
-              } else {
-                this.props.onclose(
-                  appcopy["recipe"]["snack"]["erroroncreation"]
-                );
-              }
-            } else {
-              this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
-            }
-          });
-        }
-        // Remove
-        delete ingredient["name"];
-        delete ingredient["unit"];
+      // Check
+      const recipe = JSON.parse(JSON.stringify(this.state.recipe));
+      recipe.ingredients = recipe.ingredients.filter((ingredient) => {
+        var isConform =
+          ingredient.name !== undefined &&
+          ingredient.name !== "" &&
+          ingredient.quantity !== undefined &&
+          ingredient.quantity > 0 &&
+          ingredient.unit !== undefined &&
+          ingredient.unit !== "";
+        return isConform;
       });
+      // Polish
+      recipe.ingredients.forEach((ingredient) => {
+        if (ingredient.uid) {
+          delete ingredient.uid;
+          delete ingredient.nextable;
+        }
+      });
+
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.recipeID);
-        console.log(this.state.recipe);
+        console.log(recipe);
       }
-      if (this.props.recipeID === "") {
-        // POST
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("POST");
+      apiSetRecipeSave(recipe).then((res) => {
+        switch (res.status) {
+          case 200:
+            this.setState((prevState, props) => ({
+              recipe: getEmptyComponent("recipe"),
+              openSnack: true,
+              snack: appcopy["recipe"]["snack"]["saved"]
+            }));
+            this.props.onclose();
+            this.props.onsedit();
+            break;
+          case 201:
+            this.setState({
+              recipe: getEmptyComponent("recipe"),
+              openSnack: true,
+              snack: appcopy["recipe"]["snack"]["edited"]
+            });
+            this.props.onclose();
+            this.props.onsedit();
+            break;
+          case 406:
+            this.setState({
+              recipe: getEmptyComponent("recipe"),
+              openSnack: true,
+              snack:
+                appcopy["recipe"]["snack"]["406 - issue on new ingredient save"]
+            });
+            break;
+          case 400:
+            this.setState({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            });
+            break;
+          default:
+            this.setState((prevState, props) => ({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errorunknown"]
+            }));
         }
-        //if (process.env.REACT_APP_DEBUG === "FALSE") {
-        createRecipe(recipe).then((res) => {
-          //this.props.onsave();
-          if (res !== undefined) {
-            if (res.message === "recette enregistrée") {
-              this.props.onclose(appcopy["recipe"]["snack"]["saved"]);
-            } else {
-              this.props.onclose(appcopy["recipe"]["snack"]["erroroncreation"]);
-            }
-          } else {
-            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
-          }
-        });
-        /*} else {
-          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-        }*/
-      } else {
-        // PUT
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("PUT");
-        }
-        //if (process.env.REACT_APP_DEBUG === "FALSE") {
-        modifyRecipe(this.props.recipeID, recipe).then((res) => {
-          //this.props.onsave();
-          if (res !== undefined) {
-            if (res.message === "recette modifiée") {
-              this.props.onclose(appcopy["recipe"]["snack"]["modified"]);
-            } else {
-              this.props.onclose(appcopy["recipe"]["snack"]["erroroncreation"]);
-            }
-          } else {
-            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
-          }
-        });
-        /*} else {
-          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-        }*/
-      }
+      });
     } else {
       // Snack
       var snack = appcopy["generic"]["snack"]["error"];
       snack.message =
-        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
-        errors;
+        appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
-        snackOpen: true,
+        openSnack: true,
         snack: snack
       }));
     }
+  }
+  handleDelete() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleDelete");
+    }
+    apiSetRecipeDelete(this.props.recipeid).then((res) => {
+      switch (res.status) {
+        case 200:
+          this.setState((prevState, props) => ({
+            recipe: getEmptyComponent("recipe"),
+            openSnack: true,
+            snack: appcopy["recipe"]["snack"]["deleted"]
+          }));
+          this.props.onclose();
+          this.props.onsedit();
+          break;
+        case 400:
+          this.setState({
+            openSnack: true,
+            snack: appcopy["generic"]["snack"]["errornetwork"]
+          });
+          break;
+        default:
+          this.setState((prevState, props) => ({
+            openSnack: true,
+            snack: appcopy["generic"]["snack"]["errorunknown"]
+          }));
+      }
+    });
   }
   handleIngredientDelete(uid) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -392,9 +428,9 @@ export default class Recipe extends React.Component {
     );
     let recipe = this.state.recipe;
     recipe.ingredients = ingredients;
-    this.setState({
+    this.setState((prevState, props) => ({
       recipe: recipe
-    });
+    }));
   }
   handleIngredientChange(newIngredientValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -407,21 +443,22 @@ export default class Recipe extends React.Component {
     if (newIngredientValue.nextable === true) {
       newIngredientValue.nextable = false;
       // nextable extra one
-      let emptyIngredient = getEmptyIngredient();
-      currentIngredients.push(emptyIngredient);
+      currentIngredients.push(getEmptyComponent("ingredient"));
     }
     // Update
     currentIngredients[newIngredientValue.uid] = newIngredientValue;
-    this.setState({
-      ingredients: currentIngredients
-    });
+    let recipe = this.state.recipe;
+    recipe.ingredients = currentIngredients;
+    this.setState((prevState, props) => ({
+      recipe: recipe
+    }));
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }
@@ -464,33 +501,21 @@ class Ingredient extends React.Component {
         >
           <TextField
             name="name"
-            label={
-              appcopy["generic"]["input"]["name"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            label={appcopy["generic"]["input"]["name"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.name}
             onChange={this.handleChange}
           />
           <TextField
-            name="count"
-            label={
-              appcopy["generic"]["input"]["quantity"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            name="quantity"
+            label={appcopy["generic"]["input"]["quantity"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.quantity}
             onChange={this.handleChange}
           />
           <TextField
             name="unit"
-            label={
-              appcopy["generic"]["input"]["unit"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            label={appcopy["generic"]["input"]["unit"][this.props.language]}
             variant="standard"
             defaultValue={this.props.ingredient.unit}
             onChange={this.handleChange}
@@ -517,11 +542,17 @@ class Ingredient extends React.Component {
         }
         updatingIngredient.name = target.value;
         break;
-      case "count":
+      case "quantity":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change count : " + target.value);
+          console.log("change quantity : " + target.value);
         }
-        updatingIngredient.count = target.value;
+        updatingIngredient.quantity = Number(target.value);
+        break;
+      case "unit":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change unit : " + target.value);
+        }
+        updatingIngredient.unit = target.value;
         break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {

@@ -27,6 +27,9 @@ export default class Balance extends React.Component {
       console.log("Balance.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Balance language = " + this.props.language);
+    }
     this.state = {
       selectedTab: 0,
       tabHeight: 300,
@@ -35,7 +38,7 @@ export default class Balance extends React.Component {
       summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
       transactions: [],
       transactionCategoryOpen: false,
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Updates
@@ -63,7 +66,7 @@ export default class Balance extends React.Component {
     }
     return (
       <div>
-        <h2>{appcopy["mybalance"]["title"][process.env.REACT_APP_LANGUAGE]}</h2>
+        <h2>{appcopy["mybalance"]["title"][this.props.language]}</h2>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -74,7 +77,7 @@ export default class Balance extends React.Component {
               <Tab
                 label={
                   appcopy["mybalance"]["subsection"]["summary"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
                 id="tab-0"
@@ -83,7 +86,7 @@ export default class Balance extends React.Component {
               <Tab
                 label={
                   appcopy["mybalance"]["subsection"]["transactions"][
-                    process.env.REACT_APP_LANGUAGE
+                    this.props.language
                   ]
                 }
                 id="tab-1"
@@ -99,7 +102,7 @@ export default class Balance extends React.Component {
             <h3>
               {
                 appcopy["mybalance"]["subsection"]["balanceperuser"][
-                  process.env.REACT_APP_LANGUAGE
+                  this.props.language
                 ]
               }
             </h3>
@@ -126,7 +129,7 @@ export default class Balance extends React.Component {
             <h3>
               {
                 appcopy["mybalance"]["subsection"]["balancepercategory"][
-                  process.env.REACT_APP_LANGUAGE
+                  this.props.language
                 ]
               }
             </h3>
@@ -154,7 +157,7 @@ export default class Balance extends React.Component {
             <Button onClick={this.handleOpenTransactionCategory}>
               {
                 appcopy["mybalance"]["specific"]["newTransactionCategory"][
-                  process.env.REACT_APP_LANGUAGE
+                  this.props.language
                 ]
               }
             </Button>
@@ -201,8 +204,8 @@ export default class Balance extends React.Component {
           color="primary"
           sx={{
             position: "absolute",
-            top: 40,
-            left: window.innerWidth / 2 - 28
+            bottom: 70,
+            right: 20
           }}
         >
           <AddIcon
@@ -219,24 +222,27 @@ export default class Balance extends React.Component {
           transactionOpen={this.state.transactionOpen}
           onclose={this.handleCloseTransaction}
           balanceSnack={this.handleSnack}
+          language={this.props.language}
         />
         <TransactionCategory
           open={this.state.transactionCategoryOpen}
           onclose={this.handleCloseTransactionCategory}
           balanceSnack={this.handleSnack}
+          language={this.props.language}
         />
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
+          language={this.props.language}
         />
       </div>
     );
   }
   componentDidMount() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("Balance.componentDidMount");
+      console.log("Balance.componentDidMount");
     }
     // Update
     this.updateTabHeight();
@@ -312,7 +318,7 @@ export default class Balance extends React.Component {
     this.setState({
       transactionID: "",
       transactionOpen: false,
-      snackOpen: true,
+      openSnack: true,
       snack: snack
     });
   }
@@ -336,7 +342,7 @@ export default class Balance extends React.Component {
     }
     this.setState({
       transactionCategoryOpen: false,
-      snackOpen: true,
+      openSnack: true,
       snack: snack
     });
   }
@@ -351,7 +357,7 @@ export default class Balance extends React.Component {
       console.log("Balance.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

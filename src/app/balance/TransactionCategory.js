@@ -19,9 +19,12 @@ export default class TransactionCategory extends React.Component {
       console.log("TransactionCategory.constructor");
     }
     super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("TransactionCategory language = " + this.props.language);
+    }
     this.state = {
       transactionCategory: "",
-      snackOpen: false,
+      openSnack: false,
       snack: undefined
     };
     // Handles
@@ -45,11 +48,7 @@ export default class TransactionCategory extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {
-              appcopy["transactioncategory"]["title"][
-                process.env.REACT_APP_LANGUAGE
-              ]
-            }
+            {appcopy["transactioncategory"]["title"][this.props.language]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -61,11 +60,7 @@ export default class TransactionCategory extends React.Component {
             >
               <TextField
                 name="name"
-                label={
-                  appcopy["generic"]["input"]["name"][
-                    process.env.REACT_APP_LANGUAGE
-                  ]
-                }
+                label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
                 defaultValue={this.state.transactionCategory}
                 onChange={this.handleChange}
@@ -76,26 +71,19 @@ export default class TransactionCategory extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleClose}>
-              {
-                appcopy["generic"]["button"]["cancel"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
+              {appcopy["generic"]["button"]["cancel"][this.props.language]}
             </Button>
             <Button variant="contained" onClick={this.handleSave}>
-              {
-                appcopy["generic"]["button"]["save"][
-                  process.env.REACT_APP_LANGUAGE
-                ]
-              }
+              {appcopy["generic"]["button"]["save"][this.props.language]}
             </Button>
           </DialogActions>
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
+          open={this.state.openSnack}
           snack={this.state.snack}
           onclose={this.handleCloseSnack}
+          language={this.props.language}
         />
       </div>
     );
@@ -195,10 +183,9 @@ export default class TransactionCategory extends React.Component {
       // Snack
       var snack = appcopy["generic"]["snack"]["error"];
       snack.message =
-        appcopy["generic"]["snack"]["error"][process.env.REACT_APP_LANGUAGE] +
-        errors;
+        appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
-        snackOpen: true,
+        openSnack: true,
         snack: snack
       }));
     }
@@ -208,7 +195,7 @@ export default class TransactionCategory extends React.Component {
       console.log("TransactionCategory.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
-      snackOpen: false
+      openSnack: false
     }));
   }
 }

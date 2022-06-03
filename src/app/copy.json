@@ -5,7 +5,7 @@
       "EN": "My recipies"
     },
     "snack": {
-      "recipesaved": {
+      "saved": {
         "severity": "success",
         "FR": "Recette enregistrée",
         "EN": "Recipe saved"
@@ -15,7 +15,7 @@
         "FR": "Recette modifiée",
         "EN": "Recipe edited"
       },
-      "recipemodified": {
+      "edited": {
         "severity": "success",
         "FR": "Recette modifiée",
         "EN": "Recipe edited"
@@ -40,18 +40,33 @@
     "snack": {
       "saved": {
         "severity": "success",
-        "FR": "Ingrédient enregistré",
-        "EN": "Ingredient saved"
+        "FR": "Recette enregistrée",
+        "EN": "Recipe saved"
       },
       "erroroncreation": {
         "severity": "success",
-        "FR": "Ingrédient non créé",
-        "EN": "Ingredient not created"
+        "FR": "Recette non créée",
+        "EN": "Recipe not created"
       },
-      "modified": {
+      "edited": {
         "severity": "success",
-        "FR": "Ingrédient modifié",
-        "EN": "Ingredient edited"
+        "FR": "Recette modifié",
+        "EN": "Recipe edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Recette supprimée",
+        "EN": "Recipe deleted"
+      },
+      "206 - inconsistency on load": {
+        "severity": "error",
+        "FR": "Inconsistances dans les ingrédients",
+        "EN": "Inconsistencies within ingredients"
+      },
+      "406 - issue on new ingredient save": {
+        "severity": "error",
+        "FR": "Impossible de sauver les ingrédients",
+        "EN": "Ingredients could not be saved"
       }
     }
   },
@@ -143,6 +158,11 @@
         "FR": "Transaction enregistrée",
         "EN": "Transaction saved"
       },
+      "edited": {
+        "severity": "success",
+        "FR": "Transaction modifiée",
+        "EN": "Transaction edited"
+      },
       "erroroncreation": {
         "severity": "error",
         "FR": "Transaction non créée",
@@ -173,6 +193,12 @@
       }
     }
   },
+  "ingredients": {
+    "title": {
+      "FR": "Ingrédients",
+      "EN": "Ingredients"
+    }
+  },
   "generic": {
     "button": {
       "add": {
@@ -198,6 +224,18 @@
       "cancel": {
         "FR": "Annuler",
         "EN": "Cancel"
+      },
+      "close": {
+        "FR": "Fermer",
+        "EN": "Close"
+      },
+      "view": {
+        "FR": "Voir",
+        "EN": "View"
+      },
+      "edit": {
+        "FR": "Modifer",
+        "EN": "Edit"
       }
     },
     "input": {
@@ -245,6 +283,11 @@
         "severity": "error",
         "FR": "Erreur : Problème réseau",
         "EN": "Error : Network issue"
+      },
+      "errorunknown": {
+        "severity": "error",
+        "FR": "Erreur inconnue :/",
+        "EN": "Unknown error :/"
       },
       "error": {
         "severity": "error",
