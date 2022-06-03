@@ -12,7 +12,8 @@ export async function apiSetIngredientSave(ingredient) {
     const res = {
       status: 400,
       message: "error on apiSetIngredientSave",
-      error: err
+      error: err,
+      ingredient: ingredient
     };
     console.error(res);
     return res;
@@ -31,7 +32,8 @@ export async function apiSetRecipeSave(recipe) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeSave",
-      error: err
+      error: err,
+      recipe: recipe
     };
     console.error(res);
     return res;
