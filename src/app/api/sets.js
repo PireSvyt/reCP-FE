@@ -84,6 +84,57 @@ export async function apiSetRecipeDelete(id) {
   }
 }
 
+// Transactions
+export async function apiSetTransactionSave(transaction) {
+  try {
+    const res = await axios.post(
+      apiURL + "/api/set/transaction/save",
+      transaction
+    );
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetTransactionSave",
+      error: err,
+      transaction: transaction
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiSetTransactionDelete(id) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/transaction/delete/" + id);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetTransactionDelete",
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+
+// Categories
+export async function apiSetCategorySave(category) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/category/save", category);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetCategorySave",
+      error: err,
+      category: category
+    };
+    console.error(res);
+    return res;
+  }
+}
+
 /*
 
 
