@@ -6,12 +6,12 @@ import BookIcon from "@mui/icons-material/Book";
 import appcopy from "./copy";
 
 // UIs
-import AppMenu from "./AppMenu";
-import Ingredients from "./Ingredients";
-import Balance from "./balance/Balance";
-import Myrecipies from "./Myrecipies";
-import Recipe from "./Recipe";
-import Snack from "./Snack";
+import AppMenu from "./components/AppMenu";
+import Ingredients from "./components/Ingredients";
+import Balance from "./components/Balance";
+import Myrecipies from "./components/Myrecipies";
+import Recipe from "./components/Recipe";
+import Snack from "./components/Snack";
 
 // APIs
 import { apiGetIngredients, apiGetRecipies } from "./api/gets";
@@ -70,7 +70,7 @@ export default class App extends React.Component {
           open={this.state.openRecipe}
           recipeid={this.state.recipeid}
           onclose={this.handleCloseRecipe}
-          onsedit={this.apiLoadMyrecipies}
+          onedit={this.apiLoadMyrecipies}
         />
 
         <AppTabPanel

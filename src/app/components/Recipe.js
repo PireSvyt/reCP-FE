@@ -20,11 +20,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 
-import appcopy from "./copy";
+import appcopy from "../copy";
 import { random_id } from "./toolkit";
 import Snack from "./Snack";
-import { apiGetRecipe } from "./api/gets";
-import { apiSetRecipeSave, apiSetRecipeDelete } from "./api/sets";
+import { apiGetRecipe } from "../api/gets";
+import { apiSetRecipeSave, apiSetRecipeDelete } from "../api/sets";
 
 function getEmptyComponent(type) {
   switch (type) {
@@ -363,7 +363,7 @@ export default class Recipe extends React.Component {
               snack: appcopy["recipe"]["snack"]["saved"]
             }));
             this.props.onclose();
-            this.props.onsedit();
+            this.props.onedit();
             break;
           case 201:
             this.setState({
@@ -372,7 +372,7 @@ export default class Recipe extends React.Component {
               snack: appcopy["recipe"]["snack"]["edited"]
             });
             this.props.onclose();
-            this.props.onsedit();
+            this.props.onedit();
             break;
           case 406:
             this.setState({

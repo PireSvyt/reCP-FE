@@ -110,7 +110,7 @@
       }
     },
     "specific": {
-      "newTransactionCategory": {
+      "newcategory": {
         "FR": "Ajouter une catégorie",
         "EN": "Add a category"
       }
@@ -177,10 +177,20 @@
         "severity": "error",
         "FR": "Transaction non créée",
         "EN": "Transaction not created"
+      },
+      "404 - issue on find category": {
+        "severity": "error",
+        "FR": "Catégorie introuvable",
+        "EN": "Category not found"
+      },
+      "206 - category inconsistency": {
+        "severity": "error",
+        "FR": "Catégorie introuvable",
+        "EN": "Category not found"
       }
     }
   },
-  "transactioncategory": {
+  "category": {
     "title": {
       "FR": "Catégorie",
       "EN": "Category"
