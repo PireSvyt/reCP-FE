@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  DialogContentText,
   List,
   ListItem,
   IconButton,
@@ -19,11 +20,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 
-import appcopy from "./copy";
+import appcopy from "../copy";
 import { random_id } from "./toolkit";
 import Snack from "./Snack";
-import { apiGetRecipe } from "./api/gets";
-import { apiSetRecipeSave, apiSetRecipeDelete } from "./api/sets";
+import { apiGetRecipe } from "../api/gets";
+import { apiSetRecipeSave, apiSetRecipeDelete } from "../api/sets";
 
 function getEmptyComponent(type) {
   switch (type) {
@@ -75,7 +76,9 @@ export default class Recipe extends React.Component {
     this.state = {
       recipe: getEmptyComponent("recipe"),
       openSnack: false,
-      snack: undefined
+      snack: undefined,
+      openConfirm: false,
+      confirmContent: { title: "", text: "" }
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -85,6 +88,8 @@ export default class Recipe extends React.Component {
     this.handleIngredientDelete = this.handleIngredientDelete.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+    this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -144,6 +149,7 @@ export default class Recipe extends React.Component {
                 variant="standard"
                 defaultValue={this.state.recipe.name}
                 onChange={this.handleChange}
+                autoComplete="off"
               />
 
               <TextField
@@ -154,6 +160,8 @@ export default class Recipe extends React.Component {
                 variant="standard"
                 defaultValue={this.state.recipe.portions}
                 onChange={this.handleChange}
+                autoComplete="off"
+                type="number"
               />
 
               <h3>
@@ -186,6 +194,14 @@ export default class Recipe extends React.Component {
             </Box>
           </DialogContent>
         </Dialog>
+
+        <ConfirmModal
+          open={this.state.openConfirm}
+          content={this.state.confirmContent}
+          onclose={this.handleCloseConfirm}
+          onconfirm={this.handleConfirmDelete}
+          language={this.props.language}
+        />
 
         <Snack
           open={this.state.openSnack}
@@ -278,7 +294,7 @@ export default class Recipe extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change portions : " + target.value);
         }
-        previousRecipe.portions = target.value;
+        previousRecipe.portions = Number(target.value);
         break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -347,7 +363,7 @@ export default class Recipe extends React.Component {
               snack: appcopy["recipe"]["snack"]["saved"]
             }));
             this.props.onclose();
-            this.props.onsedit();
+            this.props.onedit();
             break;
           case 201:
             this.setState({
@@ -356,7 +372,7 @@ export default class Recipe extends React.Component {
               snack: appcopy["recipe"]["snack"]["edited"]
             });
             this.props.onclose();
-            this.props.onsedit();
+            this.props.onedit();
             break;
           case 406:
             this.setState({
@@ -394,30 +410,19 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleDelete");
     }
-    apiSetRecipeDelete(this.props.recipeid).then((res) => {
-      switch (res.status) {
-        case 200:
-          this.setState((prevState, props) => ({
-            recipe: getEmptyComponent("recipe"),
-            openSnack: true,
-            snack: appcopy["recipe"]["snack"]["deleted"]
-          }));
-          this.props.onclose();
-          this.props.onsedit();
-          break;
-        case 400:
-          this.setState({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errornetwork"]
-          });
-          break;
-        default:
-          this.setState((prevState, props) => ({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errorunknown"]
-          }));
+    this.setState((prevState, props) => ({
+      openConfirm: true,
+      confirmContent: {
+        title:
+          appcopy["recipe"]["specific"]["deletionconfirmtitle"][
+            this.props.language
+          ],
+        text:
+          appcopy["recipe"]["specific"]["deletionconfirmtext"][
+            this.props.language
+          ]
       }
-    });
+    }));
   }
   handleIngredientDelete(uid) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -460,6 +465,44 @@ export default class Recipe extends React.Component {
     this.setState((prevState, props) => ({
       openSnack: false
     }));
+  }
+  handleCloseConfirm() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleCloseConfirm");
+    }
+    this.setState((prevState, props) => ({
+      openConfirm: false
+    }));
+  }
+  handleConfirmDelete() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleConfirmDelete");
+    }
+    apiSetRecipeDelete(this.props.recipeid).then((res) => {
+      switch (res.status) {
+        case 200:
+          this.setState((prevState, props) => ({
+            openConfirm: false,
+            recipe: getEmptyComponent("recipe"),
+            openSnack: true,
+            snack: appcopy["recipe"]["snack"]["deleted"]
+          }));
+          this.props.onclose();
+          this.props.onsedit();
+          break;
+        case 400:
+          this.setState({
+            openSnack: true,
+            snack: appcopy["generic"]["snack"]["errornetwork"]
+          });
+          break;
+        default:
+          this.setState((prevState, props) => ({
+            openSnack: true,
+            snack: appcopy["generic"]["snack"]["errorunknown"]
+          }));
+      }
+    });
   }
 }
 
@@ -505,6 +548,7 @@ class Ingredient extends React.Component {
             variant="standard"
             defaultValue={this.props.ingredient.name}
             onChange={this.handleChange}
+            autoComplete="off"
           />
           <TextField
             name="quantity"
@@ -512,6 +556,8 @@ class Ingredient extends React.Component {
             variant="standard"
             defaultValue={this.props.ingredient.quantity}
             onChange={this.handleChange}
+            autoComplete="off"
+            type="number"
           />
           <TextField
             name="unit"
@@ -519,6 +565,7 @@ class Ingredient extends React.Component {
             variant="standard"
             defaultValue={this.props.ingredient.unit}
             onChange={this.handleChange}
+            autoComplete="off"
           />
         </Box>
       </ListItem>
@@ -571,5 +618,56 @@ class Ingredient extends React.Component {
       console.log("Ingredient.handleDelete " + this.props.ingredient.uid);
     }
     this.props.ondelete(this.props.ingredient.uid);
+  }
+}
+
+class ConfirmModal extends React.Component {
+  /* Inputs
+  open
+  text
+  title  
+  */
+  constructor(props) {
+    super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ConfirmModal.constructor");
+    }
+    this.handleClose = this.handleClose.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
+  }
+  render() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ConfirmModal.render");
+    }
+    return (
+      <Dialog open={this.props.open} onClose={this.handleClose}>
+        <DialogTitle>{this.props.content.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{this.props.content.text}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose}>
+            {appcopy["generic"]["button"]["cancel"][this.props.language]}
+          </Button>
+          <Button onClick={this.handleConfirm} autoFocus>
+            {appcopy["generic"]["button"]["confirm"][this.props.language]}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  // Handles
+  handleClose() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ConfirmModal.handleClose");
+    }
+    this.props.onclose();
+  }
+  handleConfirm() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ConfirmModal.handleConfirm");
+    }
+    this.props.onconfirm();
   }
 }

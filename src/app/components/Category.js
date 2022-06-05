@@ -10,20 +10,20 @@ import {
 } from "@mui/material";
 
 import appcopy from "../copy";
-import { createCategoryTransaction } from "./api/categorytransactions";
-import Snack from "../Snack";
+import { apiSetCategorySave } from "../api/sets";
+import Snack from "./Snack";
 
-export default class TransactionCategory extends React.Component {
+export default class Category extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.constructor");
+      console.log("Category.constructor");
     }
     super(props);
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory language = " + this.props.language);
+      console.log("Category language = " + this.props.language);
     }
     this.state = {
-      transactionCategory: "",
+      category: "",
       openSnack: false,
       snack: undefined
     };
@@ -35,20 +35,20 @@ export default class TransactionCategory extends React.Component {
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.render");
-      //console.log("TransactionCategory.state.transactionCategory");
-      //console.log(this.state.transactionCategory);
+      console.log("Category.render");
+      //console.log("Category.state.category");
+      //console.log(this.state.category);
     }
     return (
       <div>
         <Dialog
-          id="dialog_transactioncategory"
+          id="dialog_category"
           open={this.props.open}
           onClose={this.handleClose}
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["transactioncategory"]["title"][this.props.language]}
+            {appcopy["category"]["title"][this.props.language]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -62,7 +62,7 @@ export default class TransactionCategory extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                defaultValue={this.state.transactionCategory}
+                defaultValue={this.state.category}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
@@ -88,27 +88,22 @@ export default class TransactionCategory extends React.Component {
       </div>
     );
   }
-  componentDidUpdate(prevState) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("TransactionCategory.componentDidUpdate");
-      //console.log("TransactionCategory.state");
-      //console.log(this.state);
-    }
-  }
 
   // Handles
   handleClose() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.handleClose");
+      console.log("Category.handleClose");
     }
     this.setState((prevState, props) => ({
-      transactionCategory: ""
+      openSnack: true,
+      snack: appcopy["category"]["snack"]["discarded"],
+      category: ""
     }));
-    this.props.onclose(appcopy["transactioncategory"]["snack"]["discarded"]);
+    this.props.onclose();
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.handleChange");
+      console.log("Category.handleChange");
     }
     const target = event.target;
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -120,26 +115,23 @@ export default class TransactionCategory extends React.Component {
     }
     // Update
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.state.transactionCategory");
-      console.log(this.state.transactionCategory);
+      console.log("Category.state.category");
+      console.log(this.state.category);
     }
     this.setState((prevState, props) => ({
-      transactionCategory: target.value
+      category: target.value
     }));
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.handleSave");
-      console.log("this.state.transactionCategory");
-      console.log(this.state.transactionCategory);
+      console.log("Category.handleSave");
+      console.log("this.state.category");
+      console.log(this.state.category);
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (
-      this.state.transactionCategory === "" ||
-      this.state.transactionCategory === undefined
-    ) {
+    if (this.state.category === "" || this.state.category === undefined) {
       save = false;
       errors.push(" Nom vide");
     }
@@ -150,35 +142,45 @@ export default class TransactionCategory extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.state.transactionCategory);
+        console.log(this.state.category);
         console.log("POST");
       }
-      // POST
-      //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
-      createCategoryTransaction({
-        name: this.state.transactionCategory
+      apiSetCategorySave({
+        _id: "",
+        name: this.state.category
       }).then((res) => {
-        //this.props.onsave();
-        if (res !== undefined) {
-          if (res.message === "catégorie enregistrée") {
-            this.props.onclose(
-              appcopy["transactioncategory"]["snack"]["saved"]
-            );
-          } else {
-            this.props.onclose(
-              appcopy["transactioncategory"]["snack"]["erroroncreation"]
-            );
-          }
-        } else {
-          this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
+        switch (res.status) {
+          case 200:
+            this.setState((prevState, props) => ({
+              category: "",
+              openSnack: true,
+              snack: appcopy["category"]["snack"]["edited"]
+            }));
+            this.props.onclose();
+            this.props.onedit();
+            break;
+          case 201:
+            this.setState({
+              category: "",
+              openSnack: true,
+              snack: appcopy["category"]["snack"]["saved"]
+            });
+            this.props.onclose();
+            this.props.onedit();
+            break;
+          case 400:
+            this.setState({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            });
+            break;
+          default:
+            this.setState((prevState, props) => ({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errorunknown"]
+            }));
         }
       });
-      /*} else {
-        this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-      }*/
-      this.setState((prevState, props) => ({
-        transactionCategory: ""
-      }));
     } else {
       // Snack
       var snack = appcopy["generic"]["snack"]["error"];
@@ -192,7 +194,7 @@ export default class TransactionCategory extends React.Component {
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("TransactionCategory.handleCloseSnack");
+      console.log("Category.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
       openSnack: false

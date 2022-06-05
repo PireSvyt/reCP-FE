@@ -21,13 +21,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
 
 import appcopy from "../copy";
-import {
-  getTransaction,
-  createTransaction,
-  modifyTransaction
-} from "./api/transactions";
-import { getCategoryTransactions } from "./api/categorytransactions";
-import Snack from "../Snack";
+import { apiGetTransaction, apiGetCategories } from "../api/gets";
+import { apiSetTransactionSave } from "../api/sets";
+import Snack from "./Snack";
 
 let emptyTransaction = {
   _id: undefined,
@@ -60,22 +56,14 @@ export default class Transaction extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.hanldeOpenCategorySelector = this.hanldeOpenCategorySelector.bind(
-      this
-    );
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
-    // Preload
-    getCategoryTransactions().then((newOptions) => {
-      this.setState((prevState, props) => ({
-        options: newOptions
-      }));
-    });
+    this.apiLoadCategories = this.apiLoadCategories.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.render");
-      //console.log("Transaction.props.transactionID");
-      //console.log(this.props.transactionID);
+      //console.log("Transaction.props.transactionid");
+      //console.log(this.props.transactionid);
       //console.log("Transaction.state.transaction");
       //console.log(this.state.transaction);
     }
@@ -144,6 +132,7 @@ export default class Transaction extends React.Component {
                   )
                 }}
                 autoComplete="off"
+                type="number"
               />
 
               <RadioGroup
@@ -297,6 +286,12 @@ export default class Transaction extends React.Component {
       </div>
     );
   }
+  componentDidMount() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("Transaction.componentDidMount");
+    }
+    this.apiLoadCategories();
+  }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Transaction.componentDidUpdate");
@@ -305,28 +300,47 @@ export default class Transaction extends React.Component {
     }
     if (
       prevState.transactionOpen !== this.props.transactionOpen ||
-      prevState.transactionID !== this.props.transactionID
+      prevState.transactionid !== this.props.transactionid
     ) {
-      if (this.props.transactionID !== "") {
+      if (this.props.transactionid !== "") {
         // Load
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log(
-            "Transaction.componentDidUpdate.getTransaction " +
-              this.props.transactionID
-          );
-        }
-        getTransaction(this.props.transactionID)
-          .then((res) => {
-            this.setState((prevState, props) => ({
-              transaction: { ...res }
-            }));
-          })
-          .then(() => {
-            this.setState((prevState, props) => ({
-              transactionOpen: this.props.transactionOpen,
-              transactionDate: this.state.transaction.date
-            }));
-          });
+        apiGetTransaction(this.props.transactionid).then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                transaction: res.transaction,
+                transactionOpen: this.props.transactionOpen,
+                transactionDate: res.transaction.date
+              });
+              break;
+            case 404:
+              this.setState((prevState, props) => ({
+                transaction: emptyTransaction,
+                openSnack: true,
+                snack:
+                  appcopy["transaction"]["snack"][
+                    "404 - issue on find category"
+                  ]
+              }));
+              this.props.onclose();
+              break;
+            case 400:
+              this.setState((prevState, props) => ({
+                transaction: emptyTransaction,
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              }));
+              this.props.onclose();
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                transaction: emptyTransaction,
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+              this.props.onclose();
+          }
+        });
       } else {
         this.setState((prevState, props) => ({
           transactionOpen: this.props.transactionOpen,
@@ -343,9 +357,11 @@ export default class Transaction extends React.Component {
       console.log("Transaction.handleClose");
     }
     this.setState((prevState, props) => ({
-      transaction: { ...emptyTransaction }
+      transaction: { ...emptyTransaction },
+      openSnack: true,
+      snack: appcopy["transaction"]["snack"]["discarded"]
     }));
-    this.props.onclose(appcopy["transaction"]["snack"]["discarded"]);
+    this.props.onclose();
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -463,59 +479,49 @@ export default class Transaction extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.transactionID);
+        console.log(this.props.transactionid);
         console.log(this.state.transaction);
       }
-      if (this.props.transactionID === "") {
-        // POST
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("POST");
+      apiSetTransactionSave(this.state.transaction).then((res) => {
+        switch (res.status) {
+          case 201:
+            this.setState({
+              transaction: emptyTransaction,
+              openSnack: true,
+              snack: appcopy["transaction"]["snack"]["saved"]
+            });
+            this.props.onclose();
+            this.props.onedit();
+            break;
+          case 200:
+            this.setState((prevState, props) => ({
+              transaction: emptyTransaction,
+              openSnack: true,
+              snack: appcopy["transaction"]["snack"]["edited"]
+            }));
+            this.props.onclose();
+            this.props.onedit();
+            break;
+          case 206:
+            this.setState({
+              openSnack: true,
+              snack:
+                appcopy["transaction"]["snack"]["206 - category inconsistency"]
+            });
+            break;
+          case 400:
+            this.setState({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            });
+            break;
+          default:
+            this.setState((prevState, props) => ({
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errorunknown"]
+            }));
         }
-        //if (process.env.REACT_APP_DEBUG === "FALSE") {
-        createTransaction(this.state.transaction).then((res) => {
-          //this.props.onsave();
-          if (res !== undefined) {
-            if (res.message === "transaction enregistrée") {
-              this.props.onclose(appcopy["transaction"]["snack"]["saved"]);
-            } else {
-              this.props.onclose(
-                appcopy["transaction"]["snack"]["erroroncreation"]
-              );
-            }
-          } else {
-            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
-          }
-        });
-        /*} else {
-          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-        }*/
-      } else {
-        // PUT
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("PUT");
-        }
-        //if (process.env.REACT_APP_MOCKAPI === "FALSE") {
-        modifyTransaction(
-          this.props.transactionID,
-          this.state.transaction
-        ).then((res) => {
-          //this.props.onsave();
-          if (res !== undefined) {
-            if (res.message === "transaction modifiée") {
-              this.props.onclose(appcopy["transaction"]["snack"]["edited"]);
-            } else {
-              this.props.onclose(
-                appcopy["transaction"]["snack"]["erroroncreation"]
-              );
-            }
-          } else {
-            this.props.onclose(appcopy["generic"]["snack"]["errornetwork"]);
-          }
-        });
-        /*} else {
-          this.props.onclose(appcopy["generic"]["snack"]["mockedassaved"]);
-        }*/
-      }
+      });
     } else {
       // Snack
       var snack = appcopy["generic"]["snack"]["error"];
@@ -527,13 +533,6 @@ export default class Transaction extends React.Component {
       }));
     }
   }
-  hanldeOpenCategorySelector() {
-    getCategoryTransactions().then((newOptions) => {
-      this.setState((prevState, props) => ({
-        options: newOptions
-      }));
-    });
-  }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Transaction.handleCloseSnack");
@@ -541,5 +540,22 @@ export default class Transaction extends React.Component {
     this.setState((prevState, props) => ({
       openSnack: false
     }));
+  }
+
+  // API
+  apiLoadCategories() {
+    apiGetCategories({ need: "transactiondropdown" }).then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          options: res.categories
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          options: [],
+          openSnack: true,
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
   }
 }

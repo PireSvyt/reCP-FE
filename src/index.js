@@ -7,7 +7,10 @@ import appcopy from "./app/copy";
 console.log("NODE_ENV = '" + process.env.NODE_ENV + "'");
 console.log("REACT_APP_DEBUG = '" + process.env.REACT_APP_DEBUG + "'");
 console.log(
-  "REACT_APP_SERVER_URL = '" + process.env.REACT_APP_SERVER_URL + "'"
+  "REACT_APP_SERVER_URL_PROD = '" + process.env.REACT_APP_SERVER_URL_PROD + "'"
+);
+console.log(
+  "REACT_APP_SERVER_URL_DEV = '" + process.env.REACT_APP_SERVER_URL_DEV + "'"
 );
 console.log("REACT_APP_LANGUAGE = '" + process.env.REACT_APP_LANGUAGE + "'");
 

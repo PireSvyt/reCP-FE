@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import appcopy from "./copy";
+import appcopy from "../copy";
 import Snack from "./Snack";
 
 export default class Myrecipies extends React.Component {

@@ -11,7 +11,7 @@ import {
   ListItemButton
 } from "@mui/material";
 
-import appcopy from "./copy";
+import appcopy from "../copy";
 import Snack from "./Snack";
 
 export default class Ingredients extends React.Component {

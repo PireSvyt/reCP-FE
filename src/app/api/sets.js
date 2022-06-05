@@ -1,10 +1,15 @@
 const axios = require("axios");
 
+let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
+if (process.env.NODE_ENV === "development") {
+  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
+}
+
 // Ingredients
 export async function apiSetIngredientSave(ingredient) {
   try {
     const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/ingredient/save",
+      apiURL + "/api/set/ingredient/save",
       ingredient
     );
     return res.data;
@@ -12,7 +17,8 @@ export async function apiSetIngredientSave(ingredient) {
     const res = {
       status: 400,
       message: "error on apiSetIngredientSave",
-      error: err
+      error: err,
+      ingredient: ingredient
     };
     console.error(res);
     return res;
@@ -22,16 +28,14 @@ export async function apiSetIngredientSave(ingredient) {
 // Recipies
 export async function apiSetRecipeSave(recipe) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/save",
-      recipe
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/save", recipe);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeSave",
-      error: err
+      error: err,
+      recipe: recipe
     };
     console.error(res);
     return res;
@@ -39,9 +43,7 @@ export async function apiSetRecipeSave(recipe) {
 }
 export async function apiSetRecipeSelect(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/select/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/select/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -55,9 +57,7 @@ export async function apiSetRecipeSelect(id) {
 }
 export async function apiSetRecipePrepare(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/prepare/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/prepare/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -71,15 +71,64 @@ export async function apiSetRecipePrepare(id) {
 }
 export async function apiSetRecipeDelete(id) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/api/set/recipe/delete/" + id
-    );
+    const res = await axios.post(apiURL + "/api/set/recipe/delete/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeDelete",
       error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+
+// Transactions
+export async function apiSetTransactionSave(transaction) {
+  try {
+    const res = await axios.post(
+      apiURL + "/api/set/transaction/save",
+      transaction
+    );
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetTransactionSave",
+      error: err,
+      transaction: transaction
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiSetTransactionDelete(id) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/transaction/delete/" + id);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetTransactionDelete",
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+
+// Categories
+export async function apiSetCategorySave(category) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/category/save", category);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetCategorySave",
+      error: err,
+      category: category
     };
     console.error(res);
     return res;

@@ -15,11 +15,12 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
 import appcopy from "../copy";
-import { getTransactions } from "./api/transactions";
-import getBalance from "./api/balance";
 import Transaction from "./Transaction";
-import TransactionCategory from "./TransactionCategory";
-import Snack from "../Snack";
+import Category from "./Category";
+import { apiGetBalance, apiGetTransactions } from "../api/gets";
+import Snack from "./Snack";
+
+let emptySummary = { users: { Alice: 0, Pierre: 0 }, categories: [] };
 
 export default class Balance extends React.Component {
   constructor(props) {
@@ -33,9 +34,9 @@ export default class Balance extends React.Component {
     this.state = {
       selectedTab: 0,
       tabHeight: 300,
-      transactionID: "",
+      transactionid: "",
       transactionOpen: false,
-      summary: { users: { Alice: 0, Pierre: 0 }, categories: [] },
+      summary: emptySummary,
       transactions: [],
       transactionCategoryOpen: false,
       openSnack: false,
@@ -49,15 +50,9 @@ export default class Balance extends React.Component {
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleOpenTransaction = this.handleOpenTransaction.bind(this);
     this.handleCloseTransaction = this.handleCloseTransaction.bind(this);
-    this.handleOpenTransactionCategory = this.handleOpenTransactionCategory.bind(
-      this
-    );
-    this.handleCloseTransactionCategory = this.handleCloseTransactionCategory.bind(
-      this
-    );
-    this.handleSaveTransactionCategory = this.handleSaveTransactionCategory.bind(
-      this
-    );
+    this.handleOpenCategory = this.handleOpenCategory.bind(this);
+    this.handleCloseCategory = this.handleCloseCategory.bind(this);
+    this.handleSaveCategory = this.handleSaveCategory.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
   }
   render() {
@@ -154,9 +149,9 @@ export default class Balance extends React.Component {
                 </ListItem>
               ))}
             </List>
-            <Button onClick={this.handleOpenTransactionCategory}>
+            <Button onClick={this.handleOpenCategory}>
               {
-                appcopy["mybalance"]["specific"]["newTransactionCategory"][
+                appcopy["mybalance"]["specific"]["newcategory"][
                   this.props.language
                 ]
               }
@@ -218,15 +213,20 @@ export default class Balance extends React.Component {
           />
         </Fab>
         <Transaction
-          transactionID={this.state.transactionID}
+          transactionid={this.state.transactionid}
           transactionOpen={this.state.transactionOpen}
           onclose={this.handleCloseTransaction}
+          onedit={() => {
+            this.updateTransactions();
+            this.updateSummary();
+          }}
           balanceSnack={this.handleSnack}
           language={this.props.language}
         />
-        <TransactionCategory
+        <Category
           open={this.state.transactionCategoryOpen}
-          onclose={this.handleCloseTransactionCategory}
+          onclose={this.handleCloseCategory}
+          onedit={this.updateSummary}
           balanceSnack={this.handleSnack}
           language={this.props.language}
         />
@@ -262,10 +262,18 @@ export default class Balance extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateSummary");
     }
-    getBalance().then((res) => {
-      this.setState({
-        summary: res
-      });
+    apiGetBalance({ need: "summary" }).then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          summary: res.summary
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          summary: emptySummary,
+          openSnack: true,
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
     });
   }
   updateTransactions() {
@@ -274,10 +282,20 @@ export default class Balance extends React.Component {
     }
     //
     Moment.locale("en");
-    getTransactions().then((res) => {
-      this.setState({
-        transactions: res
-      });
+    apiGetTransactions({
+      need: "mybalance"
+    }).then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          transactions: res.transactions
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          transactions: [],
+          openSnack: [],
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
     });
   }
 
@@ -307,19 +325,17 @@ export default class Balance extends React.Component {
       console.log("Balance.handleOpenTransaction " + id);
     }
     this.setState({
-      transactionID: id,
+      transactionid: id,
       transactionOpen: true
     });
   }
-  handleCloseTransaction(snack) {
+  handleCloseTransaction() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.handleCloseTransaction");
     }
     this.setState({
-      transactionID: "",
-      transactionOpen: false,
-      openSnack: true,
-      snack: snack
+      transactionid: "",
+      transactionOpen: false
     });
   }
   handleSaveTransaction() {
@@ -328,27 +344,25 @@ export default class Balance extends React.Component {
     }
     this.updateBalance();
   }
-  handleOpenTransactionCategory() {
+  handleOpenCategory() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleOpenTransactionCategory");
+      console.log("Balance.handleOpenCategory");
     }
     this.setState({
       transactionCategoryOpen: true
     });
   }
-  handleCloseTransactionCategory(snack) {
+  handleCloseCategory() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleCloseTransactionCategory");
+      console.log("Balance.handleCloseCategory");
     }
     this.setState({
-      transactionCategoryOpen: false,
-      openSnack: true,
-      snack: snack
+      transactionCategoryOpen: false
     });
   }
-  handleSaveTransactionCategory() {
+  handleSaveCategory() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleSaveTransactionCategory");
+      console.log("Balance.handleSaveCategory");
     }
     this.updateBalance();
   }
