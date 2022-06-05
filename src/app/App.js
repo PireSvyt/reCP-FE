@@ -7,6 +7,7 @@ import appcopy from "./copy";
 
 // UIs
 import AppMenu from "./components/AppMenu";
+import Ingredient from "./components/Ingredient";
 import Ingredients from "./components/Ingredients";
 import Balance from "./components/Balance";
 import Myrecipies from "./components/Myrecipies";
@@ -29,9 +30,11 @@ export default class App extends React.Component {
       selectedTab: 0,
       snack: undefined,
       openSnack: null,
+      openIngredient: false,
       openIngredients: false,
       openRecipe: false,
       menulist: [],
+      ingredientid: undefined,
       apiIngredients: [],
       apiMyrecipies: []
       //api_Transactions: [],
@@ -41,6 +44,8 @@ export default class App extends React.Component {
 
     // Handles
     this.handleChangeTab = this.handleChangeTab.bind(this);
+    this.handleOpenIngredient = this.handleOpenIngredient.bind(this);
+    this.handleCloseIngredient = this.handleCloseIngredient.bind(this);
     this.handleOpenIngredients = this.handleOpenIngredients.bind(this);
     this.handleCloseIngredients = this.handleCloseIngredients.bind(this);
     this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
@@ -58,13 +63,21 @@ export default class App extends React.Component {
           language={this.props.language}
           menulist={this.state.menulist}
         />
+
+        <Ingredient
+          language={this.props.language}
+          open={this.state.openIngredient}
+          ingredientid={this.state.ingredientid}
+          onclose={this.handleCloseIngredient}
+        />
         <Ingredients
           language={this.props.language}
           open={this.state.openIngredients}
           onclose={this.handleCloseIngredients}
           values={this.state.apiIngredients}
-          refreshvalues={this.apiLoadIngredients}
+          openingredient={this.handleOpenIngredient}
         />
+
         <Recipe
           language={this.props.language}
           open={this.state.openRecipe}
@@ -149,6 +162,23 @@ export default class App extends React.Component {
     this.setState({
       selectedTab: newTabIndex
     });
+  }
+  handleOpenIngredient(id) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleOpenIngredient " + id);
+    }
+    this.setState((prevState, props) => ({
+      openIngredient: true,
+      ingredientid: id
+    }));
+  }
+  handleCloseIngredient() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleCloseIngredient");
+    }
+    this.setState((prevState, props) => ({
+      openIngredient: false
+    }));
   }
   handleOpenIngredients() {
     this.apiLoadIngredients();

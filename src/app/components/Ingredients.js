@@ -29,9 +29,6 @@ export default class Ingredients extends React.Component {
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
-    this.handleOpenIngredient = this.handleOpenIngredient.bind(this);
-    this.handleCloseIngredient = this.handleCloseIngredient.bind(this);
-    this.handleSaveIngredient = this.handleSaveIngredient.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -59,7 +56,7 @@ export default class Ingredients extends React.Component {
                         "Ingredients.ingredients.onClick " + ingredient._id
                       );
                     }
-                    this.handleOpenIngredient(ingredient._id);
+                    this.props.openingredient(ingredient._id);
                   }}
                 >
                   <ListItemText
@@ -106,24 +103,6 @@ export default class Ingredients extends React.Component {
       console.log("Ingredients.handleClose");
     }
     this.props.onclose(undefined);
-  }
-  handleOpenIngredient(id) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredients.handleOpenIngredient " + id);
-    }
-    this.setState({});
-  }
-  handleCloseIngredient() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredients.handleCloseIngredient");
-    }
-    this.setState({});
-  }
-  handleSaveIngredient() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredients.handleSaveIngredient");
-    }
-    this.updateIngredients();
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {

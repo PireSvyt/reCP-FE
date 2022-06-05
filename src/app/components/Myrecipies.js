@@ -59,19 +59,19 @@ export default class Myrecipies extends React.Component {
           style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}
         >
           <List dense={true}>
-            {this.props.values.map((value) => (
-              <ListItem key={`${value._id}`} id={`${value._id}`}>
+            {this.props.values.map((recipe) => (
+              <ListItem key={`${recipe._id}`} id={`${recipe._id}`}>
                 <ListItemButton
                   onClick={() => {
                     if (process.env.REACT_APP_DEBUG === "TRUE") {
-                      console.log("Myrecipies.recipies.onClick " + value._id);
+                      console.log("Myrecipies.recipies.onClick " + recipe._id);
                     }
-                    this.props.openrecipe(value._id);
+                    this.props.openrecipe(recipe._id);
                   }}
                 >
                   <ListItemText
-                    primary={`${value.name}`}
-                    secondary={`${value.portions} portions`}
+                    primary={`${recipe.name}`}
+                    secondary={`${recipe.portions} portions`}
                   />
                 </ListItemButton>
               </ListItem>

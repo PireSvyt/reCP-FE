@@ -45,7 +45,6 @@ export default class Transaction extends React.Component {
       console.log("Transaction language = " + this.props.language);
     }
     this.state = {
-      transactionOpen: this.props.transactionOpen,
       transactionDate: Date(),
       options: [],
       transaction: { ...emptyTransaction },
@@ -71,7 +70,7 @@ export default class Transaction extends React.Component {
       <div>
         <Dialog
           id="dialog_transaction"
-          open={this.state.transactionOpen}
+          open={this.props.open}
           onClose={this.handleClose}
           fullWidth={true}
         >
@@ -90,7 +89,7 @@ export default class Transaction extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                defaultValue={this.state.transaction.name}
+                value={this.state.transaction.name || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
@@ -124,7 +123,7 @@ export default class Transaction extends React.Component {
                   appcopy["generic"]["input"]["quantity"][this.props.language]
                 }
                 variant="standard"
-                defaultValue={this.state.transaction.amount}
+                value={this.state.transaction.amount || ""}
                 onChange={this.handleChange}
                 InputProps={{
                   startAdornment: (
@@ -138,7 +137,7 @@ export default class Transaction extends React.Component {
               <RadioGroup
                 name="by"
                 onChange={this.handleChange}
-                defaultValue={this.state.transaction.by}
+                value={this.state.transaction.by || ""}
                 sx={{
                   display: "flex",
                   flexDirection: "row",
@@ -226,13 +225,9 @@ export default class Transaction extends React.Component {
                 renderOption={(props, option) => (
                   <li {...props}>{option.name}</li>
                 )}
-                defaultValue={this.state.transaction.category}
+                value={this.state.transaction.category || ""}
                 onOpen={this.hanldeOpenCategorySelector}
                 onChange={(event, newValue) => {
-                  /*console.log("event.target");
-                  console.log(event.target);
-                  console.log("newValue");
-                  console.log(newValue);*/
                   event.target = {
                     name: "category",
                     value: newValue.name
@@ -245,10 +240,6 @@ export default class Transaction extends React.Component {
                     index,
                     arr
                   ) {
-                    /*console.log("value");
-                    console.log(value);
-                    console.log("value");
-                    console.log(value);*/
                     if (typeof option === "string") {
                       return value.name === option;
                     } else {
@@ -257,11 +248,9 @@ export default class Transaction extends React.Component {
                   });
                   if (shorlist.length === 1) {
                     return shorlist[0].name;
+                  } else {
+                    return "";
                   }
-                  /*console.log("option");
-                  console.log(option);
-                  console.log("shorlist");
-                  console.log(shorlist);*/
                 }}
               />
             </Box>
@@ -299,7 +288,7 @@ export default class Transaction extends React.Component {
       //console.log(this.state);
     }
     if (
-      prevState.transactionOpen !== this.props.transactionOpen ||
+      prevState.open !== this.props.open ||
       prevState.transactionid !== this.props.transactionid
     ) {
       if (this.props.transactionid !== "") {
@@ -309,7 +298,6 @@ export default class Transaction extends React.Component {
             case 200:
               this.setState({
                 transaction: res.transaction,
-                transactionOpen: this.props.transactionOpen,
                 transactionDate: res.transaction.date
               });
               break;
@@ -343,7 +331,6 @@ export default class Transaction extends React.Component {
         });
       } else {
         this.setState((prevState, props) => ({
-          transactionOpen: this.props.transactionOpen,
           transactionDate: Date(),
           transaction: { ...emptyTransaction }
         }));

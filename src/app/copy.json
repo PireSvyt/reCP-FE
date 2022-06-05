@@ -48,19 +48,24 @@
       }
     },
     "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Recette abandonnée",
+        "EN": "Recipe discarded"
+      },
       "saved": {
         "severity": "success",
         "FR": "Recette enregistrée",
         "EN": "Recipe saved"
       },
       "erroroncreation": {
-        "severity": "success",
+        "severity": "error",
         "FR": "Recette non créée",
         "EN": "Recipe not created"
       },
       "edited": {
         "severity": "success",
-        "FR": "Recette modifié",
+        "FR": "Recette modifiée",
         "EN": "Recipe edited"
       },
       "deleted": {
@@ -210,6 +215,39 @@
         "severity": "error",
         "FR": "Catégorie non créée",
         "EN": "Ccategory not created"
+      }
+    }
+  },
+  "ingredient": {
+    "title": {
+      "FR": "Ingrédient",
+      "EN": "Ingredient"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Ingrédient abandonné",
+        "EN": "Ingredient discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Ingrédient enregistré",
+        "EN": "Ingredient saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Ingrédient non créé",
+        "EN": "Ingredient not created"
+      },
+      "edited": {
+        "severity": "success",
+        "FR": "Ingrédient modifié",
+        "EN": "Ingredient edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Ingrédient supprimée",
+        "EN": "Ingredient deleted"
       }
     }
   },

@@ -10,20 +10,27 @@ import {
 } from "@mui/material";
 
 import appcopy from "../copy";
-import { apiSetCategorySave } from "../api/sets";
+import { apiGetIngredient } from "../api/gets";
+import { apiSetIngredientSave } from "../api/sets";
 import Snack from "./Snack";
 
-export default class Category extends React.Component {
+let emptyIngredient = {
+  _id: undefined,
+  name: undefined,
+  shop: []
+};
+
+export default class Ingredient extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.constructor");
+      console.log("Ingredient.constructor");
     }
     super(props);
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category language = " + this.props.language);
+      console.log("Ingredient language = " + this.props.language);
     }
     this.state = {
-      category: "",
+      ingredient: { ...emptyIngredient },
       openSnack: false,
       snack: undefined
     };
@@ -35,20 +42,18 @@ export default class Category extends React.Component {
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.render");
-      //console.log("Category.state.category");
-      //console.log(this.state.category);
+      console.log("Ingredient.render");
     }
     return (
       <div>
         <Dialog
-          id="dialog_category"
+          id="dialog_transaction"
           open={this.props.open}
           onClose={this.handleClose}
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["category"]["title"][this.props.language]}
+            {appcopy["ingredient"]["title"][this.props.language]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -62,11 +67,20 @@ export default class Category extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                value={this.state.category || ""}
+                value={this.state.ingredient.name || ""}
+                onChange={this.handleChange}
+                autoComplete="off"
+              />
+              <TextField
+                name="unit"
+                label={appcopy["generic"]["input"]["unit"][this.props.language]}
+                variant="standard"
+                value={this.state.ingredient.unit || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
             </Box>
+            TODO : shelf, season, shop
           </DialogContent>
 
           <DialogActions>
@@ -88,50 +102,109 @@ export default class Category extends React.Component {
       </div>
     );
   }
+  componentDidMount() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("Ingredient.componentDidMount");
+    }
+  }
+  componentDidUpdate(prevState) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      //console.log("Ingredient.componentDidUpdate");
+      //console.log("Ingredient.state");
+      //console.log(this.state);
+    }
+    if (
+      prevState.open !== this.props.open ||
+      prevState.ingredientid !== this.props.ingredientid
+    ) {
+      if (this.props.ingredientid !== "") {
+        // Load
+        apiGetIngredient(this.props.ingredientid).then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                ingredient: res.ingredient
+              });
+              break;
+            case 400:
+              this.setState((prevState, props) => ({
+                ingredient: emptyIngredient,
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              }));
+              this.props.onclose();
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                ingredient: emptyIngredient,
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+              this.props.onclose();
+          }
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          ingredient: { ...emptyIngredient }
+        }));
+      }
+    }
+  }
 
   // Handles
   handleClose() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.handleClose");
+      console.log("Ingredient.handleClose");
     }
     this.setState((prevState, props) => ({
+      ingredient: { ...emptyIngredient },
       openSnack: true,
-      snack: appcopy["category"]["snack"]["discarded"],
-      category: ""
+      snack: appcopy["ingredient"]["snack"]["discarded"]
     }));
     this.props.onclose();
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.handleChange");
+      console.log("Ingredient.handleChange");
     }
     const target = event.target;
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("target");
-      //console.log(target);
       console.log("target.name : " + target.name);
       console.log("target.value : " + target.value);
       console.log("newValue : " + newValue);
     }
+    var previousIngredient = this.state.ingredient;
+    switch (target.name) {
+      case "name":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change name : " + target.value);
+        }
+        previousIngredient.name = target.value;
+        break;
+      default:
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("/!\\ no match : " + target.name);
+        }
+    }
     // Update
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.state.category");
-      console.log(this.state.category);
+      console.log("Ingredient.ingredient");
+      console.log(this.state.ingredient);
     }
     this.setState((prevState, props) => ({
-      category: target.value
+      ingredient: previousIngredient
     }));
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.handleSave");
-      console.log("this.state.category");
-      console.log(this.state.category);
+      console.log("Ingredient.handleSave");
+      console.log("this.state.ingredient");
+      console.log(this.state.ingredient);
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.category === "" || this.state.category === undefined) {
+    if (this.state.ingredient.name === undefined) {
       save = false;
       errors.push(" Nom vide");
     }
@@ -142,29 +215,26 @@ export default class Category extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.state.category);
-        console.log("POST");
+        console.log(this.props.ingredientid);
+        console.log(this.state.ingredient);
       }
-      apiSetCategorySave({
-        _id: "",
-        name: this.state.category
-      }).then((res) => {
+      apiSetIngredientSave(this.state.ingredient).then((res) => {
         switch (res.status) {
-          case 200:
-            this.setState((prevState, props) => ({
-              category: "",
+          case 201:
+            this.setState({
+              ingredient: emptyIngredient,
               openSnack: true,
-              snack: appcopy["category"]["snack"]["edited"]
-            }));
+              snack: appcopy["ingredient"]["snack"]["saved"]
+            });
             this.props.onclose();
             this.props.onedit();
             break;
-          case 201:
-            this.setState({
-              category: "",
+          case 200:
+            this.setState((prevState, props) => ({
+              ingredient: emptyIngredient,
               openSnack: true,
-              snack: appcopy["category"]["snack"]["saved"]
-            });
+              snack: appcopy["ingredient"]["snack"]["edited"]
+            }));
             this.props.onclose();
             this.props.onedit();
             break;
@@ -194,7 +264,7 @@ export default class Category extends React.Component {
   }
   handleCloseSnack() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Category.handleCloseSnack");
+      console.log("Ingredient.handleCloseSnack");
     }
     this.setState((prevState, props) => ({
       openSnack: false

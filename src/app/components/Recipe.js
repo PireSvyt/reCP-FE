@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
+//import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 
 import appcopy from "../copy";
@@ -74,7 +74,9 @@ export default class Recipe extends React.Component {
       console.log("Recipe language = " + this.props.language);
     }
     this.state = {
-      recipe: getEmptyComponent("recipe"),
+      recipe: { ...getEmptyComponent("recipe") },
+      recipe_name: "",
+      recipe_portions: "",
       openSnack: false,
       snack: undefined,
       openConfirm: false,
@@ -147,7 +149,7 @@ export default class Recipe extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                defaultValue={this.state.recipe.name}
+                value={this.state.recipe_name || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
@@ -158,7 +160,7 @@ export default class Recipe extends React.Component {
                   appcopy["generic"]["input"]["portions"][this.props.language]
                 }
                 variant="standard"
-                defaultValue={this.state.recipe.portions}
+                value={this.state.recipe_portions || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
                 type="number"
@@ -231,9 +233,10 @@ export default class Recipe extends React.Component {
               });
               res.recipe.ingredients.push(getEmptyComponent("ingredient"));
               this.setState({
-                recipe: res.recipe
+                recipe: res.recipe,
+                recipe_name: res.recipe.name,
+                recipe_portions: res.recipe.portions
               });
-
               break;
             case 206:
               this.setState({
@@ -270,7 +273,9 @@ export default class Recipe extends React.Component {
       console.log("Recipe.handleClose");
     }
     this.setState((prevState, props) => ({
-      recipe: getEmptyComponent("recipe")
+      recipe: getEmptyComponent("recipe"),
+      recipe_name: undefined,
+      recipe_portions: undefined
     }));
     this.props.onclose();
   }
@@ -303,12 +308,10 @@ export default class Recipe extends React.Component {
     }
     // Update
     this.setState((prevState, props) => ({
-      recipe: previousRecipe
+      recipe: previousRecipe,
+      recipe_name: previousRecipe.name,
+      recipe_portions: previousRecipe.portions
     }));
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.recipe");
-      console.log(this.state.recipe);
-    }
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -359,6 +362,8 @@ export default class Recipe extends React.Component {
           case 200:
             this.setState((prevState, props) => ({
               recipe: getEmptyComponent("recipe"),
+              recipe_name: undefined,
+              recipe_portions: undefined,
               openSnack: true,
               snack: appcopy["recipe"]["snack"]["saved"]
             }));
@@ -368,6 +373,8 @@ export default class Recipe extends React.Component {
           case 201:
             this.setState({
               recipe: getEmptyComponent("recipe"),
+              recipe_name: undefined,
+              recipe_portions: undefined,
               openSnack: true,
               snack: appcopy["recipe"]["snack"]["edited"]
             });
@@ -546,7 +553,7 @@ class Ingredient extends React.Component {
             name="name"
             label={appcopy["generic"]["input"]["name"][this.props.language]}
             variant="standard"
-            defaultValue={this.props.ingredient.name}
+            value={this.props.ingredient.name || ""}
             onChange={this.handleChange}
             autoComplete="off"
           />
@@ -554,7 +561,7 @@ class Ingredient extends React.Component {
             name="quantity"
             label={appcopy["generic"]["input"]["quantity"][this.props.language]}
             variant="standard"
-            defaultValue={this.props.ingredient.quantity}
+            value={this.props.ingredient.quantity || ""}
             onChange={this.handleChange}
             autoComplete="off"
             type="number"
@@ -563,7 +570,7 @@ class Ingredient extends React.Component {
             name="unit"
             label={appcopy["generic"]["input"]["unit"][this.props.language]}
             variant="standard"
-            defaultValue={this.props.ingredient.unit}
+            value={this.props.ingredient.unit || ""}
             onChange={this.handleChange}
             autoComplete="off"
           />

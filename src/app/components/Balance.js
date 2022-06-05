@@ -214,7 +214,7 @@ export default class Balance extends React.Component {
         </Fab>
         <Transaction
           transactionid={this.state.transactionid}
-          transactionOpen={this.state.transactionOpen}
+          open={this.state.transactionOpen}
           onclose={this.handleCloseTransaction}
           onedit={() => {
             this.updateTransactions();
