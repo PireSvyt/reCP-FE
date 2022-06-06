@@ -10,10 +10,11 @@
 
 ### Recipe
 
-- Auto complete on ingredient name in recipe form
+- Instructions
 
 ### Ingredient
 
+- Save
 - Unit conversion
 - Auto complete on shelf
 - Season

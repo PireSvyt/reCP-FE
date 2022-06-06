@@ -181,6 +181,12 @@ export default class Ingredient extends React.Component {
         }
         previousIngredient.name = target.value;
         break;
+      case "unit":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change unit : " + target.value);
+        }
+        previousIngredient.unit = target.value;
+        break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
@@ -208,6 +214,10 @@ export default class Ingredient extends React.Component {
       save = false;
       errors.push(" Nom vide");
     }
+    if (this.state.ingredient.unit === undefined) {
+      save = false;
+      errors.push(" Unité vide");
+    }
     // Save or not?
     if (errors !== [] && process.env.REACT_APP_DEBUG === "TRUE") {
       console.log(errors);
@@ -227,7 +237,7 @@ export default class Ingredient extends React.Component {
               snack: appcopy["ingredient"]["snack"]["saved"]
             });
             this.props.onclose();
-            this.props.onedit();
+            this.props.onedit(this.state.ingredient);
             break;
           case 200:
             this.setState((prevState, props) => ({
@@ -236,7 +246,7 @@ export default class Ingredient extends React.Component {
               snack: appcopy["ingredient"]["snack"]["edited"]
             }));
             this.props.onclose();
-            this.props.onedit();
+            this.props.onedit(this.state.ingredient);
             break;
           case 400:
             this.setState({

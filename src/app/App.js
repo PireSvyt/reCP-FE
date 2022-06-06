@@ -69,6 +69,7 @@ export default class App extends React.Component {
           open={this.state.openIngredient}
           ingredientid={this.state.ingredientid}
           onclose={this.handleCloseIngredient}
+          onedit={this.apiAppendIngredients}
         />
         <Ingredients
           language={this.props.language}
@@ -84,6 +85,7 @@ export default class App extends React.Component {
           recipeid={this.state.recipeid}
           onclose={this.handleCloseRecipe}
           onedit={this.apiLoadMyrecipies}
+          addingredient={this.handleOpenIngredient}
         />
 
         <AppTabPanel
@@ -237,6 +239,16 @@ export default class App extends React.Component {
         }));
       }
     });
+  }
+  apiAppendIngredients(newIngredient) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.apiAppendIngredients");
+    }
+    var previousIngredients = this.state.apiIngredients;
+    previousIngredients.push(newIngredient);
+    this.setState((prevState, props) => ({
+      apiIngredients: previousIngredients
+    }));
   }
   apiLoadMyrecipies() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {

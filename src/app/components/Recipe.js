@@ -13,17 +13,19 @@ import {
   IconButton,
   AppBar,
   Toolbar,
-  Typography
+  Typography,
+  Autocomplete
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 //import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "../copy";
 import { random_id } from "./toolkit";
 import Snack from "./Snack";
-import { apiGetRecipe } from "../api/gets";
+import { apiGetRecipe, apiGetIngredients } from "../api/gets";
 import { apiSetRecipeSave, apiSetRecipeDelete } from "../api/sets";
 
 function getEmptyComponent(type) {
@@ -77,6 +79,7 @@ export default class Recipe extends React.Component {
       recipe: { ...getEmptyComponent("recipe") },
       recipe_name: "",
       recipe_portions: "",
+      ingredientoptions: [],
       openSnack: false,
       snack: undefined,
       openConfirm: false,
@@ -92,6 +95,8 @@ export default class Recipe extends React.Component {
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
+    // API
+    this.apiLoadIngredients = this.apiLoadIngredients.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -166,13 +171,34 @@ export default class Recipe extends React.Component {
                 type="number"
               />
 
-              <h3>
-                {
-                  appcopy["recipe"]["subsection"]["ingredients"][
-                    this.props.language
-                  ]
-                }
-              </h3>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between"
+                }}
+              >
+                <h3>
+                  {
+                    appcopy["recipe"]["subsection"]["ingredients"][
+                      this.props.language
+                    ]
+                  }
+                </h3>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={() => {
+                    if (process.env.REACT_APP_DEBUG === "TRUE") {
+                      console.log("Ingredients.AddIcon.onClick");
+                    }
+                    this.props.addingredient("");
+                  }}
+                  sx={{ m: 1 }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Box>
               <List dense={true} name="recipe-ingredientlist">
                 {this.state.recipe.ingredients.map((ingredient) => (
                   <Ingredient
@@ -181,6 +207,7 @@ export default class Recipe extends React.Component {
                     onchange={this.handleIngredientChange}
                     ondelete={this.handleIngredientDelete}
                     language={this.props.language}
+                    options={this.state.ingredientoptions}
                   />
                 ))}
               </List>
@@ -219,6 +246,7 @@ export default class Recipe extends React.Component {
       //console.log("Recipe.componentDidUpdate");
     }
     if (prevState.open !== this.props.open && this.props.open) {
+      this.apiLoadIngredients();
       if (this.props.recipeid === "") {
         this.setState((prevState, props) => ({
           recipe: getEmptyComponent("recipe")
@@ -511,6 +539,23 @@ export default class Recipe extends React.Component {
       }
     });
   }
+
+  // API
+  apiLoadIngredients() {
+    apiGetIngredients({ need: "recipeingredientoptions" }).then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          ingredientoptions: res.ingredients
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          ingredientoptions: [],
+          openSnack: true,
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
+  }
 }
 
 class Ingredient extends React.Component {
@@ -530,7 +575,7 @@ class Ingredient extends React.Component {
     return (
       <ListItem
         key={this.props.ingredient.uid}
-        secondaryAction={
+        /*secondaryAction={
           <IconButton
             edge="end"
             onClick={() => {
@@ -540,23 +585,64 @@ class Ingredient extends React.Component {
           >
             <DeleteIcon disabled={this.props.ingredient.nextable} />
           </IconButton>
-        }
+        }*/
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-evenly"
+            justifyContent: "space-between"
           }}
         >
-          <TextField
+          <Autocomplete
+            sx={{
+              width: "100%"
+            }}
+            disablePortal
+            options={this.props.options}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label={appcopy["generic"]["input"]["name"][this.props.language]}
+              />
+            )}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            value={this.props.ingredient.name}
+            onChange={(event, newValue) => {
+              event.target = {
+                name: "name",
+                value: newValue
+              };
+              this.handleChange(event, newValue);
+            }}
+            getOptionLabel={(option) => {
+              var shorlist = this.props.options.filter(function (
+                value,
+                index,
+                arr
+              ) {
+                if (typeof option === "string") {
+                  return value.name === option;
+                } else {
+                  return value.name === option.name;
+                }
+              });
+              if (shorlist.length === 1) {
+                return shorlist[0].name;
+              } else {
+                return "";
+              }
+            }}
+          />
+          {/*<TextField
             name="name"
             label={appcopy["generic"]["input"]["name"][this.props.language]}
             variant="standard"
             value={this.props.ingredient.name || ""}
             onChange={this.handleChange}
             autoComplete="off"
-          />
+          />*/}
           <TextField
             name="quantity"
             label={appcopy["generic"]["input"]["quantity"][this.props.language]}
@@ -573,7 +659,16 @@ class Ingredient extends React.Component {
             value={this.props.ingredient.unit || ""}
             onChange={this.handleChange}
             autoComplete="off"
+            disabled={true}
           />
+          <IconButton
+            onClick={() => {
+              this.handleDelete();
+            }}
+            disabled={this.props.ingredient.nextable}
+          >
+            <DeleteIcon disabled={this.props.ingredient.nextable} />
+          </IconButton>
         </Box>
       </ListItem>
     );
@@ -595,6 +690,11 @@ class Ingredient extends React.Component {
           console.log("change name : " + target.value);
         }
         updatingIngredient.name = target.value;
+        this.props.options.forEach((ingredient) => {
+          if (ingredient.name === target.value) {
+            updatingIngredient.unit = ingredient.unit;
+          }
+        });
         break;
       case "quantity":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -602,12 +702,12 @@ class Ingredient extends React.Component {
         }
         updatingIngredient.quantity = Number(target.value);
         break;
-      case "unit":
+      /*case "unit":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change unit : " + target.value);
         }
         updatingIngredient.unit = target.value;
-        break;
+        break;*/
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);

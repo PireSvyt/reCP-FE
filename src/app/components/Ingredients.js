@@ -8,8 +8,18 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemButton
+  ListItemButton,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Fab
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+//import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
@@ -40,38 +50,59 @@ export default class Ingredients extends React.Component {
           id="dialog_ingredients"
           open={this.props.open}
           onClose={this.handleClose}
-          fullWidth={true}
+          fullScreen
         >
-          <DialogTitle>
-            {appcopy["ingredients"]["title"][this.props.language]}
-          </DialogTitle>
-          <DialogContent></DialogContent>
-          <List dense={true}>
-            {this.props.values.map((ingredient) => (
-              <ListItem key={`${ingredient._id}`} id={`${ingredient._id}`}>
-                <ListItemButton
-                  onClick={() => {
-                    if (process.env.REACT_APP_DEBUG === "TRUE") {
-                      console.log(
-                        "Ingredients.ingredients.onClick " + ingredient._id
-                      );
-                    }
-                    this.props.openingredient(ingredient._id);
-                  }}
-                >
-                  <ListItemText
-                    primary={`${ingredient.name}`}
-                    secondary={`${ingredient.unit}, ${ingredient.category}`}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <DialogActions>
-            <Button variant="contained" onClick={this.handleClose}>
-              {appcopy["generic"]["button"]["close"][this.props.language]}
-            </Button>
-          </DialogActions>
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={this.handleClose}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                {appcopy["ingredients"]["title"][this.props.language]}
+              </Typography>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => {
+                  if (process.env.REACT_APP_DEBUG === "TRUE") {
+                    console.log("Ingredients.AddIcon.onClick");
+                  }
+                  this.props.openingredient("");
+                }}
+                sx={{ m: 1 }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <DialogContent>
+            <List dense={true}>
+              {this.props.values.map((ingredient) => (
+                <ListItem key={`${ingredient._id}`} id={`${ingredient._id}`}>
+                  <ListItemButton
+                    onClick={() => {
+                      if (process.env.REACT_APP_DEBUG === "TRUE") {
+                        console.log(
+                          "Ingredients.ingredients.onClick " + ingredient._id
+                        );
+                      }
+                      this.props.openingredient(ingredient._id);
+                    }}
+                  >
+                    <ListItemText
+                      primary={`${ingredient.name}`}
+                      secondary={`${ingredient.unit}, ${ingredient.category}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </DialogContent>
         </Dialog>
 
         <Snack

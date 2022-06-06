@@ -12,9 +12,9 @@ import {
   FormControlLabel,
   Checkbox,
   FormGroup,
-  InputAdornment
+  InputAdornment,
+  Autocomplete
 } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -226,7 +226,6 @@ export default class Transaction extends React.Component {
                   <li {...props}>{option.name}</li>
                 )}
                 value={this.state.transaction.category || ""}
-                onOpen={this.hanldeOpenCategorySelector}
                 onChange={(event, newValue) => {
                   event.target = {
                     name: "category",
