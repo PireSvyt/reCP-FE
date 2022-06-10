@@ -325,6 +325,10 @@
         "FR": "Quantité",
         "EN": "Quantity"
       },
+      "instruction": {
+        "FR": "Instruction",
+        "EN": "Instruction"
+      },
       "unit": {
         "FR": "Unité",
         "EN": "Unit"

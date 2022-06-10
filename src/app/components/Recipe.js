@@ -61,6 +61,12 @@ function getEmptyComponent(type) {
         unit: undefined,
         nextable: true
       };
+    case "instruction":
+      return {
+        uid: random_id(),
+        instruction: undefined,
+        nextable: true
+      };
     default:
       return undefined;
   }
@@ -92,6 +98,8 @@ export default class Recipe extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleIngredientDelete = this.handleIngredientDelete.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
+    this.handleInstructionDelete = this.handleInstructionDelete.bind(this);
+    this.handleInstructionChange = this.handleInstructionChange.bind(this);
     this.handleCloseSnack = this.handleCloseSnack.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
@@ -219,7 +227,17 @@ export default class Recipe extends React.Component {
                   ]
                 }
               </h3>
-              <List dense={true}></List>
+              <List dense={true}>
+                {this.state.recipe.instructions.map((instruction) => (
+                  <Instruction
+                    key={instruction.uid}
+                    instruction={instruction}
+                    onchange={this.handleInstructionChange}
+                    ondelete={this.handleInstructionDelete}
+                    language={this.props.language}
+                  />
+                ))}
+              </List>
             </Box>
           </DialogContent>
         </Dialog>
@@ -253,6 +271,8 @@ export default class Recipe extends React.Component {
         }));
       } else {
         apiGetRecipe(this.props.recipeid).then((res) => {
+          console.log("componentDidUpdate/res.recipe");
+          console.log(res.recipe);
           switch (res.status) {
             case 200:
               res.recipe.ingredients.forEach((ingredient) => {
@@ -260,6 +280,22 @@ export default class Recipe extends React.Component {
                 ingredient.nextable = false;
               });
               res.recipe.ingredients.push(getEmptyComponent("ingredient"));
+              console.log("componentDidUpdate/res.recipe after ingredients");
+              console.log(res.recipe);
+              let newInstructions = {};
+              res.recipe.instructions.forEach((instruction) => {
+                let newInstruction = {
+                  uid: random_id(),
+                  instruction: instruction,
+                  nextable: false
+                };
+                newInstructions[newInstruction.uid] = newInstruction;
+              });
+              let newInstruction = getEmptyComponent("instruction");
+              newInstructions[newInstruction.uid] = newInstruction;
+              res.recipe.instructions = newInstructions;
+              console.log("componentDidUpdate/res.recipe after instructions");
+              console.log(res.recipe);
               this.setState({
                 recipe: res.recipe,
                 recipe_name: res.recipe.name,
@@ -374,13 +410,29 @@ export default class Recipe extends React.Component {
           ingredient.unit !== "";
         return isConform;
       });
-      // Polish
       recipe.ingredients.forEach((ingredient) => {
         if (ingredient.uid) {
           delete ingredient.uid;
           delete ingredient.nextable;
         }
       });
+      recipe.instructions = recipe.instructions.filter((instruction) => {
+        var isConform =
+          instruction.instruction !== undefined &&
+          instruction.instruction !== "";
+        return isConform;
+      });
+      var instructionList = [];
+      recipe.instructions.forEach((instruction) => {
+        if (instruction.uid) {
+          instructionList.push(instruction.instruction);
+        }
+      });
+      recipe.instructions = instructionList;
+
+      console.log("recipe");
+      console.log(recipe);
+      return;
 
       if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(recipe);
@@ -479,16 +531,63 @@ export default class Recipe extends React.Component {
       console.log(newIngredientValue);
     }
     let currentIngredients = this.state.recipe.ingredients;
+    console.log("handleIngredientChange/currentIngredients");
+    console.log(currentIngredients);
     // Nextable management
     if (newIngredientValue.nextable === true) {
       newIngredientValue.nextable = false;
       // nextable extra one
-      currentIngredients.push(getEmptyComponent("ingredient"));
+      let nextIngredient = getEmptyComponent("ingredient");
+      currentIngredients[nextIngredient.uid] = nextIngredient;
     }
+    console.log("handleIngredientChange/currentIngredients after nextable");
+    console.log(currentIngredients);
     // Update
     currentIngredients[newIngredientValue.uid] = newIngredientValue;
+    console.log(
+      "handleIngredientChange/currentIngredients after newIngredientValue"
+    );
+    console.log(currentIngredients);
     let recipe = this.state.recipe;
     recipe.ingredients = currentIngredients;
+    console.log("handleIngredientChange/recipe");
+    console.log(recipe);
+    this.setState((prevState, props) => ({
+      recipe: recipe
+    }));
+  }
+  handleInstructionDelete(uid) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleInstructionDelete " + uid);
+    }
+    let instructions = this.state.recipe.instructions.filter(
+      (instruction) => instruction.uid !== uid
+    );
+    let recipe = this.state.recipe;
+    recipe.instructions = instructions;
+    this.setState((prevState, props) => ({
+      recipe: recipe
+    }));
+  }
+  handleInstructionChange(newInstructionValue) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.handleInstructionChange " + newInstructionValue.uid);
+      console.log("newInstructionValue");
+      console.log(newInstructionValue);
+    }
+    let currentInstructions = this.state.recipe.instructions;
+    // Nextable management
+    if (newInstructionValue.nextable === true) {
+      newInstructionValue.nextable = false;
+      // nextable extra one
+      currentInstructions.push(getEmptyComponent("instruction"));
+    }
+    // Update
+    currentInstructions[newInstructionValue.uid] = newInstructionValue;
+    let recipe = this.state.recipe;
+    recipe.instructions = currentInstructions;
+    console.log("recipe");
+    console.log(recipe);
     this.setState((prevState, props) => ({
       recipe: recipe
     }));
@@ -573,25 +672,13 @@ class Ingredient extends React.Component {
       console.log("Ingredient.render " + this.props.ingredient.uid);
     }
     return (
-      <ListItem
-        key={this.props.ingredient.uid}
-        /*secondaryAction={
-          <IconButton
-            edge="end"
-            onClick={() => {
-              this.handleDelete();
-            }}
-            disabled={this.props.ingredient.nextable}
-          >
-            <DeleteIcon disabled={this.props.ingredient.nextable} />
-          </IconButton>
-        }*/
-      >
+      <ListItem key={this.props.ingredient.uid}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
+            width: "100%"
           }}
         >
           <Autocomplete
@@ -635,14 +722,6 @@ class Ingredient extends React.Component {
               }
             }}
           />
-          {/*<TextField
-            name="name"
-            label={appcopy["generic"]["input"]["name"][this.props.language]}
-            variant="standard"
-            value={this.props.ingredient.name || ""}
-            onChange={this.handleChange}
-            autoComplete="off"
-          />*/}
           <TextField
             name="quantity"
             label={appcopy["generic"]["input"]["quantity"][this.props.language]}
@@ -684,17 +763,24 @@ class Ingredient extends React.Component {
       console.log(target);
     }
     var updatingIngredient = this.props.ingredient;
+    console.log("updatingIngredient before update");
+    console.log(updatingIngredient);
     switch (target.name) {
       case "name":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
+        console.log("change name : " + target.value);
         updatingIngredient.name = target.value;
+        console.log("updatingIngredient ");
+        console.log(updatingIngredient);
         this.props.options.forEach((ingredient) => {
           if (ingredient.name === target.value) {
             updatingIngredient.unit = ingredient.unit;
           }
         });
+        console.log("updatingIngredient unit");
+        console.log(updatingIngredient);
         break;
       case "quantity":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -718,6 +804,8 @@ class Ingredient extends React.Component {
       console.log("updatingIngredient");
       console.log(updatingIngredient);
     }
+    console.log("updatingIngredient");
+    console.log(updatingIngredient);
     this.props.onchange(updatingIngredient);
   }
   handleDelete() {
@@ -725,6 +813,93 @@ class Ingredient extends React.Component {
       console.log("Ingredient.handleDelete " + this.props.ingredient.uid);
     }
     this.props.ondelete(this.props.ingredient.uid);
+  }
+}
+
+class Instruction extends React.Component {
+  constructor(props) {
+    super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Instruction.constructor " + this.props.instruction.uid);
+    }
+    // Handlers
+    this.handleChange = this.handleChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+  render() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Instruction.render " + this.props.instruction.uid);
+    }
+    return (
+      <ListItem key={this.props.instruction.uid}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%"
+          }}
+        >
+          <TextField
+            sx={{
+              width: "100%"
+            }}
+            name="instruction"
+            label={
+              appcopy["generic"]["input"]["instruction"][this.props.language]
+            }
+            variant="standard"
+            value={this.props.instruction.instruction || ""}
+            onChange={this.handleChange}
+            autoComplete="off"
+          />
+          <IconButton
+            onClick={() => {
+              this.handleDelete();
+            }}
+            disabled={this.props.instruction.nextable}
+          >
+            <DeleteIcon disabled={this.props.instruction.nextable} />
+          </IconButton>
+        </Box>
+      </ListItem>
+    );
+  }
+
+  // Handlers()
+  handleChange(event) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Instruction.handleChange");
+    }
+    const target = event.target;
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log(target);
+    }
+    var updatingInstruction = this.props.instruction;
+    switch (target.name) {
+      case "instruction":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change instruction : " + target.value);
+        }
+        updatingInstruction.instruction = target.value;
+        break;
+      default:
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("/!\\ no match : " + target.name);
+        }
+    }
+    // Update
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("updatingInstruction");
+      console.log(updatingInstruction);
+    }
+    this.props.onchange(updatingInstruction);
+  }
+  handleDelete() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Instruction.handleDelete " + this.props.instruction.uid);
+    }
+    this.props.ondelete(this.props.instruction.uid);
   }
 }
 

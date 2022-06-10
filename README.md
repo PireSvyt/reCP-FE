@@ -10,11 +10,8 @@
 
 ### Recipe
 
-- Instructions
-
 ### Ingredient
 
-- Save
 - Unit conversion
 - Auto complete on shelf
 - Season

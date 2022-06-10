@@ -237,7 +237,7 @@ export default class Ingredient extends React.Component {
               snack: appcopy["ingredient"]["snack"]["saved"]
             });
             this.props.onclose();
-            this.props.onedit(this.state.ingredient);
+            this.props.onedit();
             break;
           case 200:
             this.setState((prevState, props) => ({
@@ -246,7 +246,7 @@ export default class Ingredient extends React.Component {
               snack: appcopy["ingredient"]["snack"]["edited"]
             }));
             this.props.onclose();
-            this.props.onedit(this.state.ingredient);
+            this.props.onedit();
             break;
           case 400:
             this.setState({

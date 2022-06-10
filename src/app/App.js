@@ -55,6 +55,7 @@ export default class App extends React.Component {
     // APIs
     this.apiLoadIngredients = this.apiLoadIngredients.bind(this);
     this.apiLoadMyrecipies = this.apiLoadMyrecipies.bind(this);
+    this.apiAppendIngredients = this.apiAppendIngredients.bind(this);
   }
   render() {
     return (
@@ -69,7 +70,9 @@ export default class App extends React.Component {
           open={this.state.openIngredient}
           ingredientid={this.state.ingredientid}
           onclose={this.handleCloseIngredient}
-          onedit={this.apiAppendIngredients}
+          onedit={() => {
+            /*this.apiAppendIngredients*/
+          }}
         />
         <Ingredients
           language={this.props.language}
