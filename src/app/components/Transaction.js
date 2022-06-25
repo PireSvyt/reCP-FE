@@ -13,7 +13,8 @@ import {
   Checkbox,
   FormGroup,
   InputAdornment,
-  Autocomplete
+  Autocomplete,
+  Typography
 } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -141,16 +142,17 @@ export default class Transaction extends React.Component {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-evenly"
+                  justifyContent: "space-evenly",
+                  alignItems: "center"
                 }}
               >
-                <h4>
+                <Typography variant="h6">
                   {
                     appcopy["transaction"]["specific"]["by"][
                       this.props.language
                     ]
                   }
-                </h4>
+                </Typography>
                 <FormControlLabel
                   value="Alice"
                   control={<Radio />}
@@ -173,16 +175,17 @@ export default class Transaction extends React.Component {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-evenly"
+                  justifyContent: "space-evenly",
+                  alignItems: "center"
                 }}
               >
-                <h4>
+                <Typography variant="h6">
                   {
                     appcopy["transaction"]["specific"]["for"][
                       this.props.language
                     ]
                   }
-                </h4>
+                </Typography>
                 <FormControlLabel
                   control={
                     <Checkbox

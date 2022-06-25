@@ -21,6 +21,8 @@ import CloseIcon from "@mui/icons-material/Close";
 //import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
 import appcopy from "../copy";
 import { random_id } from "./toolkit";
@@ -88,6 +90,7 @@ export default class Recipe extends React.Component {
       console.log("Recipe language = " + this.props.language);
     }
     this.state = {
+      recipeHeight: 300,
       recipe: { ...getEmptyComponent("recipe") },
       recipe_name: "",
       recipe_portions: "",
@@ -97,6 +100,8 @@ export default class Recipe extends React.Component {
       openConfirm: false,
       confirmContent: { title: "", text: "" }
     };
+    // Updates
+    this.updateRecipeHeight = this.updateRecipeHeight.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -117,7 +122,6 @@ export default class Recipe extends React.Component {
       console.log("Recipe.render");
       //console.log(this.state.recipe);
     }
-    console.log(this.state);
     return (
       <div>
         <Dialog
@@ -155,6 +159,21 @@ export default class Recipe extends React.Component {
               >
                 <SaveIcon />
               </IconButton>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={(event) => {
+                  event.target = {
+                    name: "selected",
+                    value: !this.state.recipe.selected
+                  };
+                  this.handleChange(event, !this.state.recipe.selected);
+                }}
+                sx={{ m: 1 }}
+              >
+                {this.state.recipe.selected && <CheckBoxIcon />}
+                {!this.state.recipe.selected && <CheckBoxOutlineBlankIcon />}
+              </IconButton>
             </Toolbar>
           </AppBar>
           <DialogContent>
@@ -162,7 +181,9 @@ export default class Recipe extends React.Component {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-evenly"
+                justifyContent: "space-evenly",
+                maxHeight: this.state.recipeHeight,
+                overflow: "auto"
               }}
             >
               <TextField
@@ -193,13 +214,13 @@ export default class Recipe extends React.Component {
                   justifyContent: "space-between"
                 }}
               >
-                <h3>
+                <Typography variant="h6">
                   {
                     appcopy["recipe"]["subsection"]["ingredients"][
                       this.props.language
                     ]
                   }
-                </h3>
+                </Typography>
                 <IconButton
                   edge="start"
                   color="inherit"
@@ -227,13 +248,13 @@ export default class Recipe extends React.Component {
                 ))}
               </List>
 
-              <h3>
+              <Typography variant="h6">
                 {
                   appcopy["recipe"]["subsection"]["instructions"][
                     this.props.language
                   ]
                 }
-              </h3>
+              </Typography>
               <List dense={true}>
                 {this.state.recipe.instructions.map((instruction) => (
                   <Instruction
@@ -266,6 +287,23 @@ export default class Recipe extends React.Component {
       </div>
     );
   }
+  componentDidMount() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.componentDidMount");
+    }
+    // Update
+    this.updateRecipeHeight();
+  }
+
+  // Updates
+  updateRecipeHeight() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.updateRecipeHeight");
+    }
+    this.setState({
+      recipeHeight: window.innerHeight - 110
+    });
+  }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Recipe.componentDidUpdate");
@@ -278,8 +316,6 @@ export default class Recipe extends React.Component {
         }));
       } else {
         apiGetRecipe(this.props.recipeid).then((res) => {
-          console.log("componentDidUpdate/res.recipe");
-          console.log(res.recipe);
           switch (res.status) {
             case 200:
               // Ingredients
@@ -375,6 +411,12 @@ export default class Recipe extends React.Component {
           console.log("change portions : " + target.value);
         }
         previousRecipe.portions = Number(target.value);
+        break;
+      case "selected":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change selected : " + target.value);
+        }
+        previousRecipe.selected = target.value;
         break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {

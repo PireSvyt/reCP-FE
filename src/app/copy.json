@@ -89,6 +89,41 @@
     "title": {
       "FR": "Ma semaine",
       "EN": "My week"
+    },
+    "snack": {
+      "recipe added": {
+        "severity": "success",
+        "FR": "Recette ajoutée",
+        "EN": "Recipe added"
+      },
+      "selection emptied": {
+        "severity": "success",
+        "FR": "Séléction vidée",
+        "EN": "Selection emptied"
+      },
+      "selection renewed": {
+        "severity": "success",
+        "FR": "Séléction renouvellée",
+        "EN": "Selection renewed"
+      },
+      "304 - no more unselected recipies": {
+        "severity": "info",
+        "FR": "Plus de recette à selectionner",
+        "EN": "No more recipies to select"
+      }
+    }
+  },
+  "fridge": {
+    "title": {
+      "FR": "Mon frigo",
+      "EN": "My fridge"
+    },
+    "snack": {
+      "recipe added": {
+        "severity": "success",
+        "FR": "Recette ajoutée",
+        "EN": "Recipe added"
+      }
     }
   },
   "mybalance": {
