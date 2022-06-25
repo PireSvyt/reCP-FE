@@ -774,9 +774,14 @@ class Ingredient extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
-        console.log("change name : " + target.value.name);
-        updatingIngredient.name = target.value.name;
-        updatingIngredient.unit = target.value.unit;
+        if (target.value === null) {
+          updatingIngredient.name = undefined;
+          updatingIngredient.unit = undefined;
+        } else {
+          console.log("change name : " + target.value.name);
+          updatingIngredient.name = target.value.name;
+          updatingIngredient.unit = target.value.unit;
+        }
         break;
       case "quantity":
         if (process.env.REACT_APP_DEBUG === "TRUE") {

@@ -43,7 +43,7 @@
         "EN": "Recipe deletion"
       },
       "deletionconfirmtext": {
-        "FR": "Ah, on en a plus besoin de cette recette ?",
+        "FR": "Ah, on en n'a plus besoin de cette recette ?",
         "EN": "Hum, don't we still need it?"
       }
     },
