@@ -45,7 +45,13 @@ function getEmptyComponent(type) {
             nextable: true
           }
         ],
-        instructions: [],
+        instructions: [
+          {
+            uid: random_id(),
+            instruction: undefined,
+            nextable: true
+          }
+        ],
         scale: 1,
         state: {
           selected: false,
@@ -111,6 +117,7 @@ export default class Recipe extends React.Component {
       console.log("Recipe.render");
       //console.log(this.state.recipe);
     }
+    console.log(this.state);
     return (
       <div>
         <Dialog
@@ -275,6 +282,7 @@ export default class Recipe extends React.Component {
           console.log(res.recipe);
           switch (res.status) {
             case 200:
+              // Ingredients
               res.recipe.ingredients.forEach((ingredient) => {
                 ingredient.uid = random_id();
                 ingredient.nextable = false;
@@ -282,20 +290,23 @@ export default class Recipe extends React.Component {
               res.recipe.ingredients.push(getEmptyComponent("ingredient"));
               console.log("componentDidUpdate/res.recipe after ingredients");
               console.log(res.recipe);
-              let newInstructions = {};
+              // Instructions
+              let newInstructions = [];
+              console.log(res.recipe.instructions);
               res.recipe.instructions.forEach((instruction) => {
+                console.log(instruction);
                 let newInstruction = {
                   uid: random_id(),
                   instruction: instruction,
                   nextable: false
                 };
-                newInstructions[newInstruction.uid] = newInstruction;
+                newInstructions.push(newInstruction);
               });
-              let newInstruction = getEmptyComponent("instruction");
-              newInstructions[newInstruction.uid] = newInstruction;
+              newInstructions.push(getEmptyComponent("instruction"));
               res.recipe.instructions = newInstructions;
               console.log("componentDidUpdate/res.recipe after instructions");
               console.log(res.recipe);
+              // Set state
               this.setState({
                 recipe: res.recipe,
                 recipe_name: res.recipe.name,
@@ -430,10 +441,6 @@ export default class Recipe extends React.Component {
       });
       recipe.instructions = instructionList;
 
-      console.log("recipe");
-      console.log(recipe);
-      return;
-
       if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(recipe);
       }
@@ -537,8 +544,7 @@ export default class Recipe extends React.Component {
     if (newIngredientValue.nextable === true) {
       newIngredientValue.nextable = false;
       // nextable extra one
-      let nextIngredient = getEmptyComponent("ingredient");
-      currentIngredients[nextIngredient.uid] = nextIngredient;
+      currentIngredients.push(getEmptyComponent("ingredient"));
     }
     console.log("handleIngredientChange/currentIngredients after nextable");
     console.log(currentIngredients);
@@ -763,24 +769,14 @@ class Ingredient extends React.Component {
       console.log(target);
     }
     var updatingIngredient = this.props.ingredient;
-    console.log("updatingIngredient before update");
-    console.log(updatingIngredient);
     switch (target.name) {
       case "name":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
-        console.log("change name : " + target.value);
-        updatingIngredient.name = target.value;
-        console.log("updatingIngredient ");
-        console.log(updatingIngredient);
-        this.props.options.forEach((ingredient) => {
-          if (ingredient.name === target.value) {
-            updatingIngredient.unit = ingredient.unit;
-          }
-        });
-        console.log("updatingIngredient unit");
-        console.log(updatingIngredient);
+        console.log("change name : " + target.value.name);
+        updatingIngredient.name = target.value.name;
+        updatingIngredient.unit = target.value.unit;
         break;
       case "quantity":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -788,12 +784,6 @@ class Ingredient extends React.Component {
         }
         updatingIngredient.quantity = Number(target.value);
         break;
-      /*case "unit":
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change unit : " + target.value);
-        }
-        updatingIngredient.unit = target.value;
-        break;*/
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
@@ -804,8 +794,6 @@ class Ingredient extends React.Component {
       console.log("updatingIngredient");
       console.log(updatingIngredient);
     }
-    console.log("updatingIngredient");
-    console.log(updatingIngredient);
     this.props.onchange(updatingIngredient);
   }
   handleDelete() {
