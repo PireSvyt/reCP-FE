@@ -87,7 +87,6 @@ export default class Balance extends React.Component {
                 }
                 this.handleOpenTransaction("");
               }}
-              sx={{ m: 1 }}
             >
               <AddIcon />
             </IconButton>

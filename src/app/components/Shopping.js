@@ -86,7 +86,6 @@ export default class Shopping extends React.Component {
                 }
                 this.handleEmpty();
               }}
-              sx={{ m: 1 }}
             >
               <DeleteIcon />
             </IconButton>
