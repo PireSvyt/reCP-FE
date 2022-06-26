@@ -4,6 +4,7 @@ import BalanceIcon from "@mui/icons-material/Balance";
 import BookIcon from "@mui/icons-material/Book";
 import EventIcon from "@mui/icons-material/Event";
 import KitchenIcon from "@mui/icons-material/Kitchen";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
 import appcopy from "./copy";
 
@@ -16,22 +17,25 @@ import Myrecipies from "./components/Myrecipies";
 import Recipe from "./components/Recipe";
 import Thisweek from "./components/Thisweek";
 import Fridge from "./components/Fridge";
+import Shopping from "./components/Shopping";
 import Snack from "./components/Snack";
 
 // APIs
 import { apiGetIngredients, apiGetRecipies } from "./api/gets";
 import {
+  apiSetRecipeSelect,
   apiSetThisweekEmpty,
   apiSetThisweekRecipeAdd,
   apiSetThisweekRenew,
   apiSetThisweekRecipeReplace,
-  apiSetThisweekRecipeRemove,
   apiSetThisweekRecipeScale,
   apiSetThisweekRecipePrepare,
   apiSetThisweekNeeds,
   apiSetFridgeEmpty,
   apiSetFridgeHave,
-  apiSetFridgeHavent
+  apiSetShoppingEmpty,
+  apiSetShoppingTake,
+  apiSetShoppingAddtofridge
 } from "./api/sets";
 
 export default class App extends React.Component {
@@ -60,7 +64,6 @@ export default class App extends React.Component {
       //api_Transactions: [],
       //api_TransactionCategories: [],
     };
-    // Updates
 
     // APIs
     this.api = this.api.bind(this);
@@ -74,6 +77,7 @@ export default class App extends React.Component {
     this.handleMyrecipies = this.handleMyrecipies.bind(this);
     this.handleThisweek = this.handleThisweek.bind(this);
     this.handleFridge = this.handleFridge.bind(this);
+    this.handleShopping = this.handleShopping.bind(this);
     this.handleBalance = this.handleBalance.bind(this);
   }
   render() {
@@ -131,7 +135,14 @@ export default class App extends React.Component {
             callback={this.handleFridge}
           />
         </AppTabPanel>
-        <AppTabPanel value={this.state.selectedTab} index={3} key={"mybalance"}>
+        <AppTabPanel value={this.state.selectedTab} index={3} key={"shopping"}>
+          <Shopping
+            language={this.props.language}
+            values={this.state.apiThisweekingredients}
+            callback={this.handleShopping}
+          />
+        </AppTabPanel>
+        <AppTabPanel value={this.state.selectedTab} index={4} key={"mybalance"}>
           <Balance
             language={this.props.language}
             callback={this.handleBalance}
@@ -152,23 +163,33 @@ export default class App extends React.Component {
                 id={"navtab-" + 0}
                 aria-controls={"navtabpanel-" + 0}
                 key={"myrecipies"}
+                onClick={() => this.api("LoadMyrecipies")}
               />
               <Tab
                 icon={<EventIcon />}
                 id={"navtab-" + 1}
                 aria-controls={"navtabpanel-" + 1}
                 key={"thisweek"}
+                onClick={() => this.api("LoadThisweekrecipies")}
               />
               <Tab
                 icon={<KitchenIcon />}
                 id={"navtab-" + 2}
                 aria-controls={"navtabpanel-" + 2}
                 key={"fridge"}
+                onClick={() => this.api("LoadThisweekingredients")}
+              />
+              <Tab
+                icon={<ShoppingBagIcon />}
+                id={"navtab-" + 3}
+                aria-controls={"navtabpanel-" + 3}
+                key={"shopping"}
+                onClick={() => this.api("LoadThisweekingredients")}
               />
               <Tab
                 icon={<BalanceIcon />}
-                id={"navtab-" + 3}
-                aria-controls={"navtabpanel-" + 3}
+                id={"navtab-" + 4}
+                aria-controls={"navtabpanel-" + 4}
                 key={"mybalance"}
               />
             </Tabs>
@@ -272,8 +293,8 @@ export default class App extends React.Component {
         break;
       case "LoadThisweekingredients":
         apiSetThisweekNeeds().then((res) => {
-          console.log("App.apiLoadThisweekingredients.res");
-          console.log(res);
+          //console.log("App.apiLoadThisweekingredients.res");
+          //console.log(res);
           //apiGetIngredients({
           //  need: "fridge"
           //}).then((res) => {
@@ -310,9 +331,9 @@ export default class App extends React.Component {
   }
   handleMenu(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleManu " + action);
+      console.log("App.handleMenu " + action);
     }
-    console.log("App.handleManu " + action);
+    console.log("App.handleMenu " + action);
     switch (action) {
       case "open":
         this.setState((prevState, props) => ({
@@ -363,6 +384,8 @@ export default class App extends React.Component {
       console.log("App.handleRecipe " + action);
     }
     console.log("App.handleRecipe " + action);
+    let tmpMyrecipies = [];
+    let tmpThisweekrecipies = [];
     switch (action) {
       case "openItem":
         this.setState((prevState, props) => ({
@@ -375,8 +398,76 @@ export default class App extends React.Component {
           openRecipe: false
         }));
         break;
+      case "selectItem":
+        // Local
+        tmpMyrecipies = this.state.apiMyrecipies;
+        tmpMyrecipies.map((recipe) => {
+          if (recipe._id === details.recipeid) {
+            if (recipe.selected === true) {
+              recipe.selected = false;
+            } else {
+              recipe.selected = true;
+            }
+          }
+          return recipe;
+        });
+        tmpThisweekrecipies = this.state.apiThisweekrecipies;
+        for (var i = 0; i < tmpThisweekrecipies.length; i++) {
+          if (tmpThisweekrecipies[i]._id === details.recipeid) {
+            tmpThisweekrecipies.splice(i, 1);
+            break;
+          }
+        }
+        this.setState({
+          apiThisweekrecipies: tmpThisweekrecipies,
+          apiMyrecipies: tmpMyrecipies
+        });
+        // Distant
+        apiSetRecipeSelect(details.recipeid);
+        break;
+      case "scaleItem":
+        // Local
+        tmpThisweekrecipies = this.state.apiThisweekrecipies;
+        tmpThisweekrecipies.map((recipe) => {
+          if (recipe._id === details.recipeid) {
+            if (recipe.selected === true) {
+              if (details.increment === "up") {
+                recipe.scale += 1;
+              }
+              if (details.increment === "down") {
+                recipe.scale -= 1;
+              }
+            }
+          }
+          return recipe;
+        });
+        this.setState({
+          apiThisweekrecipies: tmpThisweekrecipies
+        });
+        // Distant
+        apiSetThisweekRecipeScale(details.recipeid, details.increment);
+        break;
+      case "cookItem":
+        // Local
+        tmpThisweekrecipies = this.state.apiThisweekrecipies;
+        tmpThisweekrecipies.map((recipe) => {
+          if (recipe._id === details.recipeid) {
+            if (recipe.cooked === true) {
+              recipe.cooked = false;
+            } else {
+              recipe.cooked = true;
+            }
+          }
+          return recipe;
+        });
+        this.setState({
+          apiThisweekrecipies: tmpThisweekrecipies
+        });
+        // Distant
+        apiSetThisweekRecipePrepare(details.recipeid);
+        break;
       case "openIngredient":
-        this.handleIngredient("openItem", details.ingredientid);
+        this.handleIngredient("openItem", details);
         break;
       case "loadMyrecipies":
         this.api("LoadMyrecipies");
@@ -397,10 +488,10 @@ export default class App extends React.Component {
         this.api("LoadMyrecipies");
         break;
       case "openRecipe":
-        this.handleRecipe("open", details.recipeid);
+        this.handleRecipe("openItem", details);
         break;
       case "selectRecipe":
-        // TODO
+        this.handleRecipe("selectItem", details);
         break;
       default:
     }
@@ -415,16 +506,18 @@ export default class App extends React.Component {
         this.handleMenu("open");
         break;
       case "empty":
+        // Local
+        this.setState({
+          apiThisweekrecipies: []
+        });
+        // Distant
         apiSetThisweekEmpty().then((res) => {
           switch (res.status) {
             case 200:
-              this.setState({
-                apiThisweekrecipies: []
-              });
-              this.setState({
+              /*this.setState({
                 openSnack: true,
                 snack: appcopy["thisweek"]["snack"]["selection emptied"]
-              });
+              });*/
               break;
             case 400:
               this.setState({
@@ -484,10 +577,10 @@ export default class App extends React.Component {
               this.setState({
                 apiThisweekrecipies: currentSelection
               });
-              this.setState({
+              /*this.setState({
                 openSnack: true,
                 snack: appcopy["thisweek"]["snack"]["recipe added"]
-              });
+              });*/
               break;
             case 304:
               this.setState({
@@ -513,9 +606,7 @@ export default class App extends React.Component {
         });
         break;
       case "remove":
-        apiSetThisweekRecipeRemove(details.recipeid).then(
-          this.api("LoadThisweekrecipies")
-        );
+        this.handleRecipe("selectItem", details);
         break;
       case "replace":
         apiSetThisweekRecipeReplace(details.recipeid).then(
@@ -523,14 +614,16 @@ export default class App extends React.Component {
         );
         break;
       case "scale":
-        apiSetThisweekRecipeScale(details.recipeid, details.increment).then(
-          this.api("LoadThisweekrecipies")
-        );
+        // Local
+        this.handleRecipe("scaleItem", details);
+        // Distant
+        apiSetThisweekRecipeScale(details.recipeid, details.increment);
         break;
       case "cook":
-        apiSetThisweekRecipePrepare(details.recipeid).then(
-          this.api("LoadThisweekrecipies")
-        );
+        // Local
+        this.handleRecipe("cookItem", details);
+        // Distant
+        apiSetThisweekRecipePrepare(details.recipeid);
         break;
       case "reload":
         this.api("LoadThisweekrecipies");
@@ -543,25 +636,150 @@ export default class App extends React.Component {
       console.log("App.handleFridge " + action);
     }
     console.log("App.handleFridge " + action);
+    let tmpList = [];
     switch (action) {
       case "openMenu":
         this.handleMenu("open");
         break;
       case "empty":
-        console.log("App.handleFridgeEmpty TODO");
+        // Local
+        tmpList = this.state.apiThisweekingredients;
+        tmpList.map((item) => {
+          item.available = 0;
+          return item;
+        });
+        this.setState({
+          apiThisweekingredients: tmpList
+        });
+        // Distant
+        apiSetFridgeEmpty().then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["fridge"]["snack"]["emptied"]
+              });
+              break;
+            case 400:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              });
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+          }
+        });
         break;
       case "have":
-        apiSetFridgeHave(details.ingredientid).then(
-          this.api("LoadThisweekingredients")
-        );
-        break;
-      case "havent":
-        apiSetFridgeHavent(details.ingredientid).then(
-          this.api("LoadThisweekingredients")
-        );
+        // Local
+        tmpList = this.state.apiThisweekingredients;
+        let tmpITem = {};
+        tmpList.map((item) => {
+          if (item._id === details.ingredientid) {
+            if (item.available === item.quantity) {
+              item.available = 0;
+            } else {
+              item.available = item.quantity;
+            }
+            tmpITem = item;
+          }
+          return item;
+        });
+        this.setState({
+          apiThisweekingredients: tmpList
+        });
+        // Distant
+        apiSetFridgeHave(tmpITem);
         break;
       case "reload":
         this.api("LoadThisweekingredients");
+        break;
+      default:
+    }
+  }
+  handleShopping(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleShopping " + action);
+    }
+    console.log("App.handleShopping " + action);
+    let tmpList = [];
+    switch (action) {
+      case "openMenu":
+        this.handleMenu("open");
+        break;
+      case "empty":
+        // Local
+        tmpList = this.state.apiThisweekingredients;
+        tmpList.map((item) => {
+          item.shopped = 0;
+          return item;
+        });
+        this.setState({
+          apiThisweekingredients: tmpList
+        });
+        // Distant
+        apiSetShoppingEmpty().then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["shopping"]["snack"]["emptied"]
+              });
+              break;
+            case 400:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              });
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+          }
+        });
+        break;
+      case "take":
+        // Local
+        tmpList = this.state.apiThisweekingredients;
+        let tmpITem = {};
+        tmpList.map((item) => {
+          if (item._id === details.ingredientid) {
+            if (item.shopped === item.quantity - (item.available || 0)) {
+              item.shopped = 0;
+            } else {
+              item.shopped = item.quantity - (item.available || 0);
+            }
+            tmpITem = item;
+          }
+          return item;
+        });
+        this.setState({
+          apiThisweekingredients: tmpList
+        });
+        // Distant
+        apiSetShoppingTake(tmpITem);
+        break;
+      case "reload":
+        this.api("LoadThisweekingredients");
+        break;
+      case "addtofridge":
+        // Local
+        tmpList = this.state.apiThisweekingredients;
+        tmpList.map((item) => {
+          item.available = (item.available || 0) + (item.shopped || 0);
+          return item;
+        });
+        this.setState({
+          apiThisweekingredients: tmpList
+        });
+        // Distant
+        apiSetShoppingAddtofridge();
         break;
       default:
     }

@@ -269,7 +269,7 @@ export default class Balance extends React.Component {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
-      tabHeight: window.innerHeight - 180
+      tabHeight: window.innerHeight - 165
     });
   }
   updateSummary() {

@@ -39,29 +39,29 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import appcopy from "../copy";
 import Snack from "./Snack";
 
-export default class Fridge extends React.Component {
+export default class Shopping extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.constructor");
+      console.log("Shopping.constructor");
     }
     super(props);
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge language = " + this.props.language);
+      console.log("Shopping language = " + this.props.language);
     }
     this.state = {
       recipiesHeight: 300
     };
     // Updates
-    this.updateFridgeHeight = this.updateFridgeHeight.bind(this);
+    this.updateShoppingHeight = this.updateShoppingHeight.bind(this);
     // Handles
     this.handleSnack = this.handleSnack.bind(this);
     this.handleEmpty = this.handleEmpty.bind(this);
-    this.handleHave = this.handleHave.bind(this);
-    this.handleIncrement = this.handleIncrement.bind(this);
+    this.handleTake = this.handleTake.bind(this);
+    this.handleAddtofridge = this.handleAddtofridge.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.render");
+      console.log("Shopping.render");
     }
     return (
       <Box>
@@ -75,14 +75,14 @@ export default class Fridge extends React.Component {
               <MoreVertIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {appcopy["fridge"]["title"][this.props.language]}
+              {appcopy["shopping"]["title"][this.props.language]}
             </Typography>
             <IconButton
               edge="start"
               color="inherit"
               onClick={() => {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
-                  console.log("Fridge.EmptyIcon.onClick");
+                  console.log("Shopping.EmptyIcon.onClick");
                 }
                 this.handleEmpty();
               }}
@@ -95,47 +95,57 @@ export default class Fridge extends React.Component {
 
         <Box style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {appcopy["fridge"]["subsection"]["ihavent"][this.props.language]}
+            {appcopy["shopping"]["subsection"]["ihavent"][this.props.language]}
           </Typography>
           <Box>
             <List dense={true}>
               {this.props.values.map((ingredient) => {
-                if ((ingredient.available || 0) < ingredient.quantity) {
+                if (
+                  ingredient.quantity - (ingredient.available || 0) >
+                  (ingredient.shopped || 0)
+                ) {
                   return (
-                    <ListItem key={"mayhave-" + ingredient._id}>
-                      <FridgeIngredient
+                    <ListItem key={"totake-" + ingredient._id}>
+                      <ShoppingIngredient
                         ingredient={ingredient}
                         callback={this.props.callback}
                       />
                     </ListItem>
                   );
                 } else {
-                  return <div key={"mayhave-" + ingredient._id} />;
+                  return <div key={"totake-" + ingredient._id} />;
                 }
               })}
             </List>
           </Box>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {appcopy["fridge"]["subsection"]["ihave"][this.props.language]}
+            {appcopy["shopping"]["subsection"]["ihave"][this.props.language]}
           </Typography>
           <Box>
             <List dense={true}>
               {this.props.values.map((ingredient) => {
-                if ((ingredient.available || 0) >= ingredient.quantity) {
+                if (
+                  ingredient.quantity - (ingredient.available || 0) <=
+                    (ingredient.shopped || 0) &&
+                  ingredient.quantity > (ingredient.available || 0)
+                ) {
                   return (
-                    <ListItem key={"have-" + ingredient._id}>
-                      <FridgeIngredient
+                    <ListItem key={"taken-" + ingredient._id}>
+                      <ShoppingIngredient
                         ingredient={ingredient}
                         callback={this.props.callback}
                       />
                     </ListItem>
                   );
                 } else {
-                  return <div key={"have-" + ingredient._id} />;
+                  return <div key={"taken-" + ingredient._id} />;
                 }
               })}
             </List>
           </Box>
+          <Button onClick={() => this.handleAddtofridge()}>
+            {appcopy["shopping"]["button"]["addtofridge"][this.props.language]}
+          </Button>
 
           <Snack
             snackOpen={this.state.snackOpen}
@@ -149,16 +159,16 @@ export default class Fridge extends React.Component {
   }
   componentDidMount() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.componentDidMount");
+      console.log("Shopping.componentDidMount");
     }
     // Update
-    this.updateFridgeHeight();
+    this.updateShoppingHeight();
   }
 
   // Updates
-  updateFridgeHeight() {
+  updateShoppingHeight() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.updateFridgeHeight");
+      console.log("Shopping.updateShoppingHeight");
     }
     this.setState({
       recipiesHeight: window.innerHeight - 115
@@ -168,26 +178,25 @@ export default class Fridge extends React.Component {
   // Handles
   handleEmpty() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.handleEmpty ");
+      console.log("Shopping.handleEmpty ");
     }
     this.props.callback("empty");
   }
-  handleHave(id) {
+  handleTake(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.handleHave " + id);
+      console.log("Shopping.handleTake " + id);
     }
-    this.props.callback("have", { ingredientid: id });
+    this.props.callback("take", { ingredientid: id });
   }
-  handleIncrement(id) {
+  handleAddtofridge() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.handleIncrement " + id);
+      console.log("Shopping.handleAddtofridge ");
     }
-    console.log("Fridge.handleIncrement TODO " + id);
-    this.props.callback("increment", { ingredientid: id });
+    this.props.callback("addtofridge");
   }
   handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.handleSnack " + action);
+      console.log("Shopping.handleSnack " + action);
     }
     switch (action) {
       case "close":
@@ -200,19 +209,20 @@ export default class Fridge extends React.Component {
   }
 }
 
-class FridgeIngredient extends React.Component {
+class ShoppingIngredient extends React.Component {
   constructor(props) {
     super(props);
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("FridgeIngredient.constructor " + this.props.ingredient._id);
+      console.log(
+        "ShoppingIngredient.constructor " + this.props.ingredient._id
+      );
     }
     // Handlers
-    this.handleHave = this.handleHave.bind(this);
-    this.handleIncrement = this.handleIncrement.bind(this);
+    this.handleTake = this.handleTake.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("FridgeIngredient.render " + this.props.ingredient._id);
+      console.log("ShoppingIngredient.render " + this.props.ingredient._id);
     }
     return (
       <Card sx={{ width: "100%", pl: "1em", pr: "1em" }}>
@@ -225,75 +235,49 @@ class FridgeIngredient extends React.Component {
           }}
         >
           <Typography>{this.props.ingredient.name}</Typography>
-          <IconButton
-            onClick={() => {
-              this.handleHave();
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center"
             }}
           >
-            {this.props.ingredient.quantity <=
-              this.props.ingredient.available && <CheckBoxIcon />}
-            {(this.props.ingredient.quantity >
-              this.props.ingredient.available ||
-              this.props.ingredient.available === undefined) && (
-              <CheckBoxOutlineBlankIcon />
-            )}
-          </IconButton>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <IconButton
-            onClick={() => {
-              this.handleIncrement("down");
-            }}
-            disabled={true}
-          >
-            <RemoveIcon />
-          </IconButton>
-          <Typography sx={{ width: "8em", textAlign: "center" }}>
-            {(Math.round(this.props.ingredient.available * 10) / 10 || 0) +
-              " / " +
-              Math.round(this.props.ingredient.quantity * 10) / 10 +
-              " " +
-              this.props.ingredient.unit}
-          </Typography>
-          <IconButton
-            onClick={() => {
-              this.handleIncrement("up");
-            }}
-            disabled={true}
-          >
-            <AddIcon />
-          </IconButton>
+            <Typography sx={{ textAlign: "right", pr: "1em" }}>
+              {Math.round(
+                (this.props.ingredient.quantity -
+                  (this.props.ingredient.available || 0)) *
+                  10
+              ) /
+                10 +
+                " " +
+                this.props.ingredient.unit}
+            </Typography>
+            <IconButton
+              onClick={() => {
+                this.handleTake();
+              }}
+            >
+              {this.props.ingredient.quantity -
+                (this.props.ingredient.available || 0) <=
+                (this.props.ingredient.shopped || 0) && <CheckBoxIcon />}
+              {this.props.ingredient.quantity -
+                (this.props.ingredient.available || 0) >
+                (this.props.ingredient.shopped || 0) && (
+                <CheckBoxOutlineBlankIcon />
+              )}
+            </IconButton>
+          </Box>
         </Box>
       </Card>
     );
   }
 
   // Handles
-  handleHave() {
+  handleTake() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("FridgeIngredient.handleHave " + this.props.ingredient._id);
+      console.log("ShoppingIngredient.handleTake " + this.props.ingredient._id);
     }
-    this.props.callback("have", { ingredientid: this.props.ingredient._id });
-  }
-  handleIncrement(newValue) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log(
-        "FridgeIngredient.handleIncrement " +
-          newValue +
-          " " +
-          this.props.ingredient._id
-      );
-    }
-    this.props.callback("scale", {
-      ingredientid: this.props.ingredient._id,
-      incement: newValue
-    });
+    this.props.callback("take", { ingredientid: this.props.ingredient._id });
   }
 }

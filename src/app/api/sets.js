@@ -74,8 +74,6 @@ export async function apiSetRecipeDelete(id) {
 export async function apiSetThisweekEmpty() {
   try {
     const res = await axios.post(apiURL + "/api/set/thisweek/empty");
-    console.log("apiSetThisweekEmpty.res");
-    console.log(res);
     return res.data;
   } catch (err) {
     const res = {
@@ -90,8 +88,6 @@ export async function apiSetThisweekEmpty() {
 export async function apiSetThisweekRecipeAdd() {
   try {
     const res = await axios.post(apiURL + "/api/set/thisweek/add");
-    console.log("apiSetThisweekRecipeAdd.res");
-    console.log(res);
     return res.data;
   } catch (err) {
     const res = {
@@ -205,9 +201,12 @@ export async function apiSetFridgeEmpty() {
     return res;
   }
 }
-export async function apiSetFridgeHave() {
+export async function apiSetFridgeHave(ingredient) {
   try {
-    const res = await axios.post(apiURL + "/api/set/fridge/have");
+    const res = await axios.post(
+      apiURL + "/api/set/fridge/have/" + ingredient._id,
+      ingredient
+    );
     return res.data;
   } catch (err) {
     const res = {
@@ -219,14 +218,47 @@ export async function apiSetFridgeHave() {
     return res;
   }
 }
-export async function apiSetFridgeHavent() {
+
+// Shopping
+export async function apiSetShoppingEmpty() {
   try {
-    const res = await axios.post(apiURL + "/api/set/fridge/havent");
+    const res = await axios.post(apiURL + "/api/set/shopping/empty");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
-      message: "error on apiSetFridgeHavent",
+      message: "error on apiSetShoppingEmpty",
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiSetShoppingTake(ingredient) {
+  try {
+    const res = await axios.post(
+      apiURL + "/api/set/shopping/take/" + ingredient._id,
+      ingredient
+    );
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetShoppingTake",
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiSetShoppingAddtofridge() {
+  try {
+    const res = await axios.post(apiURL + "/api/set/shopping/addtofridge");
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiSetShoppingAddtofridge",
       error: err
     };
     console.error(res);

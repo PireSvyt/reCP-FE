@@ -162,12 +162,21 @@ export default class Recipe extends React.Component {
               <IconButton
                 edge="start"
                 color="inherit"
-                onClick={(event) => {
-                  event.target = {
-                    name: "selected",
-                    value: !this.state.recipe.selected
-                  };
-                  this.handleChange(event, !this.state.recipe.selected);
+                onClick={() => {
+                  // Local
+                  let tmpRecipe = this.state.recipe;
+                  if (tmpRecipe.selected === true) {
+                    tmpRecipe.selected = false;
+                  } else {
+                    tmpRecipe.selected = true;
+                  }
+                  this.setState({
+                    recipe: tmpRecipe
+                  });
+                  // Distant
+                  this.props.callback("selectItem", {
+                    recipeid: this.state.recipe._id
+                  });
                 }}
                 sx={{ m: 1 }}
               >
@@ -324,11 +333,10 @@ export default class Recipe extends React.Component {
                 ingredient.nextable = false;
               });
               res.recipe.ingredients.push(getEmptyComponent("ingredient"));
-              console.log("componentDidUpdate/res.recipe after ingredients");
-              console.log(res.recipe);
+              //console.log("componentDidUpdate/res.recipe after ingredients");
               // Instructions
               let newInstructions = [];
-              console.log(res.recipe.instructions);
+              //console.log(res.recipe.instructions);
               res.recipe.instructions.forEach((instruction) => {
                 console.log(instruction);
                 let newInstruction = {
@@ -340,8 +348,7 @@ export default class Recipe extends React.Component {
               });
               newInstructions.push(getEmptyComponent("instruction"));
               res.recipe.instructions = newInstructions;
-              console.log("componentDidUpdate/res.recipe after instructions");
-              console.log(res.recipe);
+              //console.log("componentDidUpdate/res.recipe after instructions");
               // Set state
               this.setState({
                 recipe: res.recipe,

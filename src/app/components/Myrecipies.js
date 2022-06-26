@@ -47,7 +47,7 @@ export default class Myrecipies extends React.Component {
     return (
       <Box>
         <AppBar sx={{ position: "relative" }}>
-          <Toolbar onClick={() => this.props.callback("reload")}>
+          <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
@@ -73,30 +73,24 @@ export default class Myrecipies extends React.Component {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <List
-          dense={true}
-          style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}
-        >
-          {this.props.values.map((recipe) => (
-            <MyrecipiesRecipe
-              key={recipe._id}
-              recipe={recipe}
-              onedit={() => {
-                if (process.env.REACT_APP_DEBUG === "TRUE") {
-                  console.log("Myrecipies.recipies.onedit " + recipe._id);
-                }
-                this.props.callback("openRecipe", { recipeid: recipe._id });
-              }}
-            />
-          ))}
-        </List>
-
-        <Snack
-          open={this.state.openSnack}
-          snack={this.state.snack}
-          callback={this.handleSnack}
-          language={this.props.language}
-        />
+        <Box style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}>
+          <List dense={true}>
+            {this.props.values.map((recipe) => (
+              <ListItem key={"myrecipies-" + recipe._id}>
+                <MyrecipiesRecipe
+                  recipe={recipe}
+                  callback={this.props.callback}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Snack
+            open={this.state.openSnack}
+            snack={this.state.snack}
+            callback={this.handleSnack}
+            language={this.props.language}
+          />
+        </Box>
       </Box>
     );
   }
@@ -114,7 +108,7 @@ export default class Myrecipies extends React.Component {
       console.log("Myrecipies.updateRecipiesHeight");
     }
     this.setState({
-      recipiesHeight: window.innerHeight - 180
+      recipiesHeight: window.innerHeight - 115
     });
   }
 
@@ -149,9 +143,17 @@ class MyrecipiesRecipe extends React.Component {
       console.log("MyrecipiesRecipe.render " + this.props.recipe._id);
     }
     return (
-      <ListItem key={this.props.recipe.id}>
-        <Card sx={{ width: "100%", padding: "1em" }}>
-          <Typography>{this.props.recipe.name}</Typography>
+      <Card sx={{ width: "100%", pl: "1em", pr: "1em" }}>
+        <Typography>{this.props.recipe.name}</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+        >
+          <Typography>{this.props.recipe.portions} portions</Typography>
           <Box
             sx={{
               display: "flex",
@@ -160,35 +162,24 @@ class MyrecipiesRecipe extends React.Component {
               alignItems: "center"
             }}
           >
-            <Typography>{this.props.recipe.portions} portions</Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center"
+            <IconButton
+              onClick={() => {
+                this.handleOpen();
               }}
             >
-              <IconButton
-                onClick={() => {
-                  this.handleOpen();
-                }}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  this.handleSelect();
-                }}
-                disabled={true}
-              >
-                {this.props.recipe.selected && <CheckBoxIcon />}
-                {!this.props.recipe.selected && <CheckBoxOutlineBlankIcon />}
-              </IconButton>
-            </Box>
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                this.handleSelect();
+              }}
+            >
+              {this.props.recipe.selected && <CheckBoxIcon />}
+              {!this.props.recipe.selected && <CheckBoxOutlineBlankIcon />}
+            </IconButton>
           </Box>
-        </Card>
-      </ListItem>
+        </Box>
+      </Card>
     );
   }
 

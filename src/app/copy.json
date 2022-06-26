@@ -118,11 +118,50 @@
       "FR": "Mon frigo",
       "EN": "My fridge"
     },
+    "subsection": {
+      "ihavent": {
+        "FR": "Est ce que j'ai..?",
+        "EN": "Do I have..?"
+      },
+      "ihave": {
+        "FR": "J'ai déjà...",
+        "EN": "I already have..."
+      }
+    },
     "snack": {
-      "recipe added": {
+      "emptied": {
         "severity": "success",
-        "FR": "Recette ajoutée",
-        "EN": "Recipe added"
+        "FR": "Frigo vide :)",
+        "EN": "Empty fridge :)"
+      }
+    }
+  },
+  "shopping": {
+    "title": {
+      "FR": "Mes courses",
+      "EN": "My shopping"
+    },
+    "subsection": {
+      "ihavent": {
+        "FR": "Je cherche...",
+        "EN": "I'm looking for..."
+      },
+      "ihave": {
+        "FR": "J'ai pris...",
+        "EN": "I took..."
+      }
+    },
+    "button": {
+      "addtofridge": {
+        "FR": "Ajouter au frigo",
+        "EN": "Add to fridge"
+      }
+    },
+    "snack": {
+      "emptied": {
+        "severity": "success",
+        "FR": "Panier vide :)",
+        "EN": "Empty cart :)"
       }
     }
   },
@@ -370,6 +409,11 @@
       }
     },
     "snack": {
+      "WIP": {
+        "severity": "warning",
+        "FR": "En cours de construction...",
+        "EN": "Work in progress.."
+      },
       "mockedassaved": {
         "severity": "warning",
         "FR": "Factis : Sauvé",

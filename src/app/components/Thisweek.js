@@ -65,7 +65,7 @@ export default class Thisweek extends React.Component {
     return (
       <div>
         <AppBar sx={{ position: "relative" }}>
-          <Toolbar onClick={() => this.props.callback("reload")}>
+          <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
@@ -118,28 +118,25 @@ export default class Thisweek extends React.Component {
             </IconButton>
           </Toolbar>
         </AppBar>
-
         <Box style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}>
-          <List dense={true}>
-            {this.props.values.map((recipe) => (
-              <ThisweekRecipe
-                key={recipe._id}
-                recipe={recipe}
-                onremove={this.handleRemove}
-                onreplace={this.handleReplace}
-                onscale={this.handleScale}
-                oncook={this.handleCook}
-              />
-            ))}
-          </List>
+          <Box>
+            <List dense={true}>
+              {this.props.values.map((recipe) => (
+                <ThisweekRecipe
+                  key={"need-" + recipe._id}
+                  recipe={recipe}
+                  callback={this.props.callback}
+                />
+              ))}
+            </List>
+          </Box>
+          <Snack
+            snackOpen={this.state.snackOpen}
+            snack={this.state.snack}
+            callback={this.handleSnack}
+            language={this.props.language}
+          />
         </Box>
-
-        <Snack
-          snackOpen={this.state.snackOpen}
-          snack={this.state.snack}
-          callback={this.handleSnack}
-          language={this.props.language}
-        />
       </div>
     );
   }
@@ -150,14 +147,6 @@ export default class Thisweek extends React.Component {
     // Update
     this.updateRecipiesHeight();
   }
-  componentDidUpdate(prevState) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("Thisweek.componentDidUpdate");
-    }
-    if (prevState.open !== this.props.open && this.props.open) {
-      // Update
-    }
-  }
 
   // Updates
   updateRecipiesHeight() {
@@ -165,7 +154,7 @@ export default class Thisweek extends React.Component {
       console.log("Thisweek.updateRecipiesHeight");
     }
     this.setState({
-      recipiesHeight: window.innerHeight - 145
+      recipiesHeight: window.innerHeight - 115
     });
   }
 
@@ -226,8 +215,8 @@ class ThisweekRecipe extends React.Component {
       console.log("ThisweekRecipe.render " + this.props.recipe._id);
     }
     return (
-      <ListItem key={this.props.recipe._id}>
-        <Card sx={{ width: "100%", padding: "1em" }}>
+      <ListItem key={"need-" & this.props.recipe._id}>
+        <Card sx={{ width: "100%", pl: "1em", pr: "1em" }}>
           <Typography>{this.props.recipe.name}</Typography>
           <Box
             sx={{
@@ -323,19 +312,19 @@ class ThisweekRecipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("ThisweekRecipe.handleRemove " + this.props.recipe._id);
     }
-    this.props.onremove(this.props.recipe._id);
+    this.props.callback("remove", { recipeid: this.props.recipe._id });
   }
   handleReplace() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("ThisweekRecipe.handleReplace " + this.props.recipe._id);
     }
-    this.props.onreplace(this.props.recipe._id);
+    this.props.callback("replace", { recipeid: this.props.recipe._id });
   }
   handleCook() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("ThisweekRecipe.handleCook " + this.props.recipe._id);
     }
-    this.props.oncook(this.props.recipe._id);
+    this.props.callback("cook", { recipeid: this.props.recipe._id });
   }
   handleScale(command) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -344,11 +333,17 @@ class ThisweekRecipe extends React.Component {
     switch (command) {
       case "down":
         if (this.props.recipe.scale > 1) {
-          this.props.onscale(this.props.recipe._id, command);
+          this.props.callback("scale", {
+            recipeid: this.props.recipe._id,
+            increment: command
+          });
         }
         break;
       case "up":
-        this.props.onscale(this.props.recipe._id, command);
+        this.props.callback("scale", {
+          recipeid: this.props.recipe._id,
+          increment: command
+        });
         break;
       default:
     }
