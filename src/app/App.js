@@ -167,18 +167,22 @@ export default class App extends React.Component {
               <BottomNavigationAction
                 icon={<BookIcon />}
                 sx={{ ml: "-1em", mr: "-1em" }}
+                onClick={() => this.api("LoadMyrecipies")}
               />
               <BottomNavigationAction
                 icon={<EventIcon />}
                 sx={{ ml: "-1em", mr: "-1em" }}
+                onClick={() => this.api("LoadThisweekrecipies")}
               />
               <BottomNavigationAction
                 icon={<KitchenIcon />}
                 sx={{ ml: "-1em", mr: "-1em" }}
+                onClick={() => this.api("LoadThisweekingredients")}
               />
               <BottomNavigationAction
                 icon={<ShoppingBagIcon />}
                 sx={{ ml: "-1em", mr: "-1em" }}
+                onClick={() => this.api("LoadThisweekingredients")}
               />
               <BottomNavigationAction
                 icon={<BalanceIcon />}
