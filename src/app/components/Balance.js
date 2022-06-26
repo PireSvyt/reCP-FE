@@ -9,10 +9,15 @@ import {
   Box,
   Fab,
   Tabs,
-  Tab
+  Tab,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import appcopy from "../copy";
 import Transaction from "./Transaction";
@@ -53,7 +58,7 @@ export default class Balance extends React.Component {
     this.handleOpenCategory = this.handleOpenCategory.bind(this);
     this.handleCloseCategory = this.handleCloseCategory.bind(this);
     this.handleSaveCategory = this.handleSaveCategory.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -61,7 +66,33 @@ export default class Balance extends React.Component {
     }
     return (
       <div>
-        <h2>{appcopy["mybalance"]["title"][this.props.language]}</h2>
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => this.props.callback("openMenu")}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6">
+              {appcopy["mybalance"]["title"][this.props.language]}
+            </Typography>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => {
+                if (process.env.REACT_APP_DEBUG === "TRUE") {
+                  console.log("Balance.AddIcon.onClick");
+                }
+                this.handleOpenTransaction("");
+              }}
+              sx={{ m: 1 }}
+            >
+              <AddIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -94,13 +125,13 @@ export default class Balance extends React.Component {
             index={0}
             style={{ maxHeight: this.state.tabHeight, overflow: "auto" }}
           >
-            <h3>
+            <Typography variant="h6">
               {
                 appcopy["mybalance"]["subsection"]["balanceperuser"][
                   this.props.language
                 ]
               }
-            </h3>
+            </Typography>
             <List>
               <ListItem key={"Alice"}>
                 <ListItemText
@@ -121,13 +152,13 @@ export default class Balance extends React.Component {
                 <ListItemText sx={{ width: 5 / 7 }} primary={"Pierre"} />
               </ListItem>
             </List>
-            <h3>
+            <Typography variant="h6">
               {
                 appcopy["mybalance"]["subsection"]["balancepercategory"][
                   this.props.language
                 ]
               }
-            </h3>
+            </Typography>
             <List dense={true}>
               {Object.keys(this.state.summary.categories).map((value) => (
                 <ListItem
@@ -195,26 +226,9 @@ export default class Balance extends React.Component {
             </List>
           </TabPanel>
         </Box>
-        <Fab
-          color="primary"
-          sx={{
-            position: "absolute",
-            bottom: 70,
-            right: 20
-          }}
-        >
-          <AddIcon
-            onClick={() => {
-              if (process.env.REACT_APP_DEBUG === "TRUE") {
-                console.log("Balance.AddIcon.onClick");
-              }
-              this.handleOpenTransaction("");
-            }}
-          />
-        </Fab>
         <Transaction
           transactionid={this.state.transactionid}
-          transactionOpen={this.state.transactionOpen}
+          open={this.state.transactionOpen}
           onclose={this.handleCloseTransaction}
           onedit={() => {
             this.updateTransactions();
@@ -234,7 +248,7 @@ export default class Balance extends React.Component {
         <Snack
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -255,7 +269,7 @@ export default class Balance extends React.Component {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
-      tabHeight: window.innerHeight - 180
+      tabHeight: window.innerHeight - 165
     });
   }
   updateSummary() {
@@ -366,13 +380,18 @@ export default class Balance extends React.Component {
     }
     this.updateBalance();
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleCloseSnack");
+      console.log("Balance.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 

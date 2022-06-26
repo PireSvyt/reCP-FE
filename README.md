@@ -1,11 +1,23 @@
 # reCP-FE
 
-Created with CodeSandbox
+## Debt
 
-## Tech debt
-
-- Wire api sets & gets for transactions, categories and balance
+- Appbar in transaction
+- Appbar in ingredient
+- Loader on recipe save
 
 ## Fancy
 
-- Auto complete on ingredient name in recipe form
+- Full screen https://web.dev/native-hardware-fullscreen/
+
+### Recipe
+
+### Ingredient
+
+- Unit conversion
+- Season
+- Check list on shops
+
+### This week
+
+- replace recipe on BE side

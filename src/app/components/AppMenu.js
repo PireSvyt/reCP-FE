@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Paper,
-  Fab,
   Box,
   List,
   ListItem,
@@ -9,7 +8,6 @@ import {
   ListItemText,
   SwipeableDrawer
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default class AppMenu extends React.Component {
   constructor(props) {
@@ -32,7 +30,6 @@ export default class AppMenu extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("AppMenu.render");
     }
-    //<Button onClick={(e) => this.handleClick(e)}>Dashboard</Button>
     return (
       <Box
         sx={{
@@ -41,22 +38,23 @@ export default class AppMenu extends React.Component {
           right: 20
         }}
       >
-        <Fab color="tertiary" onClick={(e) => this.handleClick(e)}>
-          <MoreVertIcon />
-        </Fab>
         <SwipeableDrawer
-          open={this.state.open}
-          onClose={this.handleToggleDrawer}
+          open={this.props.open}
+          onClose={() => {
+            this.handleToggleDrawer();
+            this.props.callback("close");
+          }}
           onOpen={this.handleToggleDrawer}
         >
           <Paper>
             <List>
-              {this.props.menulist.map((menuitem) => (
+              {this.props.values.map((menuitem) => (
                 <ListItem key={menuitem.name} disablePadding>
                   <ListItemButton
                     onClick={() => {
                       this.handleClose();
                       menuitem.callback();
+                      this.props.callback("close");
                     }}
                   >
                     <ListItemText primary={menuitem.name} />

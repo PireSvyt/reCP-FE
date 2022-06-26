@@ -43,24 +43,29 @@
         "EN": "Recipe deletion"
       },
       "deletionconfirmtext": {
-        "FR": "Ah, on en a plus besoin de cette recette ?",
+        "FR": "Ah, on en n'a plus besoin de cette recette ?",
         "EN": "Hum, don't we still need it?"
       }
     },
     "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Recette abandonnée",
+        "EN": "Recipe discarded"
+      },
       "saved": {
         "severity": "success",
         "FR": "Recette enregistrée",
         "EN": "Recipe saved"
       },
       "erroroncreation": {
-        "severity": "success",
+        "severity": "error",
         "FR": "Recette non créée",
         "EN": "Recipe not created"
       },
       "edited": {
         "severity": "success",
-        "FR": "Recette modifié",
+        "FR": "Recette modifiée",
         "EN": "Recipe edited"
       },
       "deleted": {
@@ -84,6 +89,80 @@
     "title": {
       "FR": "Ma semaine",
       "EN": "My week"
+    },
+    "snack": {
+      "recipe added": {
+        "severity": "success",
+        "FR": "Recette ajoutée",
+        "EN": "Recipe added"
+      },
+      "selection emptied": {
+        "severity": "success",
+        "FR": "Séléction vidée",
+        "EN": "Selection emptied"
+      },
+      "selection renewed": {
+        "severity": "success",
+        "FR": "Séléction renouvellée",
+        "EN": "Selection renewed"
+      },
+      "304 - no more unselected recipies": {
+        "severity": "info",
+        "FR": "Plus de recette à selectionner",
+        "EN": "No more recipies to select"
+      }
+    }
+  },
+  "fridge": {
+    "title": {
+      "FR": "Mon frigo",
+      "EN": "My fridge"
+    },
+    "subsection": {
+      "ihavent": {
+        "FR": "Est ce que j'ai..?",
+        "EN": "Do I have..?"
+      },
+      "ihave": {
+        "FR": "J'ai déjà...",
+        "EN": "I already have..."
+      }
+    },
+    "snack": {
+      "emptied": {
+        "severity": "success",
+        "FR": "Frigo vide :)",
+        "EN": "Empty fridge :)"
+      }
+    }
+  },
+  "shopping": {
+    "title": {
+      "FR": "Mes courses",
+      "EN": "My shopping"
+    },
+    "subsection": {
+      "ihavent": {
+        "FR": "Je cherche...",
+        "EN": "I'm looking for..."
+      },
+      "ihave": {
+        "FR": "J'ai pris...",
+        "EN": "I took..."
+      }
+    },
+    "button": {
+      "addtofridge": {
+        "FR": "Ajouter au frigo",
+        "EN": "Add to fridge"
+      }
+    },
+    "snack": {
+      "emptied": {
+        "severity": "success",
+        "FR": "Panier vide :)",
+        "EN": "Empty cart :)"
+      }
     }
   },
   "mybalance": {
@@ -213,6 +292,39 @@
       }
     }
   },
+  "ingredient": {
+    "title": {
+      "FR": "Ingrédient",
+      "EN": "Ingredient"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Ingrédient abandonné",
+        "EN": "Ingredient discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Ingrédient enregistré",
+        "EN": "Ingredient saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Ingrédient non créé",
+        "EN": "Ingredient not created"
+      },
+      "edited": {
+        "severity": "success",
+        "FR": "Ingrédient modifié",
+        "EN": "Ingredient edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Ingrédient supprimée",
+        "EN": "Ingredient deleted"
+      }
+    }
+  },
   "ingredients": {
     "title": {
       "FR": "Ingrédients",
@@ -287,12 +399,21 @@
         "FR": "Quantité",
         "EN": "Quantity"
       },
+      "instruction": {
+        "FR": "Instruction",
+        "EN": "Instruction"
+      },
       "unit": {
         "FR": "Unité",
         "EN": "Unit"
       }
     },
     "snack": {
+      "WIP": {
+        "severity": "warning",
+        "FR": "En cours de construction...",
+        "EN": "Work in progress.."
+      },
       "mockedassaved": {
         "severity": "warning",
         "FR": "Factis : Sauvé",
