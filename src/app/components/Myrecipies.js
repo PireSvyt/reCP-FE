@@ -41,17 +41,17 @@ export default class Myrecipies extends React.Component {
     // Updates
     this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
     // Handles
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
   }
   render() {
     return (
       <Box>
         <AppBar sx={{ position: "relative" }}>
-          <Toolbar onClick={this.props.reloadvalues}>
+          <Toolbar onClick={() => this.props.callback("reload")}>
             <IconButton
               edge="start"
               color="inherit"
-              onClick={this.props.openmenu}
+              onClick={() => this.props.callback("openMenu")}
             >
               <MoreVertIcon />
             </IconButton>
@@ -65,7 +65,7 @@ export default class Myrecipies extends React.Component {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
                   console.log("Myrecipies.AddIcon.onClick");
                 }
-                this.props.openrecipe("");
+                this.props.callback("openRecipe", { recipeid: "" });
               }}
               sx={{ m: 1 }}
             >
@@ -85,32 +85,16 @@ export default class Myrecipies extends React.Component {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
                   console.log("Myrecipies.recipies.onedit " + recipe._id);
                 }
-                this.props.openrecipe(recipe._id);
+                this.props.callback("openRecipe", { recipeid: recipe._id });
               }}
             />
-            /*
-            <ListItem key={`${recipe._id}`} id={`${recipe._id}`}>
-              <ListItemButton
-                onClick={() => {
-                  if (process.env.REACT_APP_DEBUG === "TRUE") {
-                    console.log("Myrecipies.recipies.onClick " + recipe._id);
-                  }
-                  this.props.openrecipe(recipe._id);
-                }}
-              >
-                <ListItemText
-                  primary={`${recipe.name}`}
-                  secondary={`${recipe.portions} portions`}
-                />
-              </ListItemButton>
-            </ListItem> */
           ))}
         </List>
 
         <Snack
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </Box>
@@ -135,13 +119,18 @@ export default class Myrecipies extends React.Component {
   }
 
   // Handlers
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Myrecipies.handleCloseSnack");
+      console.log("Myrecipies.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 
@@ -208,12 +197,12 @@ class MyrecipiesRecipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("MyrecipiesRecipe.handleSelect " + this.props.recipe._id);
     }
-    this.props.onselect(this.props.recipe._id);
+    this.props.callback("selectRecipe", { recipeid: this.props.recipe._id });
   }
   handleOpen() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("MyrecipiesRecipe.handleOpen " + this.props.recipe._id);
     }
-    this.props.onedit(this.props.recipe._id);
+    this.props.callback("openRecipe", { recipeid: this.props.recipe._id });
   }
 }

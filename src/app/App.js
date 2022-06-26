@@ -62,40 +62,19 @@ export default class App extends React.Component {
     };
     // Updates
 
+    // APIs
+    this.api = this.api.bind(this);
+
     // Handles
     this.handleChangeTab = this.handleChangeTab.bind(this);
-    this.handleOpenMenu = this.handleOpenMenu.bind(this);
-    this.handleCloseMenu = this.handleCloseMenu.bind(this);
-    this.handleOpenIngredient = this.handleOpenIngredient.bind(this);
-    this.handleCloseIngredient = this.handleCloseIngredient.bind(this);
-    this.handleOpenIngredients = this.handleOpenIngredients.bind(this);
-    this.handleCloseIngredients = this.handleCloseIngredients.bind(this);
-    this.handleOpenRecipe = this.handleOpenRecipe.bind(this);
-    this.handleCloseRecipe = this.handleCloseRecipe.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
-    this.handleThisweekEmpty = this.handleThisweekEmpty.bind(this);
-    this.handleThisweekRenew = this.handleThisweekRenew.bind(this);
-    this.handleThisweekRecipeAdd = this.handleThisweekRecipeAdd.bind(this);
-    this.handleThisweekRecipeRemove = this.handleThisweekRecipeRemove.bind(
-      this
-    );
-    this.handleThisweekRecipeReplace = this.handleThisweekRecipeReplace.bind(
-      this
-    );
-    this.handleThisweekRecipeScale = this.handleThisweekRecipeScale.bind(this);
-    this.handleThisweekRecipeCook = this.handleThisweekRecipeCook.bind(this);
-    this.handleFridgeEmpty = this.handleFridgeEmpty.bind(this);
-    this.handleFridgeHave = this.handleFridgeHave.bind(this);
-    this.handleFridgeHavent = this.handleFridgeHavent.bind(this);
-
-    // APIs
-    this.apiLoadIngredients = this.apiLoadIngredients.bind(this);
-    this.apiLoadMyrecipies = this.apiLoadMyrecipies.bind(this);
-    this.apiAppendIngredients = this.apiAppendIngredients.bind(this);
-    this.apiLoadThisweekrecipies = this.apiLoadThisweekrecipies.bind(this);
-    this.apiLoadThisweekingredients = this.apiLoadThisweekingredients.bind(
-      this
-    );
+    this.handleSnack = this.handleSnack.bind(this);
+    this.handleMenu = this.handleMenu.bind(this);
+    this.handleIngredient = this.handleIngredient.bind(this);
+    this.handleRecipe = this.handleRecipe.bind(this);
+    this.handleMyrecipies = this.handleMyrecipies.bind(this);
+    this.handleThisweek = this.handleThisweek.bind(this);
+    this.handleFridge = this.handleFridge.bind(this);
+    this.handleBalance = this.handleBalance.bind(this);
   }
   render() {
     return (
@@ -103,34 +82,28 @@ export default class App extends React.Component {
         <AppMenu
           language={this.props.language}
           open={this.state.openMenu}
-          onclose={this.handleCloseMenu}
-          menulist={this.state.menulist}
+          values={this.state.menulist}
+          callback={this.handleMenu}
         />
 
         <Ingredient
           language={this.props.language}
           open={this.state.openIngredient}
-          ingredientid={this.state.ingredientid}
-          onclose={this.handleCloseIngredient}
-          onedit={() => {
-            /*this.apiAppendIngredients*/
-          }}
+          values={this.state.ingredientid}
+          callback={this.handleIngredient}
         />
         <Ingredients
           language={this.props.language}
           open={this.state.openIngredients}
-          onclose={this.handleCloseIngredients}
           values={this.state.apiIngredients}
-          openingredient={this.handleOpenIngredient}
+          callback={this.handleIngredient}
         />
 
         <Recipe
           language={this.props.language}
           open={this.state.openRecipe}
-          recipeid={this.state.recipeid}
-          onclose={this.handleCloseRecipe}
-          onedit={this.apiLoadMyrecipies}
-          addingredient={this.handleOpenIngredient}
+          values={this.state.recipeid}
+          callback={this.handleRecipe}
         />
 
         <AppTabPanel
@@ -140,43 +113,28 @@ export default class App extends React.Component {
         >
           <Myrecipies
             language={this.props.language}
-            openmenu={this.handleOpenMenu}
             values={this.state.apiMyrecipies}
-            refreshvalues={this.apiLoadMyrecipies}
-            openrecipe={this.handleOpenRecipe}
-            reloadvalues={this.apiLoadMyrecipies}
+            callback={this.handleMyrecipies}
           />
         </AppTabPanel>
         <AppTabPanel value={this.state.selectedTab} index={1} key={"thisweek"}>
           <Thisweek
             language={this.props.language}
-            openmenu={this.handleOpenMenu}
             values={this.state.apiThisweekrecipies}
-            onempty={this.handleThisweekEmpty}
-            onadd={this.handleThisweekRecipeAdd}
-            onrenew={this.handleThisweekRenew}
-            onremove={this.handleThisweekRecipeRemove}
-            onreplace={this.handleThisweekRecipeReplace}
-            onscale={this.handleThisweekRecipeScale}
-            oncook={this.handleThisweekRecipeCook}
-            reloadvalues={this.apiLoadThisweekrecipies}
+            callback={this.handleThisweek}
           />
         </AppTabPanel>
         <AppTabPanel value={this.state.selectedTab} index={2} key={"fridge"}>
           <Fridge
             language={this.props.language}
-            openmenu={this.handleOpenMenu}
             values={this.state.apiThisweekingredients}
-            onreset={this.handleFridgeEmpty}
-            onhave={this.handleFridgeHave}
-            onhavent={this.handleFridgeHavent}
-            reloadvalues={this.apiLoadThisweekingredients}
+            callback={this.handleFridge}
           />
         </AppTabPanel>
         <AppTabPanel value={this.state.selectedTab} index={3} key={"mybalance"}>
           <Balance
             language={this.props.language}
-            openmenu={this.handleOpenMenu}
+            callback={this.handleBalance}
           />
         </AppTabPanel>
         <Paper
@@ -218,10 +176,10 @@ export default class App extends React.Component {
         </Paper>
 
         <Snack
+          language={this.props.language}
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
-          language={this.props.language}
+          callback={this.handleSnack}
         />
       </Box>
     );
@@ -232,14 +190,109 @@ export default class App extends React.Component {
     }
     // Update
     this.setState((prevState, props) => ({
-      menulist: [{ name: "INGREDIENTS", callback: this.handleOpenIngredients }]
+      menulist: [
+        {
+          name: "INGREDIENTS",
+          callback: () => {
+            this.handleIngredient("openList");
+          }
+        }
+      ]
     }));
-    this.apiLoadIngredients();
-    this.apiLoadMyrecipies();
-    this.apiLoadThisweekrecipies();
-    this.apiLoadThisweekingredients();
+    this.api("LoadIngredients");
+    this.api("LoadMyrecipies");
+    this.api("LoadThisweekrecipies");
+    this.api("LoadThisweekingredients");
   }
 
+  // API
+  api(source, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.api " + source);
+    }
+    console.log("App.api " + source);
+    switch (source) {
+      case "LoadIngredients":
+        apiGetIngredients({
+          need: "ingredients"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiIngredients: res.ingredients
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiIngredients: [],
+              openSnack: [],
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "AppendIngredients":
+        var previousIngredients = this.state.apiIngredients;
+        previousIngredients.push(details.newIngredient);
+        this.setState((prevState, props) => ({
+          apiIngredients: previousIngredients
+        }));
+        break;
+      case "LoadMyrecipies":
+        apiGetRecipies({
+          need: "myrecipies"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiMyrecipies: res.recipies
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiMyrecipies: [],
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "LoadThisweekrecipies":
+        apiGetRecipies({
+          need: "thisweek"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiThisweekrecipies: res.recipies
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiThisweekrecipies: [],
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "LoadThisweekingredients":
+        apiSetThisweekNeeds().then((res) => {
+          console.log("App.apiLoadThisweekingredients.res");
+          console.log(res);
+          //apiGetIngredients({
+          //  need: "fridge"
+          //}).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiThisweekingredients: res.ingredients
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiThisweekingredients: [],
+              openSnack: true,
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      default:
+    }
+  }
   // Handlers
   handleChangeTab(event, newTabIndex) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -255,333 +308,289 @@ export default class App extends React.Component {
       selectedTab: newTabIndex
     });
   }
-  // Menu
-  handleOpenMenu() {
+  handleMenu(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleOpenMenu");
+      console.log("App.handleManu " + action);
     }
-    this.setState((prevState, props) => ({
-      openMenu: true
-    }));
-  }
-  handleCloseMenu() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleCloseMenu");
-    }
-    this.setState((prevState, props) => ({
-      openMenu: false
-    }));
-  }
-  // Ingredients
-  handleOpenIngredient(id) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleOpenIngredient " + id);
-    }
-    this.setState((prevState, props) => ({
-      openIngredient: true,
-      ingredientid: id
-    }));
-  }
-  handleCloseIngredient() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleCloseIngredient");
-    }
-    this.setState((prevState, props) => ({
-      openIngredient: false
-    }));
-  }
-  handleOpenIngredients() {
-    this.apiLoadIngredients();
-    this.setState((prevState, props) => ({
-      openIngredients: true
-    }));
-  }
-  handleCloseIngredients() {
-    this.setState((prevState, props) => ({
-      openIngredients: false
-    }));
-  }
-  // Recipe
-  handleOpenRecipe(id) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleOpenRecipe " + id);
-    }
-    this.setState((prevState, props) => ({
-      openRecipe: true,
-      recipeid: id
-    }));
-  }
-  handleCloseRecipe() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleCloseRecipe");
-    }
-    this.setState((prevState, props) => ({
-      openRecipe: false
-    }));
-  }
-  // This week
-  handleThisweekEmpty() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekEmpty");
-    }
-    console.log("App.handleThisweekEmpty");
-    apiSetThisweekEmpty().then((res) => {
-      switch (res.status) {
-        case 200:
-          this.setState({
-            apiThisweekrecipies: []
-          });
-          this.setState({
-            openSnack: true,
-            snack: appcopy["thisweek"]["snack"]["selection emptied"]
-          });
-          break;
-        case 400:
-          this.setState({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errornetwork"]
-          });
-          break;
-        default:
-          this.setState((prevState, props) => ({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errorunknown"]
-          }));
-      }
-    });
-  }
-  handleThisweekRenew() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekRenew");
-    }
-    console.log("App.handleThisweekRenew");
-    apiSetThisweekRenew().then((res) => {
-      switch (res.status) {
-        case 200:
-          this.setState({
-            apiThisweekrecipies: res.recipies
-          });
-          this.setState({
-            openSnack: true,
-            snack: appcopy["thisweek"]["snack"]["selection renewed"]
-          });
-          break;
-        case 304:
-          this.setState({
-            openSnack: true,
-            snack:
-              appcopy["thisweek"]["snack"]["304 - no more unselected recipies"]
-          });
-          break;
-        case 400:
-          this.setState({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errornetwork"]
-          });
-          break;
-        default:
-          this.setState((prevState, props) => ({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errorunknown"]
-          }));
-      }
-    });
-  }
-  handleThisweekRecipeAdd() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekRecipeAdd");
-    }
-    console.log("App.handleThisweekRecipeAdd");
-    apiSetThisweekRecipeAdd().then((res) => {
-      switch (res.status) {
-        case 200:
-          let currentSelection = this.state.apiThisweekrecipies;
-          currentSelection.push(res.recipe);
-          this.setState({
-            apiThisweekrecipies: currentSelection
-          });
-          this.setState({
-            openSnack: true,
-            snack: appcopy["thisweek"]["snack"]["recipe added"]
-          });
-          break;
-        case 304:
-          this.setState({
-            openSnack: true,
-            snack:
-              appcopy["thisweek"]["snack"]["304 - no more unselected recipies"]
-          });
-          break;
-        case 400:
-          this.setState({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errornetwork"]
-          });
-          break;
-        default:
-          this.setState((prevState, props) => ({
-            openSnack: true,
-            snack: appcopy["generic"]["snack"]["errorunknown"]
-          }));
-      }
-    });
-  }
-  handleThisweekRecipeRemove(recipeid) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekRecipeRemove " + recipeid);
-    }
-    console.log("App.handleThisweekRecipeRemove " + recipeid);
-    apiSetThisweekRecipeRemove(recipeid).then(this.apiLoadThisweekrecipies());
-  }
-  handleThisweekRecipeReplace(recipeid) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekRecipeReplace " + recipeid);
-    }
-    console.log("App.handleThisweekRecipeReplace " + recipeid);
-    apiSetThisweekRecipeReplace(recipeid).then(this.apiLoadThisweekrecipies());
-  }
-  handleThisweekRecipeScale(recipeid, increment) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log(
-        "App.handleThisweekRecipeScale " + increment + " " + recipeid
-      );
-    }
-    console.log("App.handleThisweekRecipeScale " + increment + " " + recipeid);
-    apiSetThisweekRecipeScale(recipeid, increment).then(
-      this.apiLoadThisweekrecipies()
-    );
-  }
-  handleFridgeHave(recipeid) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleFridgeHave " + recipeid);
-    }
-    console.log("App.handleFridgeHave " + recipeid);
-    apiSetFridgeHave(recipeid).then(this.apiLoadThisweekingredients());
-  }
-  handleFridgeHavent(recipeid) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleFridgeHavent " + recipeid);
-    }
-    console.log("App.handleFridgeHavent " + recipeid);
-    apiSetFridgeHavent(recipeid).then(this.apiLoadThisweekingredients());
-  }
-  handleThisweekRecipeCook(recipeid) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleThisweekRecipeCook " + recipeid);
-    }
-    console.log("App.handleThisweekRecipeCook " + recipeid);
-    apiSetThisweekRecipePrepare(recipeid).then(this.apiLoadThisweekrecipies());
-  }
-  handleFridgeEmpty() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleFridgeEmpty ");
-    }
-    console.log("App.handleFridgeEmpty TODO");
-  }
-  // Snack
-  handleCloseSnack() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.handleCloseSnack");
-    }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
-  }
-
-  // APIs
-  apiLoadIngredients() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiLoadIngredients");
-    }
-    apiGetIngredients({
-      need: "ingredients"
-    }).then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          apiIngredients: res.ingredients
-        });
-      } else {
+    console.log("App.handleManu " + action);
+    switch (action) {
+      case "open":
         this.setState((prevState, props) => ({
-          apiIngredients: [],
-          openSnack: [],
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          openMenu: true
         }));
-      }
-    });
-  }
-  apiAppendIngredients(newIngredient) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiAppendIngredients");
-    }
-    var previousIngredients = this.state.apiIngredients;
-    previousIngredients.push(newIngredient);
-    this.setState((prevState, props) => ({
-      apiIngredients: previousIngredients
-    }));
-  }
-  apiLoadMyrecipies() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiLoadMyrecipies");
-    }
-    apiGetRecipies({
-      need: "myrecipies"
-    }).then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          apiMyrecipies: res.recipies
-        });
-      } else {
+        break;
+      case "close":
         this.setState((prevState, props) => ({
-          apiMyrecipies: [],
-          openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          openMenu: false
         }));
-      }
-    });
-  }
-  apiLoadThisweekrecipies() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiLoadThisweekrecipies");
+        break;
+      default:
     }
-    apiGetRecipies({
-      need: "thisweek"
-    }).then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          apiThisweekrecipies: res.recipies
-        });
-      } else {
-        this.setState((prevState, props) => ({
-          apiThisweekrecipies: [],
-          openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
-        }));
-      }
-    });
   }
-  apiLoadThisweekingredients() {
+  handleIngredient(action, details) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("App.apiLoadThisweekingredients");
+      console.log("App.handleIngredient " + action);
     }
-    console.log("App.apiLoadThisweekingredients");
-    apiSetThisweekNeeds().then((res) => {
-      console.log("App.apiLoadThisweekingredients.res");
-      console.log(res);
-      //apiGetIngredients({
-      //  need: "fridge"
-      //}).then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          apiThisweekingredients: res.ingredients
-        });
-      } else {
+    console.log("App.handleIngredient " + action);
+    switch (action) {
+      case "openItem":
         this.setState((prevState, props) => ({
-          apiThisweekingredients: [],
-          openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          openIngredient: true,
+          ingredientid: details.ingredientid
         }));
-      }
-    });
+        break;
+      case "closeItem":
+        this.setState((prevState, props) => ({
+          openIngredient: false
+        }));
+        break;
+      case "openList":
+        this.api("LoadIngredients");
+        this.setState((prevState, props) => ({
+          openIngredients: true
+        }));
+        break;
+      case "closeList":
+        this.setState((prevState, props) => ({
+          openIngredients: false
+        }));
+        break;
+      default:
+    }
+  }
+  handleRecipe(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleRecipe " + action);
+    }
+    console.log("App.handleRecipe " + action);
+    switch (action) {
+      case "openItem":
+        this.setState((prevState, props) => ({
+          openRecipe: true,
+          recipeid: details.recipeid
+        }));
+        break;
+      case "closeItem":
+        this.setState((prevState, props) => ({
+          openRecipe: false
+        }));
+        break;
+      case "openIngredient":
+        this.handleIngredient("openItem", details.ingredientid);
+        break;
+      case "loadMyrecipies":
+        this.api("LoadMyrecipies");
+        break;
+      default:
+    }
+  }
+  handleMyrecipies(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleMyrecipies " + action);
+    }
+    console.log("App.handleMyrecipies " + action);
+    switch (action) {
+      case "openMenu":
+        this.handleMenu("open");
+        break;
+      case "reload":
+        this.api("LoadMyrecipies");
+        break;
+      case "openRecipe":
+        this.handleRecipe("open", details.recipeid);
+        break;
+      case "selectRecipe":
+        // TODO
+        break;
+      default:
+    }
+  }
+  handleThisweek(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleThisweek " + action);
+    }
+    console.log("App.handleThisweek " + action);
+    switch (action) {
+      case "openMenu":
+        this.handleMenu("open");
+        break;
+      case "empty":
+        apiSetThisweekEmpty().then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                apiThisweekrecipies: []
+              });
+              this.setState({
+                openSnack: true,
+                snack: appcopy["thisweek"]["snack"]["selection emptied"]
+              });
+              break;
+            case 400:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              });
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+          }
+        });
+        break;
+      case "renew":
+        apiSetThisweekRenew().then((res) => {
+          switch (res.status) {
+            case 200:
+              this.setState({
+                apiThisweekrecipies: res.recipies
+              });
+              this.setState({
+                openSnack: true,
+                snack: appcopy["thisweek"]["snack"]["selection renewed"]
+              });
+              break;
+            case 304:
+              this.setState({
+                openSnack: true,
+                snack:
+                  appcopy["thisweek"]["snack"][
+                    "304 - no more unselected recipies"
+                  ]
+              });
+              break;
+            case 400:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              });
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+          }
+        });
+        break;
+      case "add":
+        apiSetThisweekRecipeAdd().then((res) => {
+          switch (res.status) {
+            case 200:
+              let currentSelection = this.state.apiThisweekrecipies;
+              currentSelection.push(res.recipe);
+              this.setState({
+                apiThisweekrecipies: currentSelection
+              });
+              this.setState({
+                openSnack: true,
+                snack: appcopy["thisweek"]["snack"]["recipe added"]
+              });
+              break;
+            case 304:
+              this.setState({
+                openSnack: true,
+                snack:
+                  appcopy["thisweek"]["snack"][
+                    "304 - no more unselected recipies"
+                  ]
+              });
+              break;
+            case 400:
+              this.setState({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errornetwork"]
+              });
+              break;
+            default:
+              this.setState((prevState, props) => ({
+                openSnack: true,
+                snack: appcopy["generic"]["snack"]["errorunknown"]
+              }));
+          }
+        });
+        break;
+      case "remove":
+        apiSetThisweekRecipeRemove(details.recipeid).then(
+          this.api("LoadThisweekrecipies")
+        );
+        break;
+      case "replace":
+        apiSetThisweekRecipeReplace(details.recipeid).then(
+          this.api("LoadThisweekrecipies")
+        );
+        break;
+      case "scale":
+        apiSetThisweekRecipeScale(details.recipeid, details.increment).then(
+          this.api("LoadThisweekrecipies")
+        );
+        break;
+      case "cook":
+        apiSetThisweekRecipePrepare(details.recipeid).then(
+          this.api("LoadThisweekrecipies")
+        );
+        break;
+      case "reload":
+        this.api("LoadThisweekrecipies");
+        break;
+      default:
+    }
+  }
+  handleFridge(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleFridge " + action);
+    }
+    console.log("App.handleFridge " + action);
+    switch (action) {
+      case "openMenu":
+        this.handleMenu("open");
+        break;
+      case "empty":
+        console.log("App.handleFridgeEmpty TODO");
+        break;
+      case "have":
+        apiSetFridgeHave(details.ingredientid).then(
+          this.api("LoadThisweekingredients")
+        );
+        break;
+      case "havent":
+        apiSetFridgeHavent(details.ingredientid).then(
+          this.api("LoadThisweekingredients")
+        );
+        break;
+      case "reload":
+        this.api("LoadThisweekingredients");
+        break;
+      default:
+    }
+  }
+  handleBalance(action) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleBalance " + action);
+    }
+    console.log("App.handleBalance " + action);
+    switch (action) {
+      case "openMenu":
+        this.handleMenu("open");
+        break;
+      default:
+    }
+  }
+  handleSnack(action) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleSnack " + action);
+    }
+    console.log("App.handleSnack " + action);
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 

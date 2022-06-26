@@ -58,7 +58,7 @@ export default class Balance extends React.Component {
     this.handleOpenCategory = this.handleOpenCategory.bind(this);
     this.handleCloseCategory = this.handleCloseCategory.bind(this);
     this.handleSaveCategory = this.handleSaveCategory.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -71,7 +71,7 @@ export default class Balance extends React.Component {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={this.props.openmenu}
+              onClick={() => this.props.callback("openMenu")}
             >
               <MoreVertIcon />
             </IconButton>
@@ -248,7 +248,7 @@ export default class Balance extends React.Component {
         <Snack
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -380,13 +380,18 @@ export default class Balance extends React.Component {
     }
     this.updateBalance();
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Balance.handleCloseSnack");
+      console.log("Balance.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 

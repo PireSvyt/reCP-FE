@@ -52,7 +52,7 @@ export default class Thisweek extends React.Component {
     // Updates
     this.updateRecipiesHeight = this.updateRecipiesHeight.bind(this);
     // Handles
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleReplace = this.handleReplace.bind(this);
     this.handleCook = this.handleCook.bind(this);
@@ -65,11 +65,11 @@ export default class Thisweek extends React.Component {
     return (
       <div>
         <AppBar sx={{ position: "relative" }}>
-          <Toolbar onClick={this.props.reloadvalues}>
+          <Toolbar onClick={() => this.props.callback("reload")}>
             <IconButton
               edge="start"
               color="inherit"
-              onClick={this.props.openmenu}
+              onClick={() => this.props.callback("openMenu")}
             >
               <MoreVertIcon />
             </IconButton>
@@ -83,7 +83,7 @@ export default class Thisweek extends React.Component {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
                   console.log("Thisweek.EmptyIcon.onClick");
                 }
-                this.props.onempty();
+                this.props.callback("empty");
               }}
               sx={{ m: 1 }}
             >
@@ -97,7 +97,7 @@ export default class Thisweek extends React.Component {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
                   console.log("Thisweek.RestartAltIcon.onClick");
                 }
-                this.props.onrenew();
+                this.props.callback("renew");
               }}
               sx={{ m: 1 }}
             >
@@ -110,7 +110,7 @@ export default class Thisweek extends React.Component {
                 if (process.env.REACT_APP_DEBUG === "TRUE") {
                   console.log("Thisweek.AddIcon.onClick");
                 }
-                this.props.onadd();
+                this.props.callback("add");
               }}
               sx={{ m: 1 }}
             >
@@ -137,7 +137,7 @@ export default class Thisweek extends React.Component {
         <Snack
           snackOpen={this.state.snackOpen}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -174,33 +174,38 @@ export default class Thisweek extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Thisweek.handleRemove " + id);
     }
-    this.props.onremove(id);
+    this.props.callback("remove", { recipeid: id });
   }
   handleReplace(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Thisweek.handleReplace " + id);
     }
-    this.props.onreplace(id);
+    this.props.callback("replace", { recipeid: id });
   }
   handleCook(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Thisweek.handleCook " + id);
     }
-    this.props.oncook(id);
+    this.props.callback("cook", { recipeid: id });
   }
   handleScale(id, command) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Thisweek.handleScale " + command + " " + id);
     }
-    this.props.onscale(id, command);
+    this.props.callback("scale", { recipeid: id, increment: command });
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Thisweek.handleCloseSnack");
+      console.log("Thisweek.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      snackOpen: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 

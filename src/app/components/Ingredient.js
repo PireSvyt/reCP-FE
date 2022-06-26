@@ -38,7 +38,7 @@ export default class Ingredient extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -96,7 +96,7 @@ export default class Ingredient extends React.Component {
         <Snack
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -115,11 +115,11 @@ export default class Ingredient extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.ingredientid !== this.props.ingredientid
+      prevState.values !== this.props.values
     ) {
-      if (this.props.ingredientid !== "") {
+      if (this.props.values !== "") {
         // Load
-        apiGetIngredient(this.props.ingredientid).then((res) => {
+        apiGetIngredient(this.props.values).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
@@ -140,7 +140,7 @@ export default class Ingredient extends React.Component {
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errorunknown"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
           }
         });
       } else {
@@ -161,7 +161,7 @@ export default class Ingredient extends React.Component {
       openSnack: true,
       snack: appcopy["ingredient"]["snack"]["discarded"]
     }));
-    this.props.onclose();
+    this.props.callback("closeItem");
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -225,7 +225,7 @@ export default class Ingredient extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.ingredientid);
+        console.log(this.props.values);
         console.log(this.state.ingredient);
       }
       apiSetIngredientSave(this.state.ingredient).then((res) => {
@@ -236,8 +236,7 @@ export default class Ingredient extends React.Component {
               openSnack: true,
               snack: appcopy["ingredient"]["snack"]["saved"]
             });
-            this.props.onclose();
-            this.props.onedit();
+            this.props.callback("closeItem");
             break;
           case 200:
             this.setState((prevState, props) => ({
@@ -245,8 +244,7 @@ export default class Ingredient extends React.Component {
               openSnack: true,
               snack: appcopy["ingredient"]["snack"]["edited"]
             }));
-            this.props.onclose();
-            this.props.onedit();
+            this.props.callback("closeItem");
             break;
           case 400:
             this.setState({
@@ -272,12 +270,17 @@ export default class Ingredient extends React.Component {
       }));
     }
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.handleCloseSnack");
+      console.log("Ingredient.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }

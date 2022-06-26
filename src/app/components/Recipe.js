@@ -111,7 +111,7 @@ export default class Recipe extends React.Component {
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
     this.handleInstructionDelete = this.handleInstructionDelete.bind(this);
     this.handleInstructionChange = this.handleInstructionChange.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
     // API
@@ -228,7 +228,7 @@ export default class Recipe extends React.Component {
                     if (process.env.REACT_APP_DEBUG === "TRUE") {
                       console.log("Ingredients.AddIcon.onClick");
                     }
-                    this.props.addingredient("");
+                    this.props.callback("openIngredient", { ingredientid: "" });
                   }}
                   sx={{ m: 1 }}
                 >
@@ -281,7 +281,7 @@ export default class Recipe extends React.Component {
         <Snack
           open={this.state.openSnack}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -310,12 +310,12 @@ export default class Recipe extends React.Component {
     }
     if (prevState.open !== this.props.open && this.props.open) {
       this.apiLoadIngredients();
-      if (this.props.recipeid === "") {
+      if (this.props.values === "") {
         this.setState((prevState, props) => ({
           recipe: getEmptyComponent("recipe")
         }));
       } else {
-        apiGetRecipe(this.props.recipeid).then((res) => {
+        apiGetRecipe(this.props.values).then((res) => {
           switch (res.status) {
             case 200:
               // Ingredients
@@ -355,7 +355,7 @@ export default class Recipe extends React.Component {
                 openSnack: true,
                 snack: appcopy["recipe"]["snack"]["206 - inconsistency on load"]
               });
-              this.props.onclose();
+              this.props.callback("closeItem");
               break;
             case 400:
               this.setState((prevState, props) => ({
@@ -363,7 +363,7 @@ export default class Recipe extends React.Component {
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errornetwork"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
               break;
             default:
               this.setState((prevState, props) => ({
@@ -371,7 +371,7 @@ export default class Recipe extends React.Component {
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errorunknown"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
           }
         });
       }
@@ -388,7 +388,7 @@ export default class Recipe extends React.Component {
       recipe_name: undefined,
       recipe_portions: undefined
     }));
-    this.props.onclose();
+    this.props.callback("closeItem");
   }
   handleChange(event) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -496,8 +496,7 @@ export default class Recipe extends React.Component {
               openSnack: true,
               snack: appcopy["recipe"]["snack"]["saved"]
             }));
-            this.props.onclose();
-            this.props.onedit();
+            this.props.callback("closeItem");
             break;
           case 201:
             this.setState({
@@ -507,8 +506,7 @@ export default class Recipe extends React.Component {
               openSnack: true,
               snack: appcopy["recipe"]["snack"]["edited"]
             });
-            this.props.onclose();
-            this.props.onedit();
+            this.props.callback("closeItem");
             break;
           case 406:
             this.setState({
@@ -640,13 +638,18 @@ export default class Recipe extends React.Component {
       recipe: recipe
     }));
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.handleCloseSnack");
+      console.log("Recipe.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      openSnack: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
   handleCloseConfirm() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -660,7 +663,7 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.handleConfirmDelete");
     }
-    apiSetRecipeDelete(this.props.recipeid).then((res) => {
+    apiSetRecipeDelete(this.props.values).then((res) => {
       switch (res.status) {
         case 200:
           this.setState((prevState, props) => ({
@@ -669,8 +672,7 @@ export default class Recipe extends React.Component {
             openSnack: true,
             snack: appcopy["recipe"]["snack"]["deleted"]
           }));
-          this.props.onclose();
-          this.props.onsedit();
+          this.props.callback("closeItem");
           break;
         case 400:
           this.setState({

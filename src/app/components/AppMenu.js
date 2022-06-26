@@ -42,18 +42,19 @@ export default class AppMenu extends React.Component {
           open={this.props.open}
           onClose={() => {
             this.handleToggleDrawer();
-            this.props.onclose();
+            this.props.callback("close");
           }}
           onOpen={this.handleToggleDrawer}
         >
           <Paper>
             <List>
-              {this.props.menulist.map((menuitem) => (
+              {this.props.values.map((menuitem) => (
                 <ListItem key={menuitem.name} disablePadding>
                   <ListItemButton
                     onClick={() => {
                       this.handleClose();
                       menuitem.callback();
+                      this.props.callback("close");
                     }}
                   >
                     <ListItemText primary={menuitem.name} />

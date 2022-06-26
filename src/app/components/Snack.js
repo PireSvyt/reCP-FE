@@ -65,10 +65,7 @@ export default class Snack extends React.Component {
       console.log("Snack.state");
       console.log(this.state);
     }
-    if (
-      prevState.snackOpen !== this.props.snackOpen ||
-      prevState.snack !== this.props.snack
-    ) {
+    if (prevState.snack !== this.props.snack) {
       // Add optional inputs
       var newSnack = this.props.snack;
       if (newSnack !== undefined) {
@@ -94,7 +91,7 @@ export default class Snack extends React.Component {
       console.log("Snack.handleClose");
     }
     if (reason !== "clickaway") {
-      this.props.onclose();
+      this.props.callback("close");
     }
   }
 }

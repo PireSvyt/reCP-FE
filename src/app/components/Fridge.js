@@ -54,7 +54,7 @@ export default class Fridge extends React.Component {
     // Updates
     this.updateFridgeHeight = this.updateFridgeHeight.bind(this);
     // Handles
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
     this.handleEmpty = this.handleEmpty.bind(this);
     this.handleHave = this.handleHave.bind(this);
     this.handleHavent = this.handleHavent.bind(this);
@@ -67,11 +67,11 @@ export default class Fridge extends React.Component {
     return (
       <div>
         <AppBar sx={{ position: "relative" }}>
-          <Toolbar onClick={this.props.reloadvalues}>
+          <Toolbar onClick={() => this.props.callback("reload")}>
             <IconButton
               edge="start"
               color="inherit"
-              onClick={this.props.openmenu}
+              onClick={() => this.props.callback("openMenu")}
             >
               <MoreVertIcon />
             </IconButton>
@@ -111,7 +111,7 @@ export default class Fridge extends React.Component {
         <Snack
           snackOpen={this.state.snackOpen}
           snack={this.state.snack}
-          onclose={this.handleCloseSnack}
+          callback={this.handleSnack}
           language={this.props.language}
         />
       </div>
@@ -148,34 +148,39 @@ export default class Fridge extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Fridge.handleEmpty " + id);
     }
-    this.props.onreset();
+    this.props.callback("empty");
   }
   handleHave(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Fridge.handleHave " + id);
     }
-    this.props.onhave(id);
+    this.props.callback("have", { ingredientid: id });
   }
   handleHavent(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Fridge.handleHavent " + id);
     }
-    this.props.onhavent(id);
+    this.props.callback("havent", { ingredientid: id });
   }
   handleIncrement(id) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Fridge.handleIncrement " + id);
     }
     console.log("Fridge.handleIncrement TODO " + id);
-    //this.props.onincrement(id);
+    this.props.callback("increment", { ingredientid: id });
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Fridge.handleCloseSnack");
+      console.log("Fridge.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      snackOpen: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
 

@@ -34,11 +34,12 @@ export default class Ingredients extends React.Component {
       console.log("Ingredients language = " + this.props.language);
     }
     this.state = {
-      open: false
+      open: false,
+      openSnack: false
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseSnack = this.handleCloseSnack.bind(this);
+    this.handleSnack = this.handleSnack.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -72,7 +73,7 @@ export default class Ingredients extends React.Component {
                   if (process.env.REACT_APP_DEBUG === "TRUE") {
                     console.log("Ingredients.AddIcon.onClick");
                   }
-                  this.props.openingredient("");
+                  this.props.callback("openItem", { ingredientid: "" });
                 }}
                 sx={{ m: 1 }}
               >
@@ -91,7 +92,9 @@ export default class Ingredients extends React.Component {
                           "Ingredients.ingredients.onClick " + ingredient._id
                         );
                       }
-                      this.props.openingredient(ingredient._id);
+                      this.props.callback("openItem", {
+                        ingredientid: ingredient._id
+                      });
                     }}
                   >
                     <ListItemText
@@ -106,10 +109,10 @@ export default class Ingredients extends React.Component {
         </Dialog>
 
         <Snack
-          snackOpen={this.state.snackOpen}
-          snack={this.state.snack}
-          onclose={this.handleCloseSnack}
           language={this.props.language}
+          open={this.state.snackOpen}
+          snack={this.state.snack}
+          callback={this.handleSnack}
         />
       </div>
     );
@@ -133,14 +136,19 @@ export default class Ingredients extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Ingredients.handleClose");
     }
-    this.props.onclose(undefined);
+    this.props.callback("closeList");
   }
-  handleCloseSnack() {
+  handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredients.handleCloseSnack");
+      console.log("Ingredients.handleSnack " + action);
     }
-    this.setState((prevState, props) => ({
-      snackOpen: false
-    }));
+    switch (action) {
+      case "close":
+        this.setState((prevState, props) => ({
+          openSnack: false
+        }));
+        break;
+      default:
+    }
   }
 }
