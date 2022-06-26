@@ -76,20 +76,21 @@ export default class Thisweek extends React.Component {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               {appcopy["thisweek"]["title"][this.props.language]}
             </Typography>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => {
-                if (process.env.REACT_APP_DEBUG === "TRUE") {
-                  console.log("Thisweek.EmptyIcon.onClick");
-                }
-                this.props.callback("empty");
-              }}
-              sx={{ m: 1 }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            {/*
+            <Box>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => {
+                  if (process.env.REACT_APP_DEBUG === "TRUE") {
+                    console.log("Thisweek.EmptyIcon.onClick");
+                  }
+                  this.props.callback("empty");
+                }}
+                sx={{ mr: "0.25em" }}
+              >
+                <DeleteIcon />
+              </IconButton>
+              {/*
             <IconButton
               edge="start"
               color="inherit"
@@ -103,19 +104,19 @@ export default class Thisweek extends React.Component {
             >
               <RestartAltIcon />
             </IconButton> */}
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => {
-                if (process.env.REACT_APP_DEBUG === "TRUE") {
-                  console.log("Thisweek.AddIcon.onClick");
-                }
-                this.props.callback("add");
-              }}
-              sx={{ m: 1 }}
-            >
-              <AddIcon />
-            </IconButton>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => {
+                  if (process.env.REACT_APP_DEBUG === "TRUE") {
+                    console.log("Thisweek.AddIcon.onClick");
+                  }
+                  this.props.callback("add");
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
           </Toolbar>
         </AppBar>
         <Box style={{ maxHeight: this.state.recipiesHeight, overflow: "auto" }}>

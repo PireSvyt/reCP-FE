@@ -147,7 +147,7 @@ export default class Recipe extends React.Component {
                 edge="start"
                 color="inherit"
                 onClick={this.handleDelete}
-                sx={{ m: 1 }}
+                sx={{ mr: "0.25em" }}
               >
                 <DeleteIcon />
               </IconButton>
@@ -155,7 +155,7 @@ export default class Recipe extends React.Component {
                 edge="start"
                 color="inherit"
                 onClick={this.handleSave}
-                sx={{ m: 1 }}
+                sx={{ mr: "0.25em" }}
               >
                 <SaveIcon />
               </IconButton>
@@ -178,7 +178,6 @@ export default class Recipe extends React.Component {
                     recipeid: this.state.recipe._id
                   });
                 }}
-                sx={{ m: 1 }}
               >
                 {this.state.recipe.selected && <CheckBoxIcon />}
                 {!this.state.recipe.selected && <CheckBoxOutlineBlankIcon />}

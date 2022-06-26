@@ -86,7 +86,6 @@ export default class Fridge extends React.Component {
                 }
                 this.handleEmpty();
               }}
-              sx={{ m: 1 }}
             >
               <DeleteIcon />
             </IconButton>

@@ -67,7 +67,6 @@ export default class Myrecipies extends React.Component {
                 }
                 this.props.callback("openRecipe", { recipeid: "" });
               }}
-              sx={{ m: 1 }}
             >
               <AddIcon />
             </IconButton>

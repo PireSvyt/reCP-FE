@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Paper, Box, Tabs, Tab } from "@mui/material";
+import {
+  Paper,
+  Box,
+  Tabs,
+  Tab,
+  BottomNavigation,
+  BottomNavigationAction
+} from "@mui/material";
 import BalanceIcon from "@mui/icons-material/Balance";
 import BookIcon from "@mui/icons-material/Book";
 import EventIcon from "@mui/icons-material/Event";
@@ -48,7 +55,7 @@ export default class App extends React.Component {
       console.log("App language = " + this.props.language);
     }
     this.state = {
-      selectedTab: 0,
+      selectedTab: 1,
       snack: undefined,
       openSnack: null,
       openMenu: false,
@@ -153,10 +160,37 @@ export default class App extends React.Component {
           elevation={3}
         >
           <Box>
+            <BottomNavigation
+              value={this.state.selectedTab}
+              onChange={this.handleChangeTab}
+            >
+              <BottomNavigationAction
+                icon={<BookIcon />}
+                sx={{ ml: "-1em", mr: "-1em" }}
+              />
+              <BottomNavigationAction
+                icon={<EventIcon />}
+                sx={{ ml: "-1em", mr: "-1em" }}
+              />
+              <BottomNavigationAction
+                icon={<KitchenIcon />}
+                sx={{ ml: "-1em", mr: "-1em" }}
+              />
+              <BottomNavigationAction
+                icon={<ShoppingBagIcon />}
+                sx={{ ml: "-1em", mr: "-1em" }}
+              />
+              <BottomNavigationAction
+                icon={<BalanceIcon />}
+                sx={{ ml: "-1em", mr: "-1em" }}
+              />
+            </BottomNavigation>
+            {/**
             <Tabs
               value={this.state.selectedTab}
               onChange={this.handleChangeTab}
               variant="fullWidth"
+              sx={{ ml: "-1em", mr: "-1em" }}
             >
               <Tab
                 icon={<BookIcon />}
@@ -192,7 +226,7 @@ export default class App extends React.Component {
                 aria-controls={"navtabpanel-" + 4}
                 key={"mybalance"}
               />
-            </Tabs>
+            </Tabs> */}
           </Box>
         </Paper>
 
