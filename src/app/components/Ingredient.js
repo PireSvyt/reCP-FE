@@ -17,7 +17,9 @@ import Snack from "./Snack";
 let emptyIngredient = {
   _id: undefined,
   name: undefined,
-  shop: []
+  shops: [],
+  unit: undefined,
+  category: undefined
 };
 
 export default class Ingredient extends React.Component {
