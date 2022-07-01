@@ -231,6 +231,7 @@ export default class Ingredient extends React.Component {
       apiSetIngredientSave(this.state.ingredient).then((res) => {
         switch (res.status) {
           case 201:
+            console.log("default");
             this.setState({
               ingredient: emptyIngredient,
               openSnack: true,
@@ -239,6 +240,7 @@ export default class Ingredient extends React.Component {
             this.props.callback("closeItem");
             break;
           case 200:
+            console.log("modified");
             this.setState((prevState, props) => ({
               ingredient: emptyIngredient,
               openSnack: true,
@@ -246,13 +248,23 @@ export default class Ingredient extends React.Component {
             }));
             this.props.callback("closeItem");
             break;
+          case 208: // Already reported https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_client_errors
+            console.log("name unicity violation");
+            this.setState({
+              openSnack: true,
+              snack: appcopy["ingredient"]["snack"]["conflict"]
+            });
+            break;
           case 400:
+            console.log("error");
+            console.log(res);
             this.setState({
               openSnack: true,
               snack: appcopy["generic"]["snack"]["errornetwork"]
             });
             break;
           default:
+            console.log("default");
             this.setState((prevState, props) => ({
               openSnack: true,
               snack: appcopy["generic"]["snack"]["errorunknown"]

@@ -322,6 +322,11 @@
         "severity": "success",
         "FR": "Ingrédient supprimée",
         "EN": "Ingredient deleted"
+      },
+      "conflict": {
+        "severity": "error",
+        "FR": "Nom déjà utilisé",
+        "EN": "Name already used"
       }
     }
   },

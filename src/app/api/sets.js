@@ -14,13 +14,12 @@ export async function apiSetIngredientSave(ingredient) {
     );
     return res.data;
   } catch (err) {
-    const res = {
+    let res = {
       status: 400,
       message: "error on apiSetIngredientSave",
       error: err,
       ingredient: ingredient
     };
-    console.error(res);
     return res;
   }
 }
