@@ -263,24 +263,39 @@ export default class Shopping extends React.Component {
     // Populate
     let newCategories = {};
     this.props.values.forEach((ingredient) => {
-      //console.log("ingredient");
-      //console.log(ingredient);
+      console.log("ingredient");
+      console.log(ingredient);
+      console.log("ingredient.category = " + ingredient.category);
       if (ingredient.category === undefined) {
         if (Object.keys(newCategories).length === 0) {
+          console.log("default category (no key) ");
           newCategories["?"] = [];
           newCategories["?"].push(ingredient);
         } else {
+          console.log("default category ");
           newCategories["?"].push(ingredient);
         }
       } else {
-        if (Object.keys(newCategories).find(ingredient.category)) {
-          newCategories[ingredient.category].push(ingredient);
-        } else {
+        if (Object.keys(newCategories).length === 0) {
+          console.log("new category (no key) : " + ingredient.category);
           newCategories[ingredient.category] = [];
           newCategories[ingredient.category].push(ingredient);
+        } else {
+          console.log("Object.keys(newCategories)");
+          console.log(Object.keys(newCategories));
+          if (Object.keys(newCategories).find(ingredient.category)) {
+            console.log("append category : " + ingredient.category);
+            newCategories[ingredient.category].push(ingredient);
+          } else {
+            console.log("new category : " + ingredient.category);
+            newCategories[ingredient.category] = [];
+            newCategories[ingredient.category].push(ingredient);
+          }
         }
       }
     });
+    console.log("newCategories");
+    console.log(newCategories);
 
     // Sort and update
     //newCategories.sort(compare);
@@ -295,7 +310,7 @@ export default class Shopping extends React.Component {
       console.log("Shopping.updateShoppingHeight");
     }
     this.setState({
-      recipiesHeight: window.innerHeight - 115
+      recipiesHeight: window.innerHeight - 130
     });
   }
 
