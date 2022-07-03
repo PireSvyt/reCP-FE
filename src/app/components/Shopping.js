@@ -263,8 +263,8 @@ export default class Shopping extends React.Component {
     // Populate
     let newCategories = {};
     this.props.values.forEach((ingredient) => {
-      console.log("ingredient");
-      console.log(ingredient);
+      //console.log("ingredient");
+      //console.log(ingredient);
       if (ingredient.category === undefined) {
         if (Object.keys(newCategories).length === 0) {
           newCategories["?"] = [];

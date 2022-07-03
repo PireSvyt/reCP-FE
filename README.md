@@ -43,6 +43,7 @@
 
 ## Debt
 
+- Log management
 - Appbar in transaction
 - Appbar in ingredient
 - Clean up dependencies

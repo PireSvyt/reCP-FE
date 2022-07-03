@@ -515,7 +515,7 @@ export default class App extends React.Component {
     }
   }
   handleMyrecipies(action, details) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
+    if (process.env.REACT_APP_DEBUG === "true") {
       console.log("App.handleMyrecipies " + action);
     }
     console.log("App.handleMyrecipies " + action);

@@ -36,7 +36,6 @@ export async function apiSetRecipeSave(recipe) {
       error: err,
       recipe: recipe
     };
-    console.error(res);
     return res;
   }
 }
