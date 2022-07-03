@@ -19,10 +19,10 @@
 
 ### Ingredient
 
-- Unit conversion
-- Season
 - Category list
+- Unit conversion
 - Shop list
+- Season
 
 ### Ingredients
 
@@ -41,13 +41,17 @@
 
 - P1 **Manually add ingredient**
 
-## FE debt
+## Debt
 
 - Appbar in transaction
 - Appbar in ingredient
+- Clean up dependencies
 
 ## Fancy
 
+- Expose readme
+- Enable to generate tickets for improvements
+- Enable to tag and sort tickets for improvements
 - Full screen https://web.dev/native-hardware-fullscreen/
 - Back button catch
 - Refresh catch
