@@ -1,23 +1,49 @@
 # reCP-FE
 
-## Debt
-
-- Appbar in transaction
-- Appbar in ingredient
-- Loader on recipe save
-
-## Fancy
-
-- Full screen https://web.dev/native-hardware-fullscreen/
+## Per screen
 
 ### Recipe
+
+- View mode
+
+### My recipies
+
+- **Search for recipe**
+- Tag category
+- Filter by category
 
 ### Ingredient
 
 - Unit conversion
 - Season
-- Check list on shops
+- Category list
+- Shop list
+
+### Ingredients
+
+- **Treeview by category**
 
 ### This week
 
-- replace recipe on BE side
+- **BE Add to be random**
+- BE replace recipe
+
+### Fridge
+
+- Enable partial have/haven't
+
+### Shopping
+
+- **Manually add ingredient**
+
+## FE debt
+
+- Appbar in transaction
+- Appbar in ingredient
+
+## Fancy
+
+- Full screen https://web.dev/native-hardware-fullscreen/
+- Back button catch
+- Refresh catch
+- Loader on recipe save
