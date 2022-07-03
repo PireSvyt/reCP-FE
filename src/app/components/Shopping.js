@@ -198,6 +198,7 @@ export default class Shopping extends React.Component {
                           return <div key={"totake-" + category + "-" + ingredient._id} />;
                         }
                       })}
+                      ABC
                     </ TreeItem >
                   )
                 })
