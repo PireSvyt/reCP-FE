@@ -20,10 +20,10 @@ import {
   Card,
   CardContent,
   CardActions,
-  Autocomplete,
-  TreeView,
-  TreeItem
+  Autocomplete
 } from "@mui/material";
+import {TreeView,
+  TreeItem} from '@mui/lab';
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 //import EditIcon from "@mui/icons-material/Edit";
@@ -171,22 +171,38 @@ export default class Shopping extends React.Component {
                 }
               })}
             </List>
-            {/**
             <TreeView>
-              {() => {
-                console.log("building TreeView");
-                if (Object.keys(this.state.treeCategories).lenght === 0) {
-                  console.log("no TreeView to build");
-                  return <div key={"empty-treecategories"} />;
-                } else {
-                  console.log("adding branches");
-                  Object.keys(this.state.treeCategories).forEach((category) => {
-                    console.log("building branch : " + category);
-                    return <TreeItem label={category}>ABC</TreeItem>;
-                  });
-                }
-              }}
-            </TreeView> */}
+              {
+                //https://mui.com/material-ui/react-tree-view/
+                Object.keys(this.state.treeCategories).forEach((category) => {
+                  console.log("category")
+                  console.log(category)
+                  return (
+                    <TreeItem nodeId={category} label={category} >
+                      {this.state.treeCategories[category].forEach((ingredient) => {
+                        console.log("ingredient")
+                        console.log(ingredient)
+                        if (
+                          ingredient.quantity - (ingredient.available || 0) >
+                          (ingredient.shopped || 0)
+                        ) {
+                        console.log("to add")
+                          return (
+                            <ShoppingIngredient
+                              ingredient={ingredient}
+                              callback={this.props.callback}
+                            />
+                          );
+                        } else {
+                          console.log("dummy div")
+                          return <div key={"totake-" + category + "-" + ingredient._id} />;
+                        }
+                      })}
+                    </ TreeItem >
+                  )
+                })
+              }
+            </TreeView> 
           </Box>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {appcopy["shopping"]["subsection"]["ihave"][this.props.language]}
@@ -194,7 +210,6 @@ export default class Shopping extends React.Component {
           <Box>
             <List dense={true} sx={{ display: this.state.listView }}>
               {
-                //https://mui.com/material-ui/react-tree-view/
                 this.props.values.map((ingredient) => {
                   if (
                     ingredient.quantity - (ingredient.available || 0) <=
@@ -263,39 +278,39 @@ export default class Shopping extends React.Component {
     // Populate
     let newCategories = {};
     this.props.values.forEach((ingredient) => {
-      console.log("ingredient");
-      console.log(ingredient);
-      console.log("ingredient.category = " + ingredient.category);
+      //console.log("ingredient");
+      //console.log(ingredient);
+      //console.log("ingredient.category = " + ingredient.category);
       if (ingredient.category === undefined) {
         if (Object.keys(newCategories).length === 0) {
-          console.log("default category (no key) ");
+          //console.log("default category (no key) ");
           newCategories["?"] = [];
           newCategories["?"].push(ingredient);
         } else {
-          console.log("default category ");
+          //console.log("default category ");
           newCategories["?"].push(ingredient);
         }
       } else {
         if (Object.keys(newCategories).length === 0) {
-          console.log("new category (no key) : " + ingredient.category);
+          //console.log("new category (no key) : " + ingredient.category);
           newCategories[ingredient.category] = [];
           newCategories[ingredient.category].push(ingredient);
         } else {
-          console.log("Object.keys(newCategories)");
-          console.log(Object.keys(newCategories));
-          if (Object.keys(newCategories).find(ingredient.category)) {
-            console.log("append category : " + ingredient.category);
+          //console.log("Object.keys(newCategories)");
+          //console.log(Object.keys(newCategories));
+          if (ingredient.category in Object.keys(newCategories)) {
+            //console.log("append category : " + ingredient.category);
             newCategories[ingredient.category].push(ingredient);
           } else {
-            console.log("new category : " + ingredient.category);
+            //console.log("new category : " + ingredient.category);
             newCategories[ingredient.category] = [];
             newCategories[ingredient.category].push(ingredient);
           }
         }
       }
     });
-    console.log("newCategories");
-    console.log(newCategories);
+    //console.log("newCategories");
+    //console.log(newCategories);
 
     // Sort and update
     //newCategories.sort(compare);
