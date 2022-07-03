@@ -146,6 +146,7 @@ export default class App extends React.Component {
           <Shopping
             language={this.props.language}
             values={this.state.apiThisweekingredients}
+            secondaryvalues={this.state.apiIngredients}
             callback={this.handleShopping}
           />
         </AppTabPanel>
@@ -620,12 +621,12 @@ export default class App extends React.Component {
                 snack: appcopy["thisweek"]["snack"]["recipe added"]
               });*/
               break;
-            case 304:
+            case 208:
               this.setState({
                 openSnack: true,
                 snack:
                   appcopy["thisweek"]["snack"][
-                    "304 - no more unselected recipies"
+                    "208 - no more unselected recipies"
                   ]
               });
               break;
@@ -805,6 +806,9 @@ export default class App extends React.Component {
         break;
       case "reload":
         this.api("LoadThisweekingredients");
+        break;
+      case "addingredient":
+        console.log("App.handleShopping.addingredient TODO");
         break;
       case "addtofridge":
         // Local

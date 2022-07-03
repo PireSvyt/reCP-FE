@@ -17,7 +17,9 @@ import Snack from "./Snack";
 let emptyIngredient = {
   _id: undefined,
   name: undefined,
-  shop: []
+  shops: [],
+  unit: undefined,
+  category: undefined
 };
 
 export default class Ingredient extends React.Component {
@@ -76,6 +78,16 @@ export default class Ingredient extends React.Component {
                 label={appcopy["generic"]["input"]["unit"][this.props.language]}
                 variant="standard"
                 value={this.state.ingredient.unit || ""}
+                onChange={this.handleChange}
+                autoComplete="off"
+              />
+              <TextField
+                name="category"
+                label={
+                  appcopy["generic"]["input"]["category"][this.props.language]
+                }
+                variant="standard"
+                value={this.state.ingredient.category || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
@@ -187,6 +199,12 @@ export default class Ingredient extends React.Component {
         }
         previousIngredient.unit = target.value;
         break;
+      case "category":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change category : " + target.value);
+        }
+        previousIngredient.category = target.value;
+        break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
@@ -228,6 +246,7 @@ export default class Ingredient extends React.Component {
         console.log(this.props.values);
         console.log(this.state.ingredient);
       }
+      console.log(this.state.ingredient);
       apiSetIngredientSave(this.state.ingredient).then((res) => {
         switch (res.status) {
           case 201:

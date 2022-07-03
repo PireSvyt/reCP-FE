@@ -94,7 +94,6 @@ export async function apiSetThisweekRecipeAdd() {
       message: "error on apiSetThisweekRecipeAdd",
       error: err
     };
-    console.error(res);
     return res;
   }
 }
