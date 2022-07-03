@@ -1,5 +1,10 @@
 # reCP backlog
 
+## MUST DO
+
+- P0 **Secure DB login in env var**
+- P3 **Protect with login**
+
 ## Per screen
 
 ### Recipe
@@ -8,7 +13,7 @@
 
 ### My recipies
 
-- **Search for recipe**
+- P2 **Search for recipe**
 - Tag category
 - Filter by category
 
@@ -21,11 +26,11 @@
 
 ### Ingredients
 
-- **Treeview by category**
+- P1 **Treeview by category**
 
 ### This week
 
-- **BE Add to be random**
+- P0 **BE Add to be random**
 - BE replace recipe
 
 ### Fridge
@@ -34,7 +39,7 @@
 
 ### Shopping
 
-- **Manually add ingredient**
+- P1 **Manually add ingredient**
 
 ## FE debt
 
@@ -47,5 +52,3 @@
 - Back button catch
 - Refresh catch
 - Loader on recipe save
-
-TESTING COMMIT IN PRIVATE MODE
