@@ -81,6 +81,16 @@ export default class Ingredient extends React.Component {
                 onChange={this.handleChange}
                 autoComplete="off"
               />
+              <TextField
+                name="category"
+                label={
+                  appcopy["generic"]["input"]["category"][this.props.language]
+                }
+                variant="standard"
+                value={this.state.ingredient.category || ""}
+                onChange={this.handleChange}
+                autoComplete="off"
+              />
             </Box>
             TODO : shelf, season, shop
           </DialogContent>
@@ -189,6 +199,12 @@ export default class Ingredient extends React.Component {
         }
         previousIngredient.unit = target.value;
         break;
+      case "category":
+        if (process.env.REACT_APP_DEBUG === "TRUE") {
+          console.log("change category : " + target.value);
+        }
+        previousIngredient.category = target.value;
+        break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("/!\\ no match : " + target.name);
@@ -230,6 +246,7 @@ export default class Ingredient extends React.Component {
         console.log(this.props.values);
         console.log(this.state.ingredient);
       }
+      console.log(this.state.ingredient);
       apiSetIngredientSave(this.state.ingredient).then((res) => {
         switch (res.status) {
           case 201:

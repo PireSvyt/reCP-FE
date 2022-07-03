@@ -33,6 +33,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import NoMealsIcon from "@mui/icons-material/NoMeals";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
@@ -114,7 +115,7 @@ export default class Thisweek extends React.Component {
                   this.props.callback("add");
                 }}
               >
-                <AddIcon />
+                <PlaylistAddIcon />
               </IconButton>
             </Box>
           </Toolbar>

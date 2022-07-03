@@ -106,7 +106,7 @@
         "FR": "Séléction renouvellée",
         "EN": "Selection renewed"
       },
-      "304 - no more unselected recipies": {
+      "208 - no more unselected recipies": {
         "severity": "info",
         "FR": "Plus de recette à selectionner",
         "EN": "No more recipies to select"

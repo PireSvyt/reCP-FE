@@ -90,7 +90,6 @@ export default class Recipe extends React.Component {
       console.log("Recipe language = " + this.props.language);
     }
     this.state = {
-      recipeHeight: 300,
       recipe: { ...getEmptyComponent("recipe") },
       recipe_name: "",
       recipe_portions: "",
@@ -100,8 +99,6 @@ export default class Recipe extends React.Component {
       openConfirm: false,
       confirmContent: { title: "", text: "" }
     };
-    // Updates
-    this.updateRecipeHeight = this.updateRecipeHeight.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -190,7 +187,6 @@ export default class Recipe extends React.Component {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-evenly",
-                maxHeight: this.state.recipeHeight,
                 overflow: "auto"
               }}
             >
@@ -299,19 +295,9 @@ export default class Recipe extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Recipe.componentDidMount");
     }
-    // Update
-    this.updateRecipeHeight();
   }
 
   // Updates
-  updateRecipeHeight() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Recipe.updateRecipeHeight");
-    }
-    this.setState({
-      recipeHeight: window.innerHeight - 110
-    });
-  }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Recipe.componentDidUpdate");
@@ -807,6 +793,11 @@ class Ingredient extends React.Component {
         </Box>
       </ListItem>
     );
+  }
+  componentDidMount() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Recipe.componentDidMount");
+    }
   }
 
   // Handlers()
