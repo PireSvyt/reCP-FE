@@ -24,6 +24,38 @@ export async function apiSetIngredientSave(ingredient) {
   }
 }
 
+// Shelfs
+export async function apiSetShelfSave(shelf) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/shelf/save", shelf);
+    return res.data;
+  } catch (err) {
+    let res = {
+      status: 400,
+      message: "error on apiSetShelfSave",
+      error: err,
+      shelf: shelf
+    };
+    return res;
+  }
+}
+
+// Shops
+export async function apiSetShopSave(shop) {
+  try {
+    const res = await axios.post(apiURL + "/api/set/shop/save", shop);
+    return res.data;
+  } catch (err) {
+    let res = {
+      status: 400,
+      message: "error on apiSetShopSave",
+      error: err,
+      shop: shop
+    };
+    return res;
+  }
+}
+
 // Recipies
 export async function apiSetRecipeSave(recipe) {
   try {
@@ -36,7 +68,6 @@ export async function apiSetRecipeSave(recipe) {
       error: err,
       recipe: recipe
     };
-    console.error(res);
     return res;
   }
 }

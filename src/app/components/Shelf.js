@@ -6,33 +6,38 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  Select,
+  Typography,
+  OutlinedInput,
+  ListItemText,
+  Checkbox,
+  MenuItem
 } from "@mui/material";
 
 import appcopy from "../copy";
-import { apiGetIngredient } from "../api/gets";
-import { apiSetIngredientSave } from "../api/sets";
+import { apiGetShelf, apiGetShops } from "../api/gets";
+import { apiSetShelfSave } from "../api/sets";
 import Snack from "./Snack";
 
-let emptyIngredient = {
+let emptyShelf = {
   _id: undefined,
   name: undefined,
-  shops: [],
-  unit: undefined,
-  category: undefined
+  shops: []
 };
 
-export default class Ingredient extends React.Component {
+export default class Shelf extends React.Component {
   constructor(props) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.constructor");
+      console.log("Shelf.constructor");
     }
     super(props);
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient language = " + this.props.language);
+      console.log("Shelf language = " + this.props.language);
     }
     this.state = {
-      ingredient: { ...emptyIngredient },
+      shelf: { ...emptyShelf },
+      shopoptions: [],
       openSnack: false,
       snack: undefined
     };
@@ -41,10 +46,12 @@ export default class Ingredient extends React.Component {
     this.handleSave = this.handleSave.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSnack = this.handleSnack.bind(this);
+    // API
+    this.apiLoadShops = this.apiLoadShops.bind(this);
   }
   render() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.render");
+      console.log("Shelf.render");
     }
     return (
       <div>
@@ -55,7 +62,7 @@ export default class Ingredient extends React.Component {
           fullWidth={true}
         >
           <DialogTitle>
-            {appcopy["ingredient"]["title"][this.props.language]}
+            {appcopy["shelf"]["title"][this.props.language]}
           </DialogTitle>
           <DialogContent>
             <Box
@@ -69,30 +76,53 @@ export default class Ingredient extends React.Component {
                 name="name"
                 label={appcopy["generic"]["input"]["name"][this.props.language]}
                 variant="standard"
-                value={this.state.ingredient.name || ""}
+                value={this.state.shelf.name || ""}
                 onChange={this.handleChange}
                 autoComplete="off"
               />
-              <TextField
-                name="unit"
-                label={appcopy["generic"]["input"]["unit"][this.props.language]}
-                variant="standard"
-                value={this.state.ingredient.unit || ""}
-                onChange={this.handleChange}
-                autoComplete="off"
-              />
-              <TextField
-                name="category"
-                label={
-                  appcopy["generic"]["input"]["category"][this.props.language]
+              <Select
+                multiple
+                value={this.state.shelf.shops}
+                onChange={(event, newValue) => {
+                  //console.log("event.target");
+                  //console.log(event.target);
+                  //console.log("newValue.props.value");
+                  //console.log(newValue.props.value);
+                  event.target = {
+                    name: "shops",
+                    value: newValue.props.value
+                  };
+                  this.handleChange(event, newValue.props.value);
+                }}
+                input={
+                  <OutlinedInput
+                    label={
+                      appcopy["generic"]["input"]["shop"][this.props.language]
+                    }
+                  />
                 }
-                variant="standard"
-                value={this.state.ingredient.category || ""}
-                onChange={this.handleChange}
-                autoComplete="off"
-              />
+                renderValue={(selected) => {
+                  let names = [];
+                  this.state.shopoptions.forEach((option) => {
+                    if (selected.indexOf(option._id) >= 0) {
+                      names.push(option.name);
+                    }
+                  });
+                  //console.log("names");
+                  //console.log(names);
+                  return names.join(", ");
+                }}
+              >
+                {this.state.shopoptions.map((shop) => (
+                  <MenuItem key={shop._id} value={shop._id}>
+                    <Checkbox
+                      checked={this.state.shelf.shops.indexOf(shop._id) > -1}
+                    />
+                    <ListItemText primary={shop.name} />
+                  </MenuItem>
+                ))}
+              </Select>
             </Box>
-            TODO : shelf, season, shop
           </DialogContent>
 
           <DialogActions>
@@ -116,39 +146,40 @@ export default class Ingredient extends React.Component {
   }
   componentDidMount() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("Ingredient.componentDidMount");
+      //console.log("Shelf.componentDidMount");
     }
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      //console.log("Ingredient.componentDidUpdate");
-      //console.log("Ingredient.state");
+      //console.log("Shelf.componentDidUpdate");
+      //console.log("Shelf.state");
       //console.log(this.state);
     }
     if (
       prevState.open !== this.props.open ||
       prevState.values !== this.props.values
     ) {
+      this.apiLoadShops();
       if (this.props.values !== "") {
         // Load
-        apiGetIngredient(this.props.values).then((res) => {
+        apiGetShelf(this.props.values).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
-                ingredient: res.ingredient
+                shelf: res.shelf
               });
               break;
             case 400:
               this.setState((prevState, props) => ({
-                ingredient: emptyIngredient,
+                shelf: emptyShelf,
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errornetwork"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
               break;
             default:
               this.setState((prevState, props) => ({
-                ingredient: emptyIngredient,
+                shelf: emptyShelf,
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errorunknown"]
               }));
@@ -157,7 +188,7 @@ export default class Ingredient extends React.Component {
         });
       } else {
         this.setState((prevState, props) => ({
-          ingredient: { ...emptyIngredient }
+          shelf: { ...emptyShelf }
         }));
       }
     }
@@ -166,18 +197,18 @@ export default class Ingredient extends React.Component {
   // Handles
   handleClose() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.handleClose");
+      console.log("Shelf.handleClose");
     }
     this.setState((prevState, props) => ({
-      ingredient: { ...emptyIngredient },
+      shelf: { ...emptyShelf },
       openSnack: true,
-      snack: appcopy["ingredient"]["snack"]["discarded"]
+      snack: appcopy["shelf"]["snack"]["discarded"]
     }));
     this.props.callback("closeItem");
   }
   handleChange(event, newValue) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.handleChange");
+      console.log("Shelf.handleChange");
     }
     const target = event.target;
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -185,25 +216,38 @@ export default class Ingredient extends React.Component {
       console.log("target.value : " + target.value);
       console.log("newValue : " + newValue);
     }
-    var previousIngredient = this.state.ingredient;
+    console.log("target.name : " + target.name);
+    console.log("target.value : ");
+    console.log(target.value);
+    var previousShelf = this.state.shelf;
     switch (target.name) {
       case "name":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change name : " + target.value);
         }
-        previousIngredient.name = target.value;
+        previousShelf.name = target.value;
         break;
-      case "unit":
+      case "shops":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change unit : " + target.value);
+          console.log("change shop : " + target.value);
         }
-        previousIngredient.unit = target.value;
-        break;
-      case "category":
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change category : " + target.value);
+        console.log("change shop : ");
+        console.log(target.value);
+        console.log(" this.state.shelf.shops : ");
+        console.log(this.state.shelf.shops);
+        console.log(previousShelf.shops.indexOf(target.value));
+        if (previousShelf.shops.includes(target.value)) {
+          console.log("removing  ");
+          previousShelf.shops.splice(
+            previousShelf.shops.indexOf(target.value),
+            1
+          );
+        } else {
+          console.log("adding  ");
+          previousShelf.shops.push(target.value);
         }
-        previousIngredient.category = target.value;
+        console.log("previousShelf.shops : ");
+        console.log(previousShelf.shops);
         break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -212,29 +256,25 @@ export default class Ingredient extends React.Component {
     }
     // Update
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.ingredient");
-      console.log(this.state.ingredient);
+      console.log("Shelf.shelf");
+      console.log(this.state.shelf);
     }
     this.setState((prevState, props) => ({
-      ingredient: previousIngredient
+      shelf: previousShelf
     }));
   }
   handleSave() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.handleSave");
-      console.log("this.state.ingredient");
-      console.log(this.state.ingredient);
+      console.log("Shelf.handleSave");
+      console.log("this.state.shelf");
+      console.log(this.state.shelf);
     }
     // Check inputs
     let save = true;
     let errors = [];
-    if (this.state.ingredient.name === undefined) {
+    if (this.state.shelf.name === undefined) {
       save = false;
       errors.push(" Nom vide");
-    }
-    if (this.state.ingredient.unit === undefined) {
-      save = false;
-      errors.push(" Unité vide");
     }
     // Save or not?
     if (errors !== [] && process.env.REACT_APP_DEBUG === "TRUE") {
@@ -244,25 +284,25 @@ export default class Ingredient extends React.Component {
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
         console.log(this.props.values);
-        console.log(this.state.ingredient);
+        console.log(this.state.shelf);
       }
-      apiSetIngredientSave(this.state.ingredient).then((res) => {
+      apiSetShelfSave(this.state.shelf).then((res) => {
         switch (res.status) {
           case 201:
             //console.log("default");
             this.setState({
-              ingredient: emptyIngredient,
+              shelf: emptyShelf,
               openSnack: true,
-              snack: appcopy["ingredient"]["snack"]["saved"]
+              snack: appcopy["shelf"]["snack"]["saved"]
             });
             this.props.callback("closeItem");
             break;
           case 200:
             //console.log("modified");
             this.setState((prevState, props) => ({
-              ingredient: emptyIngredient,
+              shelf: emptyShelf,
               openSnack: true,
-              snack: appcopy["ingredient"]["snack"]["edited"]
+              snack: appcopy["shelf"]["snack"]["edited"]
             }));
             this.props.callback("closeItem");
             break;
@@ -270,7 +310,7 @@ export default class Ingredient extends React.Component {
             //console.log("name unicity violation");
             this.setState({
               openSnack: true,
-              snack: appcopy["ingredient"]["snack"]["conflict"]
+              snack: appcopy["shelf"]["snack"]["conflict"]
             });
             break;
           case 400:
@@ -302,7 +342,7 @@ export default class Ingredient extends React.Component {
   }
   handleSnack(action) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Ingredient.handleSnack " + action);
+      console.log("Shelf.handleSnack " + action);
     }
     switch (action) {
       case "close":
@@ -312,5 +352,22 @@ export default class Ingredient extends React.Component {
         break;
       default:
     }
+  }
+
+  // API
+  apiLoadShops() {
+    apiGetShops({ need: "shops" }).then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          shopoptions: res.shops
+        });
+      } else {
+        this.setState((prevState, props) => ({
+          shopoptions: [],
+          openSnack: true,
+          snack: appcopy["generic"]["snack"]["errornetwork"]
+        }));
+      }
+    });
   }
 }

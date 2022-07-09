@@ -37,6 +37,70 @@ export async function apiGetIngredients(need) {
   }
 }
 
+// Shelfs
+export async function apiGetShelf(id) {
+  try {
+    const res = await axios.post(apiURL + "/api/get/shelf/item/" + id);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiGetShelf " + id,
+      shelf: {},
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiGetShelfs(need) {
+  try {
+    const res = await axios.post(apiURL + "/api/get/shelf/list", need);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiGetShelfs " + need,
+      shelfs: [],
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+
+// Shops
+export async function apiGetShop(id) {
+  try {
+    const res = await axios.post(apiURL + "/api/get/shop/item/" + id);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiGetShop " + id,
+      shop: {},
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+export async function apiGetShops(need) {
+  try {
+    const res = await axios.post(apiURL + "/api/get/shop/list", need);
+    return res.data;
+  } catch (err) {
+    const res = {
+      status: 400,
+      message: "error on apiGetShops " + need,
+      shops: [],
+      error: err
+    };
+    console.error(res);
+    return res;
+  }
+}
+
 // Recipies
 export async function apiGetRecipe(id) {
   try {
