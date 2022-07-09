@@ -22,8 +22,7 @@ import {
   CardActions,
   Autocomplete
 } from "@mui/material";
-import {TreeView,
-  TreeItem} from '@mui/lab';
+import { TreeView, TreeItem } from "@mui/lab";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 //import EditIcon from "@mui/icons-material/Edit";
@@ -39,9 +38,11 @@ import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
+import { random_id } from "./toolkit";
 
 export default class Shopping extends React.Component {
   constructor(props) {
@@ -171,65 +172,42 @@ export default class Shopping extends React.Component {
                 }
               })}
             </List>
-            <TreeView>
-              {
-                //https://mui.com/material-ui/react-tree-view/
-                Object.keys(this.state.treeCategories).forEach((category) => {
-                  console.log("category")
-                  console.log(category)
-                  return (
-                    <TreeItem nodeId={category} label={category} >
-                      {this.state.treeCategories[category].forEach((ingredient) => {
-                        console.log("ingredient")
-                        console.log(ingredient)
-                        if (
-                          ingredient.quantity - (ingredient.available || 0) >
-                          (ingredient.shopped || 0)
-                        ) {
-                        console.log("to add")
-                          return (
-                            <ShoppingIngredient
-                              ingredient={ingredient}
-                              callback={this.props.callback}
-                            />
-                          );
-                        } else {
-                          console.log("dummy div")
-                          return <div key={"totake-" + category + "-" + ingredient._id} />;
-                        }
-                      })}
-                      ABC
-                    </ TreeItem >
-                  )
-                })
-              }
-            </TreeView> 
+
+            {Object.keys(this.state.treeCategories).forEach((category) => {
+              console.log("CATEGORY : " + category);
+              console.log(this.state.treeCategories[category]);
+              return (
+                <ShoppingCategory
+                  category={category}
+                  values={this.state.treeCategories[category]}
+                  callback={this.props.callback}
+                />
+              );
+            })}
           </Box>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {appcopy["shopping"]["subsection"]["ihave"][this.props.language]}
           </Typography>
           <Box>
             <List dense={true} sx={{ display: this.state.listView }}>
-              {
-                this.props.values.map((ingredient) => {
-                  if (
-                    ingredient.quantity - (ingredient.available || 0) <=
-                      (ingredient.shopped || 0) &&
-                    ingredient.quantity > (ingredient.available || 0)
-                  ) {
-                    return (
-                      <ListItem key={"taken-" + ingredient._id}>
-                        <ShoppingIngredient
-                          ingredient={ingredient}
-                          callback={this.props.callback}
-                        />
-                      </ListItem>
-                    );
-                  } else {
-                    return <div key={"taken-" + ingredient._id} />;
-                  }
-                })
-              }
+              {this.props.values.map((ingredient) => {
+                if (
+                  ingredient.quantity - (ingredient.available || 0) <=
+                    (ingredient.shopped || 0) &&
+                  ingredient.quantity > (ingredient.available || 0)
+                ) {
+                  return (
+                    <ListItem key={"taken-" + ingredient._id}>
+                      <ShoppingIngredient
+                        ingredient={ingredient}
+                        callback={this.props.callback}
+                      />
+                    </ListItem>
+                  );
+                } else {
+                  return <div key={"taken-" + ingredient._id} />;
+                }
+              })}
             </List>
           </Box>
           <Button onClick={() => this.handleAddtofridge()}>
@@ -670,5 +648,44 @@ class ShoppingAddIngredient extends React.Component {
     this.props.callback("addingredient", {
       ingredientid: this.state.ingredient
     });
+  }
+}
+
+class ShoppingCategory extends React.Component {
+  constructor(props) {
+    super(props);
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ShoppingCategory.constructor");
+    }
+    console.log("ShoppingCategory.constructor");
+    // Handlers
+  }
+  render() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("ShoppingCategory.render " + this.props.category);
+    }
+    console.log("ShoppingCategory.render " + this.props.category);
+    return (
+      <Card
+        sx={{
+          ml: "1em",
+          mr: "1em",
+          pl: "1em",
+          pr: "1em"
+        }}
+      >
+        <Typography>{this.props.category}</Typography>
+        {this.props.values.map((ingredient) => {
+          return (
+            <ListItem key={ingredient._id + "-" + random_id()}>
+              <ShoppingIngredient
+                ingredient={ingredient}
+                callback={this.props.callback}
+              />
+            </ListItem>
+          );
+        })}
+      </Card>
+    );
   }
 }

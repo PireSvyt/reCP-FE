@@ -2,8 +2,6 @@ import * as React from "react";
 import {
   Paper,
   Box,
-  Tabs,
-  Tab,
   BottomNavigation,
   BottomNavigationAction
 } from "@mui/material";
@@ -19,6 +17,12 @@ import appcopy from "./copy";
 import AppMenu from "./components/AppMenu";
 import Ingredient from "./components/Ingredient";
 import Ingredients from "./components/Ingredients";
+import Shelf from "./components/Shelf";
+import Shelfs from "./components/Shelfs";
+import Shop from "./components/Shop";
+import Shops from "./components/Shops";
+import Category from "./components/Category";
+import Categories from "./components/Categories";
 import Balance from "./components/Balance";
 import Myrecipies from "./components/Myrecipies";
 import Recipe from "./components/Recipe";
@@ -28,7 +32,13 @@ import Shopping from "./components/Shopping";
 import Snack from "./components/Snack";
 
 // APIs
-import { apiGetIngredients, apiGetRecipies } from "./api/gets";
+import {
+  apiGetIngredients,
+  apiGetShelfs,
+  apiGetShops,
+  apiGetRecipies,
+  apiGetCategories
+} from "./api/gets";
 import {
   apiSetRecipeSelect,
   apiSetThisweekEmpty,
@@ -58,13 +68,26 @@ export default class App extends React.Component {
       selectedTab: 1,
       snack: undefined,
       openSnack: null,
+      menulist: [],
       openMenu: false,
       openIngredient: false,
       openIngredients: false,
+      openCategory: false,
+      openCategories: false,
+      openShelf: false,
+      openShelfs: false,
+      openShop: false,
+      openShops: false,
       openRecipe: false,
-      menulist: [],
       ingredientid: undefined,
+      shelfid: undefined,
+      shopid: undefined,
+      recipeid: undefined,
+      categoryid: undefined,
       apiIngredients: [],
+      apiShelfs: [],
+      apiShops: [],
+      apiCategories: [],
       apiMyrecipies: [],
       apiThisweekrecipies: [],
       apiThisweekingredients: []
@@ -80,6 +103,9 @@ export default class App extends React.Component {
     this.handleSnack = this.handleSnack.bind(this);
     this.handleMenu = this.handleMenu.bind(this);
     this.handleIngredient = this.handleIngredient.bind(this);
+    this.handleShelf = this.handleShelf.bind(this);
+    this.handleShop = this.handleShop.bind(this);
+    this.handleCategory = this.handleCategory.bind(this);
     this.handleRecipe = this.handleRecipe.bind(this);
     this.handleMyrecipies = this.handleMyrecipies.bind(this);
     this.handleThisweek = this.handleThisweek.bind(this);
@@ -101,13 +127,56 @@ export default class App extends React.Component {
           language={this.props.language}
           open={this.state.openIngredient}
           values={this.state.ingredientid}
+          secondaryvalues={this.state.apiShelfs}
           callback={this.handleIngredient}
         />
         <Ingredients
           language={this.props.language}
           open={this.state.openIngredients}
           values={this.state.apiIngredients}
+          secondaryvalues={this.state.apiShelfs}
           callback={this.handleIngredient}
+        />
+
+        <Shelf
+          language={this.props.language}
+          open={this.state.openShelf}
+          values={this.state.shelfid}
+          secondaryvalues={this.state.apiShops}
+          callback={this.handleShelf}
+        />
+        <Shelfs
+          language={this.props.language}
+          open={this.state.openShelfs}
+          values={this.state.apiShelfs}
+          secondaryvalues={this.state.apiShops}
+          callback={this.handleShelf}
+        />
+
+        <Shop
+          language={this.props.language}
+          open={this.state.openShop}
+          values={this.state.shopid}
+          callback={this.handleShop}
+        />
+        <Shops
+          language={this.props.language}
+          open={this.state.openShops}
+          values={this.state.apiShops}
+          callback={this.handleShop}
+        />
+
+        <Category
+          language={this.props.language}
+          open={this.state.openCategory}
+          values={this.state.categoryid}
+          callback={this.handleCategory}
+        />
+        <Categories
+          language={this.props.language}
+          open={this.state.openCategories}
+          values={this.state.apiCategories}
+          callback={this.handleCategory}
         />
 
         <Recipe
@@ -252,14 +321,35 @@ export default class App extends React.Component {
     this.setState((prevState, props) => ({
       menulist: [
         {
-          name: "INGREDIENTS",
+          name: appcopy["ingredients"]["title"][this.props.language],
           callback: () => {
             this.handleIngredient("openList");
           }
-        }
+        },
+        {
+          name: appcopy["shelfs"]["title"][this.props.language],
+          callback: () => {
+            this.handleShelf("openList");
+          }
+        },
+        {
+          name: appcopy["shops"]["title"][this.props.language],
+          callback: () => {
+            this.handleShop("openList");
+          }
+        } /*,
+        {
+          name: "CATEGORIES",
+          callback: () => {
+            this.handleCategory("openList");
+          }
+        }*/
       ]
     }));
     this.api("LoadIngredients");
+    this.api("LoadShelfs");
+    this.api("LoadShops");
+    this.api("LoadCategories");
     this.api("LoadMyrecipies");
     this.api("LoadThisweekrecipies");
     this.api("LoadThisweekingredients");
@@ -283,6 +373,57 @@ export default class App extends React.Component {
           } else {
             this.setState((prevState, props) => ({
               apiIngredients: [],
+              openSnack: [],
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "LoadShelfs":
+        apiGetShelfs({
+          need: "shelfs"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiShelfs: res.shelfs
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiShelfs: [],
+              openSnack: [],
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "LoadShops":
+        apiGetShops({
+          need: "shops"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiShops: res.shops
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiShops: [],
+              openSnack: [],
+              snack: appcopy["generic"]["snack"]["errornetwork"]
+            }));
+          }
+        });
+        break;
+      case "LoadCategories":
+        apiGetCategories({
+          need: "categories"
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              apiCategories: res.categories
+            });
+          } else {
+            this.setState((prevState, props) => ({
+              apiCategories: [],
               openSnack: [],
               snack: appcopy["generic"]["snack"]["errornetwork"]
             }));
@@ -413,6 +554,99 @@ export default class App extends React.Component {
       case "closeList":
         this.setState((prevState, props) => ({
           openIngredients: false
+        }));
+        break;
+      default:
+    }
+  }
+  handleShelf(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleShelf " + action);
+    }
+    console.log("App.handleShelf " + action);
+    switch (action) {
+      case "openItem":
+        this.setState((prevState, props) => ({
+          openShelf: true,
+          shelfid: details.shelfid
+        }));
+        break;
+      case "closeItem":
+        this.setState((prevState, props) => ({
+          openShelf: false
+        }));
+        break;
+      case "openList":
+        this.api("LoadShelfs");
+        this.setState((prevState, props) => ({
+          openShelfs: true
+        }));
+        break;
+      case "closeList":
+        this.setState((prevState, props) => ({
+          openShelfs: false
+        }));
+        break;
+      default:
+    }
+  }
+  handleShop(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleShop " + action);
+    }
+    console.log("App.handleShop " + action);
+    switch (action) {
+      case "openItem":
+        this.setState((prevState, props) => ({
+          openShop: true,
+          shopid: details.shopid
+        }));
+        break;
+      case "closeItem":
+        this.setState((prevState, props) => ({
+          openShop: false
+        }));
+        break;
+      case "openList":
+        this.api("LoadShops");
+        this.setState((prevState, props) => ({
+          openShops: true
+        }));
+        break;
+      case "closeList":
+        this.setState((prevState, props) => ({
+          openShops: false
+        }));
+        break;
+      default:
+    }
+  }
+  handleCategory(action, details) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("App.handleCategory " + action);
+    }
+    console.log("App.handleCategory " + action);
+    switch (action) {
+      case "openItem":
+        this.setState((prevState, props) => ({
+          openCategory: true,
+          categoryid: details.categoryid
+        }));
+        break;
+      case "closeItem":
+        this.setState((prevState, props) => ({
+          openCategory: false
+        }));
+        break;
+      case "openList":
+        this.api("LoadCategories");
+        this.setState((prevState, props) => ({
+          openCategories: true
+        }));
+        break;
+      case "closeList":
+        this.setState((prevState, props) => ({
+          openCategories: false
         }));
         break;
       default:

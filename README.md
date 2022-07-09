@@ -19,14 +19,21 @@
 
 ### Ingredient
 
-- Category list
+- P0 **Shelf list**
 - Unit conversion
-- Shop list
 - Season
 
 ### Ingredients
 
-- P1 **Treeview by category**
+- P1 **Treeview by shelf**
+
+### Shelf
+
+### Shelfs
+
+### Shop
+
+### Shops
 
 ### This week
 

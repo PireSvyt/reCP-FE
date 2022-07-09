@@ -292,6 +292,12 @@
       }
     }
   },
+  "categories": {
+    "title": {
+      "FR": "Catégories",
+      "EN": "Categories"
+    }
+  },
   "ingredient": {
     "title": {
       "FR": "Ingrédient",
@@ -320,7 +326,7 @@
       },
       "deleted": {
         "severity": "success",
-        "FR": "Ingrédient supprimée",
+        "FR": "Ingrédient supprimé",
         "EN": "Ingredient deleted"
       },
       "conflict": {
@@ -334,6 +340,94 @@
     "title": {
       "FR": "Ingrédients",
       "EN": "Ingredients"
+    }
+  },
+  "shelf": {
+    "title": {
+      "FR": "Rayon",
+      "EN": "Shelf"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Rayon abandonné",
+        "EN": "Shelf discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Rayon enregistré",
+        "EN": "Shelf saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Rayon non créé",
+        "EN": "Shelf not created"
+      },
+      "edited": {
+        "severity": "success",
+        "FR": "Rayon modifié",
+        "EN": "Shelf edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Rayon supprimé",
+        "EN": "Shelf deleted"
+      },
+      "conflict": {
+        "severity": "error",
+        "FR": "Nom déjà utilisé",
+        "EN": "Name already used"
+      }
+    }
+  },
+  "shelfs": {
+    "title": {
+      "FR": "Rayons",
+      "EN": "Shelfs"
+    }
+  },
+  "shop": {
+    "title": {
+      "FR": "Magasin",
+      "EN": "Shop"
+    },
+    "snack": {
+      "discarded": {
+        "severity": "info",
+        "FR": "Magasin abandonné",
+        "EN": "Shop discarded"
+      },
+      "saved": {
+        "severity": "success",
+        "FR": "Magasin enregistré",
+        "EN": "Shop saved"
+      },
+      "erroroncreation": {
+        "severity": "error",
+        "FR": "Magasin non créé",
+        "EN": "Shop not created"
+      },
+      "edited": {
+        "severity": "success",
+        "FR": "Magasin modifié",
+        "EN": "Shop edited"
+      },
+      "deleted": {
+        "severity": "success",
+        "FR": "Magasin supprimé",
+        "EN": "Shop deleted"
+      },
+      "conflict": {
+        "severity": "error",
+        "FR": "Nom déjà utilisé",
+        "EN": "Name already used"
+      }
+    }
+  },
+  "shops": {
+    "title": {
+      "FR": "Magasins",
+      "EN": "Shops"
     }
   },
   "generic": {
@@ -395,6 +489,14 @@
       "amount": {
         "FR": "Montant",
         "EN": "Amount"
+      },
+      "shelf": {
+        "FR": "Rayon",
+        "EN": "Shelf"
+      },
+      "shop": {
+        "FR": "Magasin",
+        "EN": "Shop"
       },
       "category": {
         "FR": "Catégorie",
