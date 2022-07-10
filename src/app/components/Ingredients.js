@@ -1,10 +1,7 @@
 import * as React from "react";
 import {
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogTitle,
   List,
   ListItem,
   ListItemText,
@@ -12,13 +9,9 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
-  Fab
+  Typography
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-//import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "../copy";
@@ -37,6 +30,8 @@ export default class Ingredients extends React.Component {
       open: false,
       openSnack: false
     };
+    // Utils
+    this.getShelfName = this.getShelfName.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSnack = this.handleSnack.bind(this);
@@ -99,7 +94,9 @@ export default class Ingredients extends React.Component {
                   >
                     <ListItemText
                       primary={`${ingredient.name}`}
-                      secondary={`${ingredient.unit}, ${ingredient.category}`}
+                      secondary={`${ingredient.unit}, ${this.getShelfName(
+                        ingredient.shelf
+                      )}`}
                     />
                   </ListItemButton>
                 </ListItem>
@@ -129,6 +126,22 @@ export default class Ingredients extends React.Component {
     if (prevState.open !== this.props.open && this.props.open) {
       // Update
     }
+  }
+
+  // Utils
+  getShelfName(id) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Ingredient.getShelfName : " + id);
+    }
+    let selectedshelf = "";
+    this.props.secondaryvalues.forEach((shelf) => {
+      if (id === shelf._id) {
+        selectedshelf = shelf.name;
+      }
+    });
+    //console.log("shelf");
+    //console.log(shelf);
+    return selectedshelf;
   }
 
   // Handles

@@ -29,10 +29,13 @@ export default class Shop extends React.Component {
       console.log("Shop language = " + this.props.language);
     }
     this.state = {
+      componentHeight: undefined,
       shop: { ...emptyShop },
       openSnack: false,
       snack: undefined
     };
+    // Updates
+    this.updateComponentHeight = this.updateComponentHeight.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -54,7 +57,11 @@ export default class Shop extends React.Component {
           <DialogTitle>
             {appcopy["shop"]["title"][this.props.language]}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent
+            sx={{
+              height: this.state.componentHeight
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -96,6 +103,7 @@ export default class Shop extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Shop.componentDidMount");
     }
+    this.updateComponentHeight();
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -139,6 +147,16 @@ export default class Shop extends React.Component {
         }));
       }
     }
+  }
+
+  // Updates
+  updateComponentHeight() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Thisweek.updateComponentHeight");
+    }
+    this.setState({
+      componentHeight: window.innerHeight - 115
+    });
   }
 
   // Handles
