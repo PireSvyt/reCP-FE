@@ -14,12 +14,11 @@
 ### My recipies
 
 - P2 **Search for recipe**
-- Tag category
-- Filter by category
+- Tags
+- Filters
 
 ### Ingredient
 
-- P0 **Shelf list**
 - Unit conversion
 - Season
 
@@ -37,8 +36,9 @@
 
 ### This week
 
-- P0 **BE Add to be random**
-- BE replace recipe
+- P0 **Add recipe from FE (random)**
+- P2 **Renew recipe selection from FE (random)**
+- Replace recipe
 
 ### Fridge
 
@@ -54,6 +54,7 @@
 - Appbar in transaction
 - Appbar in ingredient
 - Clean up dependencies
+- Modal size uniformity
 
 ## Fancy
 

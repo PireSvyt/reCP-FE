@@ -113,11 +113,11 @@ export default class Shop extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.values !== this.props.values
+      prevState.shop !== this.props.shop
     ) {
-      if (this.props.values !== "") {
+      if (this.props.shop !== "") {
         // Load
-        apiGetShop(this.props.values).then((res) => {
+        apiGetShop(this.props.shop).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
@@ -223,7 +223,7 @@ export default class Shop extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.values);
+        console.log(this.props.shop);
         console.log(this.state.shop);
       }
       apiSetShopSave(this.state.shop).then((res) => {

@@ -164,12 +164,12 @@ export default class Shelf extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.values !== this.props.values
+      prevState.shelf !== this.props.shelf
     ) {
       this.apiLoadShops();
-      if (this.props.values !== "") {
+      if (this.props.shelf !== "") {
         // Load
-        apiGetShelf(this.props.values).then((res) => {
+        apiGetShelf(this.props.shelf).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
@@ -300,7 +300,7 @@ export default class Shelf extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.values);
+        console.log(this.props.shelf);
         console.log(this.state.shelf);
       }
       apiSetShelfSave(this.state.shelf).then((res) => {

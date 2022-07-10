@@ -38,6 +38,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
+import UIShelf from "./uicomponents/uishelf";
 
 export default class Fridge extends React.Component {
   constructor(props) {
@@ -97,43 +98,65 @@ export default class Fridge extends React.Component {
             {appcopy["fridge"]["subsection"]["ihavent"][this.props.language]}
           </Typography>
           <Box>
-            <List dense={true}>
-              {this.props.values.map((ingredient) => {
-                if ((ingredient.available || 0) < ingredient.quantity) {
-                  return (
-                    <ListItem key={"mayhave-" + ingredient._id}>
-                      <FridgeIngredient
-                        ingredient={ingredient}
-                        callback={this.props.callback}
-                      />
-                    </ListItem>
-                  );
-                } else {
-                  return <div key={"mayhave-" + ingredient._id} />;
-                }
-              })}
-            </List>
+            {this.props.shelfs.map((shelf) => {
+              //console.log(this.props.tertiaryingredients);
+              //console.log("SHELF : " + shelf.name);
+              // filter
+              function filter(ingredient) {
+                //console.log(ingredient);
+                let status = (ingredient.available || 0) < ingredient.quantity;
+                //console.log(status);
+                return status;
+              }
+              //console.log("this.props.ingredients : ");
+              //console.log(this.props.ingredients);
+              let sublist = this.props.ingredients.filter((ingredient) => {
+                return filter(ingredient) && ingredient.shelf === shelf._id;
+              });
+              //console.log("sublist : ");
+              //console.log(sublist);
+              return (
+                <UIShelf
+                  shelf={shelf.name}
+                  ingredients={sublist}
+                  shelfs={this.props.shelfs}
+                  callback={this.props.callback}
+                  packaging="fridge"
+                />
+              );
+            })}
           </Box>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {appcopy["fridge"]["subsection"]["ihave"][this.props.language]}
           </Typography>
           <Box>
-            <List dense={true}>
-              {this.props.values.map((ingredient) => {
-                if ((ingredient.available || 0) >= ingredient.quantity) {
-                  return (
-                    <ListItem key={"have-" + ingredient._id}>
-                      <FridgeIngredient
-                        ingredient={ingredient}
-                        callback={this.props.callback}
-                      />
-                    </ListItem>
-                  );
-                } else {
-                  return <div key={"have-" + ingredient._id} />;
-                }
-              })}
-            </List>
+            {this.props.shelfs.map((shelf) => {
+              //console.log(this.props.tertiaryingredients);
+              //console.log("SHELF : " + shelf.name);
+              // filter
+              function filter(ingredient) {
+                //console.log(ingredient);
+                let status = (ingredient.available || 0) >= ingredient.quantity;
+                //console.log(status);
+                return status;
+              }
+              //console.log("this.props.ingredients : ");
+              //console.log(this.props.ingredients);
+              let sublist = this.props.ingredients.filter((ingredient) => {
+                return filter(ingredient) && ingredient.shelf === shelf._id;
+              });
+              //console.log("sublist : ");
+              //console.log(sublist);
+              return (
+                <UIShelf
+                  shelf={shelf.name}
+                  ingredients={sublist}
+                  shelfs={this.props.shelfs}
+                  callback={this.props.callback}
+                  packaging="fridge"
+                />
+              );
+            })}
           </Box>
 
           <Snack

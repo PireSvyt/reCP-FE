@@ -97,7 +97,7 @@ export default class Ingredient extends React.Component {
                   width: "100%"
                 }}
                 disablePortal
-                options={this.props.secondaryvalues}
+                options={this.props.shelfs}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -119,7 +119,7 @@ export default class Ingredient extends React.Component {
                   this.handleChange(event, newValue);
                 }}
                 getOptionLabel={(option) => {
-                  var shorlist = this.props.secondaryvalues.filter(function (
+                  var shorlist = this.props.shelfs.filter(function (
                     value,
                     index,
                     arr
@@ -174,11 +174,11 @@ export default class Ingredient extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.values !== this.props.values
+      prevState.ingredient !== this.props.ingredient
     ) {
-      if (this.props.values !== "") {
+      if (this.props.ingredient !== "") {
         // Load
-        apiGetIngredient(this.props.values).then((res) => {
+        apiGetIngredient(this.props.ingredient).then((res) => {
           switch (res.status) {
             case 200:
               console.log("loaded ingredient");
@@ -195,7 +195,7 @@ export default class Ingredient extends React.Component {
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errornetwork"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
               break;
             default:
               this.setState((prevState, props) => ({
@@ -232,7 +232,7 @@ export default class Ingredient extends React.Component {
       console.log("Ingredient.getShelfName : " + id);
     }
     let selectedshelf = "";
-    this.props.secondaryvalues.forEach((shelf) => {
+    this.props.shelfs.forEach((shelf) => {
       if (id === shelf._id) {
         selectedshelf = shelf.name;
       }
@@ -324,7 +324,7 @@ export default class Ingredient extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.values);
+        console.log(this.props.ingredient);
         console.log(this.state.ingredient);
       }
       apiSetIngredientSave(this.state.ingredient).then((res) => {

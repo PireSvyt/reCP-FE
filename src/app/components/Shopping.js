@@ -1,48 +1,23 @@
 import * as React from "react";
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Fab,
   TextField,
   Box,
-  DialogContentText,
   Card,
-  CardContent,
-  CardActions,
   Autocomplete
 } from "@mui/material";
-import { TreeView, TreeItem } from "@mui/lab";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-//import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import TuneIcon from "@mui/icons-material/Tune";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import NoMealsIcon from "@mui/icons-material/NoMeals";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
-import { random_id } from "./toolkit";
+import UIShelf from "./uicomponents/uishelf";
 
 export default class Shopping extends React.Component {
   constructor(props) {
@@ -61,7 +36,6 @@ export default class Shopping extends React.Component {
     };
     // Updates
     this.updateShoppingHeight = this.updateShoppingHeight.bind(this);
-    this.getTreeCategories = this.getTreeCategories.bind(this);
     // Handles
     this.handleSnack = this.handleSnack.bind(this);
     this.handleEmpty = this.handleEmpty.bind(this);
@@ -146,41 +120,33 @@ export default class Shopping extends React.Component {
             </IconButton>
           </Box>
           <Box>
-            <ShoppingAddIngredient
-              language={this.props.language}
-              open={this.state.openIngredients}
-              values={this.props.secondaryvalues}
-              callback={this.handleIngredient}
-              addingingredient={this.state.addingIngredient}
-            />
-            <List dense={true} sx={{ display: this.state.listView }}>
-              {this.props.values.map((ingredient) => {
-                if (
+            {this.props.shelfs.map((shelf) => {
+              //console.log(this.props.tertiaryingredients);
+              //console.log("SHELF : " + shelf.name);
+              // filter
+              function filter(ingredient) {
+                //console.log(ingredient);
+                let status =
                   ingredient.quantity - (ingredient.available || 0) >
-                  (ingredient.shopped || 0)
-                ) {
-                  return (
-                    <ListItem key={"totake-" + ingredient._id}>
-                      <ShoppingIngredient
-                        ingredient={ingredient}
-                        callback={this.props.callback}
-                      />
-                    </ListItem>
-                  );
-                } else {
-                  return <div key={"totake-" + ingredient._id} />;
-                }
-              })}
-            </List>
-
-            {Object.keys(this.state.treeCategories).forEach((category) => {
-              console.log("CATEGORY : " + category);
-              console.log(this.state.treeCategories[category]);
+                    (ingredient.shopped || 0) &&
+                  ingredient.quantity > (ingredient.available || 0);
+                //console.log(status);
+                return status;
+              }
+              //console.log("this.props.ingredients : ");
+              //console.log(this.props.ingredients);
+              let sublist = this.props.ingredients.filter((ingredient) => {
+                return filter(ingredient) && ingredient.shelf === shelf._id;
+              });
+              //console.log("sublist : ");
+              //console.log(sublist);
               return (
-                <ShoppingCategory
-                  category={category}
-                  values={this.state.treeCategories[category]}
+                <UIShelf
+                  shelf={shelf.name}
+                  ingredients={sublist}
+                  shelfs={this.props.shelfs}
                   callback={this.props.callback}
+                  packaging="shopping"
                 />
               );
             })}
@@ -189,26 +155,36 @@ export default class Shopping extends React.Component {
             {appcopy["shopping"]["subsection"]["ihave"][this.props.language]}
           </Typography>
           <Box>
-            <List dense={true} sx={{ display: this.state.listView }}>
-              {this.props.values.map((ingredient) => {
-                if (
+            {this.props.shelfs.map((shelf) => {
+              //console.log(this.props.shelfs);
+              //console.log("SHELF : " + shelf.name);
+              // filter
+              function filter(ingredient) {
+                //console.log(ingredient);
+                let status =
                   ingredient.quantity - (ingredient.available || 0) <=
                     (ingredient.shopped || 0) &&
-                  ingredient.quantity > (ingredient.available || 0)
-                ) {
-                  return (
-                    <ListItem key={"taken-" + ingredient._id}>
-                      <ShoppingIngredient
-                        ingredient={ingredient}
-                        callback={this.props.callback}
-                      />
-                    </ListItem>
-                  );
-                } else {
-                  return <div key={"taken-" + ingredient._id} />;
-                }
-              })}
-            </List>
+                  ingredient.quantity > (ingredient.available || 0);
+                //console.log(status);
+                return status;
+              }
+              //console.log("this.props.ingredients : ");
+              //console.log(this.props.ingredients);
+              let sublist = this.props.ingredients.filter((ingredient) => {
+                return filter(ingredient) && ingredient.shelf === shelf._id;
+              });
+              //console.log("sublist : ");
+              //console.log(sublist);
+              return (
+                <UIShelf
+                  shelf={shelf.name}
+                  ingredients={sublist}
+                  shelfs={this.props.shelfs}
+                  callback={this.props.callback}
+                  packaging="shopping"
+                />
+              );
+            })}
           </Box>
           <Button onClick={() => this.handleAddtofridge()}>
             {appcopy["shopping"]["button"]["addtofridge"][this.props.language]}
@@ -238,64 +214,9 @@ export default class Shopping extends React.Component {
       //console.log("Shopping.state");
       //console.log(this.state);
     }
-    if (prevState.values !== this.props.values) {
-      this.getTreeCategories();
+    if (prevState.ingredients !== this.props.ingredients) {
+      //
     }
-  }
-  getTreeCategories() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("Shopping.getTreeCategories");
-    }
-    // useful
-    function compare(a, b) {
-      if (a.localeCompare(b, "en", { sensitivity: "base" }) === 1) {
-        return 1;
-      } else {
-        return -1;
-      }
-    }
-    // Populate
-    let newCategories = {};
-    this.props.values.forEach((ingredient) => {
-      //console.log("ingredient");
-      //console.log(ingredient);
-      //console.log("ingredient.category = " + ingredient.category);
-      if (ingredient.category === undefined) {
-        if (Object.keys(newCategories).length === 0) {
-          //console.log("default category (no key) ");
-          newCategories["?"] = [];
-          newCategories["?"].push(ingredient);
-        } else {
-          //console.log("default category ");
-          newCategories["?"].push(ingredient);
-        }
-      } else {
-        if (Object.keys(newCategories).length === 0) {
-          //console.log("new category (no key) : " + ingredient.category);
-          newCategories[ingredient.category] = [];
-          newCategories[ingredient.category].push(ingredient);
-        } else {
-          //console.log("Object.keys(newCategories)");
-          //console.log(Object.keys(newCategories));
-          if (ingredient.category in Object.keys(newCategories)) {
-            //console.log("append category : " + ingredient.category);
-            newCategories[ingredient.category].push(ingredient);
-          } else {
-            //console.log("new category : " + ingredient.category);
-            newCategories[ingredient.category] = [];
-            newCategories[ingredient.category].push(ingredient);
-          }
-        }
-      }
-    });
-    //console.log("newCategories");
-    //console.log(newCategories);
-
-    // Sort and update
-    //newCategories.sort(compare);
-    this.setState({
-      treeCategories: newCategories
-    });
   }
 
   // Updates
@@ -385,307 +306,5 @@ export default class Shopping extends React.Component {
         break;
       default:
     }
-  }
-}
-
-class ShoppingIngredient extends React.Component {
-  constructor(props) {
-    super(props);
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log(
-        "ShoppingIngredient.constructor " + this.props.ingredient._id
-      );
-    }
-    // Handlers
-    this.handleTake = this.handleTake.bind(this);
-  }
-  render() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingIngredient.render " + this.props.ingredient._id);
-    }
-    return (
-      <Card sx={{ width: "100%", pl: "1em", pr: "1em" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}
-        >
-          <Typography>{this.props.ingredient.name}</Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            <Typography sx={{ textAlign: "right", pr: "1em" }}>
-              {Math.round(
-                (this.props.ingredient.quantity -
-                  (this.props.ingredient.available || 0)) *
-                  10
-              ) /
-                10 +
-                " " +
-                this.props.ingredient.unit}
-            </Typography>
-            <IconButton
-              onClick={() => {
-                this.handleTake();
-              }}
-            >
-              {this.props.ingredient.quantity -
-                (this.props.ingredient.available || 0) <=
-                (this.props.ingredient.shopped || 0) && <CheckBoxIcon />}
-              {this.props.ingredient.quantity -
-                (this.props.ingredient.available || 0) >
-                (this.props.ingredient.shopped || 0) && (
-                <CheckBoxOutlineBlankIcon />
-              )}
-            </IconButton>
-          </Box>
-        </Box>
-      </Card>
-    );
-  }
-
-  // Handles
-  handleTake() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingIngredient.handleTake " + this.props.ingredient._id);
-    }
-    this.props.callback("take", { ingredientid: this.props.ingredient._id });
-  }
-}
-
-let emptyIngredient = {
-  _id: undefined,
-  name: undefined,
-  shops: [],
-  unit: undefined,
-  category: undefined
-};
-
-class ShoppingAddIngredient extends React.Component {
-  constructor(props) {
-    super(props);
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingAddIngredient.constructor");
-    }
-    this.state = {
-      ingredient: { ...emptyIngredient }
-    };
-    // Handlers
-    this.handleChange = this.handleChange.bind(this);
-    this.handleAdd = this.handleAdd.bind(this);
-  }
-  render() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingAddIngredient.render " + this.state.ingredient._id);
-    }
-    return (
-      <Card
-        sx={{
-          ml: "1em",
-          mr: "1em",
-          pl: "1em",
-          pr: "1em",
-          display: this.props.addingingredient
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}
-        >
-          <Autocomplete
-            sx={{
-              width: "100%"
-            }}
-            disablePortal
-            options={this.props.values}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                label={appcopy["generic"]["input"]["name"][this.props.language]}
-              />
-            )}
-            renderOption={(props, option) => <li {...props}>{option.name}</li>}
-            value={this.state.ingredient.name}
-            onChange={(event, newValue) => {
-              event.target = {
-                name: "name",
-                value: newValue
-              };
-              this.handleChange(event, newValue);
-            }}
-            getOptionLabel={(option) => {
-              var shorlist = this.props.values.filter(function (
-                value,
-                index,
-                arr
-              ) {
-                if (typeof option === "string") {
-                  return value.name === option;
-                } else {
-                  return value.name === option.name;
-                }
-              });
-              if (shorlist.length === 1) {
-                return shorlist[0].name;
-              } else {
-                return "";
-              }
-            }}
-          />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <TextField
-              name="quantity"
-              label={
-                appcopy["generic"]["input"]["quantity"][this.props.language]
-              }
-              variant="standard"
-              value={this.state.ingredient.quantity}
-              onChange={this.handleChange}
-              autoComplete="off"
-              type="number"
-            />
-            <TextField
-              name="unit"
-              label={appcopy["generic"]["input"]["unit"][this.props.language]}
-              variant="standard"
-              value={this.state.ingredient.unit || ""}
-              onChange={this.handleChange}
-              autoComplete="off"
-              disabled={true}
-            />
-            <Button onClick={() => this.handleAddtofridge()}>
-              {appcopy["generic"]["button"]["add"][this.props.language]}
-            </Button>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignItems: "center"
-          }}
-        ></Box>
-      </Card>
-    );
-  }
-
-  // Handles
-  handleChange(event, newValue) {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingAddIngredient.handleChange");
-    }
-    const target = event.target;
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("target.name : " + target.name);
-      console.log("target.value : " + target.value);
-      console.log("newValue : " + newValue);
-    }
-    console.log("this.state.ingredient");
-    console.log(this.state.ingredient);
-    var previousIngredient = this.state.ingredient;
-    switch (target.name) {
-      case "name":
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change name : " + target.value);
-        }
-        if (target.value === null) {
-          previousIngredient.name = undefined;
-          previousIngredient.unit = undefined;
-        } else {
-          console.log("change name : " + target.value.name);
-          previousIngredient.name = target.value.name;
-          previousIngredient.unit = target.value.unit;
-        }
-        break;
-      case "quantity":
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change quantity : " + target.value);
-        }
-        previousIngredient.quantity = target.value;
-        break;
-      default:
-        if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("/!\\ no match : " + target.name);
-        }
-    }
-    // Update
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingAddIngredient.ingredient");
-      console.log(this.state.ingredient);
-    }
-    console.log(this.state.ingredient);
-    console.log(previousIngredient);
-    this.setState((prevState, props) => ({
-      ingredient: previousIngredient
-    }));
-  }
-  handleAdd() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log(
-        "ShoppingAddIngredient.handleAdd " + this.props.ingredient._id
-      );
-    }
-    this.props.callback("addingredient", {
-      ingredientid: this.state.ingredient
-    });
-  }
-}
-
-class ShoppingCategory extends React.Component {
-  constructor(props) {
-    super(props);
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingCategory.constructor");
-    }
-    console.log("ShoppingCategory.constructor");
-    // Handlers
-  }
-  render() {
-    if (process.env.REACT_APP_DEBUG === "TRUE") {
-      console.log("ShoppingCategory.render " + this.props.category);
-    }
-    console.log("ShoppingCategory.render " + this.props.category);
-    return (
-      <Card
-        sx={{
-          ml: "1em",
-          mr: "1em",
-          pl: "1em",
-          pr: "1em"
-        }}
-      >
-        <Typography>{this.props.category}</Typography>
-        {this.props.values.map((ingredient) => {
-          return (
-            <ListItem key={ingredient._id + "-" + random_id()}>
-              <ShoppingIngredient
-                ingredient={ingredient}
-                callback={this.props.callback}
-              />
-            </ListItem>
-          );
-        })}
-      </Card>
-    );
   }
 }

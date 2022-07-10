@@ -82,7 +82,7 @@ export default class Shelfs extends React.Component {
           </AppBar>
           <DialogContent>
             <List dense={true}>
-              {this.props.values.map((shelf) => (
+              {this.props.shelfs.map((shelf) => (
                 <ListItem key={`${shelf._id}`} id={`${shelf._id}`}>
                   <ListItemButton
                     onClick={() => {

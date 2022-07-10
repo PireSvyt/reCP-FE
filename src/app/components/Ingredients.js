@@ -2,20 +2,18 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
   AppBar,
   Toolbar,
   IconButton,
-  Typography
+  Typography,
+  Box
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
+import UIShelf from "./uicomponents/uishelf";
 
 export default class Ingredients extends React.Component {
   constructor(props) {
@@ -77,31 +75,47 @@ export default class Ingredients extends React.Component {
             </Toolbar>
           </AppBar>
           <DialogContent>
-            <List dense={true}>
-              {this.props.values.map((ingredient) => (
-                <ListItem key={`${ingredient._id}`} id={`${ingredient._id}`}>
-                  <ListItemButton
-                    onClick={() => {
-                      if (process.env.REACT_APP_DEBUG === "TRUE") {
-                        console.log(
-                          "Ingredients.ingredients.onClick " + ingredient._id
-                        );
-                      }
-                      this.props.callback("openItem", {
-                        ingredientid: ingredient._id
-                      });
-                    }}
-                  >
-                    <ListItemText
-                      primary={`${ingredient.name}`}
-                      secondary={`${ingredient.unit}, ${this.getShelfName(
-                        ingredient.shelf
-                      )}`}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+            <Box>
+              <UIShelf
+                shelf={"???"}
+                ingredients={this.props.ingredients.filter((ingredient) => {
+                  //console.log(" ingredient.shelf : " + ingredient.shelf);
+                  return (
+                    ingredient.shelf === undefined || ingredient.shelf === ""
+                  );
+                })}
+                shelfs={this.props.shelfs}
+                callback={this.props.callback}
+                packaging="ingredients"
+              />
+              {this.props.shelfs.map((shelf) => {
+                //console.log(this.props.tertiaryingredients);
+                //console.log("SHELF : " + shelf.name);
+                // filter
+                function filter(ingredient) {
+                  //console.log(ingredient);
+                  let status = true;
+                  //console.log(status);
+                  return status;
+                }
+                //console.log("this.props.ingredients : ");
+                //console.log(this.props.ingredients);
+                let sublist = this.props.ingredients.filter((ingredient) => {
+                  return filter(ingredient) && ingredient.shelf === shelf._id;
+                });
+                //console.log("sublist : ");
+                //console.log(sublist);
+                return (
+                  <UIShelf
+                    shelf={shelf.name}
+                    ingredients={sublist}
+                    shelfs={this.props.shelfs}
+                    callback={this.props.callback}
+                    packaging="ingredients"
+                  />
+                );
+              })}
+            </Box>
           </DialogContent>
         </Dialog>
 
@@ -134,7 +148,7 @@ export default class Ingredients extends React.Component {
       console.log("Ingredient.getShelfName : " + id);
     }
     let selectedshelf = "";
-    this.props.secondaryvalues.forEach((shelf) => {
+    this.props.shelfs.forEach((shelf) => {
       if (id === shelf._id) {
         selectedshelf = shelf.name;
       }
