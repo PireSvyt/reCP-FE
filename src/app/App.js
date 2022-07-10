@@ -126,43 +126,44 @@ export default class App extends React.Component {
         <Ingredient
           language={this.props.language}
           open={this.state.openIngredient}
-          values={this.state.ingredientid}
-          secondaryvalues={this.state.apiShelfs}
+          ingredient={this.state.ingredientid}
+          shelfs={this.state.apiShelfs}
           callback={this.handleIngredient}
         />
         <Ingredients
           language={this.props.language}
           open={this.state.openIngredients}
-          values={this.state.apiIngredients}
-          secondaryvalues={this.state.apiShelfs}
+          ingredients={this.state.apiIngredients}
+          shelfs={this.state.apiShelfs}
           callback={this.handleIngredient}
         />
 
         <Shelf
           language={this.props.language}
           open={this.state.openShelf}
-          values={this.state.shelfid}
-          secondaryvalues={this.state.apiShops}
+          shelf={this.state.shelfid}
+          shops={this.state.apiShops}
+          shelfs={this.state.apiShelfs}
           callback={this.handleShelf}
         />
         <Shelfs
           language={this.props.language}
           open={this.state.openShelfs}
-          values={this.state.apiShelfs}
-          secondaryvalues={this.state.apiShops}
+          shelfs={this.state.apiShelfs}
+          shops={this.state.apiShops}
           callback={this.handleShelf}
         />
 
         <Shop
           language={this.props.language}
           open={this.state.openShop}
-          values={this.state.shopid}
+          shop={this.state.shopid}
           callback={this.handleShop}
         />
         <Shops
           language={this.props.language}
           open={this.state.openShops}
-          values={this.state.apiShops}
+          shops={this.state.apiShops}
           callback={this.handleShop}
         />
 
@@ -207,15 +208,17 @@ export default class App extends React.Component {
         <AppTabPanel value={this.state.selectedTab} index={2} key={"fridge"}>
           <Fridge
             language={this.props.language}
-            values={this.state.apiThisweekingredients}
+            ingredients={this.state.apiThisweekingredients}
+            shelfs={this.state.apiShelfs}
             callback={this.handleFridge}
           />
         </AppTabPanel>
         <AppTabPanel value={this.state.selectedTab} index={3} key={"shopping"}>
           <Shopping
             language={this.props.language}
-            values={this.state.apiThisweekingredients}
+            ingredients={this.state.apiThisweekingredients}
             secondaryvalues={this.state.apiIngredients}
+            shelfs={this.state.apiShelfs}
             callback={this.handleShopping}
           />
         </AppTabPanel>

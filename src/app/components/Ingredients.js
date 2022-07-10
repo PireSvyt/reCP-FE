@@ -1,28 +1,19 @@
 import * as React from "react";
 import {
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogTitle,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Fab
+  Box
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-//import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
 
 import appcopy from "../copy";
 import Snack from "./Snack";
+import UIShelf from "./uicomponents/uishelf";
 
 export default class Ingredients extends React.Component {
   constructor(props) {
@@ -37,6 +28,8 @@ export default class Ingredients extends React.Component {
       open: false,
       openSnack: false
     };
+    // Utils
+    this.getShelfName = this.getShelfName.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSnack = this.handleSnack.bind(this);
@@ -82,29 +75,47 @@ export default class Ingredients extends React.Component {
             </Toolbar>
           </AppBar>
           <DialogContent>
-            <List dense={true}>
-              {this.props.values.map((ingredient) => (
-                <ListItem key={`${ingredient._id}`} id={`${ingredient._id}`}>
-                  <ListItemButton
-                    onClick={() => {
-                      if (process.env.REACT_APP_DEBUG === "TRUE") {
-                        console.log(
-                          "Ingredients.ingredients.onClick " + ingredient._id
-                        );
-                      }
-                      this.props.callback("openItem", {
-                        ingredientid: ingredient._id
-                      });
-                    }}
-                  >
-                    <ListItemText
-                      primary={`${ingredient.name}`}
-                      secondary={`${ingredient.unit}, ${ingredient.category}`}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+            <Box>
+              <UIShelf
+                shelf={"???"}
+                ingredients={this.props.ingredients.filter((ingredient) => {
+                  //console.log(" ingredient.shelf : " + ingredient.shelf);
+                  return (
+                    ingredient.shelf === undefined || ingredient.shelf === ""
+                  );
+                })}
+                shelfs={this.props.shelfs}
+                callback={this.props.callback}
+                packaging="ingredients"
+              />
+              {this.props.shelfs.map((shelf) => {
+                //console.log(this.props.tertiaryingredients);
+                //console.log("SHELF : " + shelf.name);
+                // filter
+                function filter(ingredient) {
+                  //console.log(ingredient);
+                  let status = true;
+                  //console.log(status);
+                  return status;
+                }
+                //console.log("this.props.ingredients : ");
+                //console.log(this.props.ingredients);
+                let sublist = this.props.ingredients.filter((ingredient) => {
+                  return filter(ingredient) && ingredient.shelf === shelf._id;
+                });
+                //console.log("sublist : ");
+                //console.log(sublist);
+                return (
+                  <UIShelf
+                    shelf={shelf.name}
+                    ingredients={sublist}
+                    shelfs={this.props.shelfs}
+                    callback={this.props.callback}
+                    packaging="ingredients"
+                  />
+                );
+              })}
+            </Box>
           </DialogContent>
         </Dialog>
 
@@ -129,6 +140,22 @@ export default class Ingredients extends React.Component {
     if (prevState.open !== this.props.open && this.props.open) {
       // Update
     }
+  }
+
+  // Utils
+  getShelfName(id) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Ingredient.getShelfName : " + id);
+    }
+    let selectedshelf = "";
+    this.props.shelfs.forEach((shelf) => {
+      if (id === shelf._id) {
+        selectedshelf = shelf.name;
+      }
+    });
+    //console.log("shelf");
+    //console.log(shelf);
+    return selectedshelf;
   }
 
   // Handles

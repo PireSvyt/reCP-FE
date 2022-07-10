@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   Select,
-  Typography,
   OutlinedInput,
   ListItemText,
   Checkbox,
@@ -36,11 +35,14 @@ export default class Shelf extends React.Component {
       console.log("Shelf language = " + this.props.language);
     }
     this.state = {
+      componentHeight: undefined,
       shelf: { ...emptyShelf },
       shopoptions: [],
       openSnack: false,
       snack: undefined
     };
+    // Updates
+    this.updateComponentHeight = this.updateComponentHeight.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -64,7 +66,11 @@ export default class Shelf extends React.Component {
           <DialogTitle>
             {appcopy["shelf"]["title"][this.props.language]}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent
+            sx={{
+              height: this.state.componentHeight
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -148,6 +154,7 @@ export default class Shelf extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Shelf.componentDidMount");
     }
+    this.updateComponentHeight();
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -157,12 +164,12 @@ export default class Shelf extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.values !== this.props.values
+      prevState.shelf !== this.props.shelf
     ) {
       this.apiLoadShops();
-      if (this.props.values !== "") {
+      if (this.props.shelf !== "") {
         // Load
-        apiGetShelf(this.props.values).then((res) => {
+        apiGetShelf(this.props.shelf).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
@@ -192,6 +199,16 @@ export default class Shelf extends React.Component {
         }));
       }
     }
+  }
+
+  // Updates
+  updateComponentHeight() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Thisweek.updateComponentHeight");
+    }
+    this.setState({
+      componentHeight: window.innerHeight - 115
+    });
   }
 
   // Handles
@@ -283,7 +300,7 @@ export default class Shelf extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.values);
+        console.log(this.props.shelf);
         console.log(this.state.shelf);
       }
       apiSetShelfSave(this.state.shelf).then((res) => {

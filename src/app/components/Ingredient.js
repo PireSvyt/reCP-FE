@@ -6,7 +6,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  Autocomplete
 } from "@mui/material";
 
 import appcopy from "../copy";
@@ -17,9 +18,9 @@ import Snack from "./Snack";
 let emptyIngredient = {
   _id: undefined,
   name: undefined,
-  shops: [],
   unit: undefined,
-  category: undefined
+  category: undefined,
+  shelf: undefined
 };
 
 export default class Ingredient extends React.Component {
@@ -33,9 +34,15 @@ export default class Ingredient extends React.Component {
     }
     this.state = {
       ingredient: { ...emptyIngredient },
+      shelf: "",
+      componentHeight: undefined,
       openSnack: false,
       snack: undefined
     };
+    // Updates
+    this.updateComponentHeight = this.updateComponentHeight.bind(this);
+    // Utils
+    this.getShelfName = this.getShelfName.bind(this);
     // Handles
     this.handleClose = this.handleClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -57,7 +64,11 @@ export default class Ingredient extends React.Component {
           <DialogTitle>
             {appcopy["ingredient"]["title"][this.props.language]}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent
+            sx={{
+              height: this.state.componentHeight
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -81,18 +92,53 @@ export default class Ingredient extends React.Component {
                 onChange={this.handleChange}
                 autoComplete="off"
               />
-              <TextField
-                name="category"
-                label={
-                  appcopy["generic"]["input"]["category"][this.props.language]
-                }
-                variant="standard"
-                value={this.state.ingredient.category || ""}
-                onChange={this.handleChange}
-                autoComplete="off"
+              <Autocomplete
+                sx={{
+                  width: "100%"
+                }}
+                disablePortal
+                options={this.props.shelfs}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label={
+                      appcopy["generic"]["input"]["shelf"][this.props.language]
+                    }
+                  />
+                )}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
+                )}
+                value={this.state.shelf}
+                onChange={(event, newValue) => {
+                  event.target = {
+                    name: "shelf",
+                    value: newValue
+                  };
+                  this.handleChange(event, newValue);
+                }}
+                getOptionLabel={(option) => {
+                  var shorlist = this.props.shelfs.filter(function (
+                    value,
+                    index,
+                    arr
+                  ) {
+                    if (typeof option === "string") {
+                      return value.name === option;
+                    } else {
+                      return value.name === option.name;
+                    }
+                  });
+                  if (shorlist.length === 1) {
+                    return shorlist[0].name;
+                  } else {
+                    return "";
+                  }
+                }}
               />
+              TODO : season
             </Box>
-            TODO : shelf, season, shop
           </DialogContent>
 
           <DialogActions>
@@ -118,6 +164,7 @@ export default class Ingredient extends React.Component {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       //console.log("Ingredient.componentDidMount");
     }
+    this.updateComponentHeight();
   }
   componentDidUpdate(prevState) {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -127,28 +174,33 @@ export default class Ingredient extends React.Component {
     }
     if (
       prevState.open !== this.props.open ||
-      prevState.values !== this.props.values
+      prevState.ingredient !== this.props.ingredient
     ) {
-      if (this.props.values !== "") {
+      if (this.props.ingredient !== "") {
         // Load
-        apiGetIngredient(this.props.values).then((res) => {
+        apiGetIngredient(this.props.ingredient).then((res) => {
           switch (res.status) {
             case 200:
+              console.log("loaded ingredient");
+              console.log(res.ingredient);
               this.setState({
-                ingredient: res.ingredient
+                ingredient: res.ingredient,
+                shelf: this.getShelfName(res.ingredient.shelf)
               });
               break;
             case 400:
               this.setState((prevState, props) => ({
                 ingredient: emptyIngredient,
+                shelf: "",
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errornetwork"]
               }));
-              this.props.onclose();
+              this.props.callback("closeItem");
               break;
             default:
               this.setState((prevState, props) => ({
                 ingredient: emptyIngredient,
+                shelf: "",
                 openSnack: true,
                 snack: appcopy["generic"]["snack"]["errorunknown"]
               }));
@@ -157,10 +209,37 @@ export default class Ingredient extends React.Component {
         });
       } else {
         this.setState((prevState, props) => ({
-          ingredient: { ...emptyIngredient }
+          ingredient: { ...emptyIngredient },
+          shelf: ""
         }));
       }
     }
+  }
+
+  // Updates
+  updateComponentHeight() {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Thisweek.updateComponentHeight");
+    }
+    this.setState({
+      componentHeight: window.innerHeight - 115
+    });
+  }
+
+  // Utils
+  getShelfName(id) {
+    if (process.env.REACT_APP_DEBUG === "TRUE") {
+      console.log("Ingredient.getShelfName : " + id);
+    }
+    let selectedshelf = "";
+    this.props.shelfs.forEach((shelf) => {
+      if (id === shelf._id) {
+        selectedshelf = shelf.name;
+      }
+    });
+    //console.log("shelf");
+    //console.log(shelf);
+    return selectedshelf;
   }
 
   // Handles
@@ -170,6 +249,7 @@ export default class Ingredient extends React.Component {
     }
     this.setState((prevState, props) => ({
       ingredient: { ...emptyIngredient },
+      shelf: "",
       openSnack: true,
       snack: appcopy["ingredient"]["snack"]["discarded"]
     }));
@@ -199,11 +279,11 @@ export default class Ingredient extends React.Component {
         }
         previousIngredient.unit = target.value;
         break;
-      case "category":
+      case "shelf":
         if (process.env.REACT_APP_DEBUG === "TRUE") {
-          console.log("change category : " + target.value);
+          console.log("change shelf : " + target.value._id);
         }
-        previousIngredient.category = target.value;
+        previousIngredient.shelf = target.value._id;
         break;
       default:
         if (process.env.REACT_APP_DEBUG === "TRUE") {
@@ -216,7 +296,8 @@ export default class Ingredient extends React.Component {
       console.log(this.state.ingredient);
     }
     this.setState((prevState, props) => ({
-      ingredient: previousIngredient
+      ingredient: previousIngredient,
+      shelf: this.getShelfName(previousIngredient.shelf)
     }));
   }
   handleSave() {
@@ -243,7 +324,7 @@ export default class Ingredient extends React.Component {
     // Post or publish
     if (save === true) {
       if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log(this.props.values);
+        console.log(this.props.ingredient);
         console.log(this.state.ingredient);
       }
       apiSetIngredientSave(this.state.ingredient).then((res) => {
@@ -252,6 +333,7 @@ export default class Ingredient extends React.Component {
             //console.log("default");
             this.setState({
               ingredient: emptyIngredient,
+              shelf: "",
               openSnack: true,
               snack: appcopy["ingredient"]["snack"]["saved"]
             });
@@ -261,6 +343,7 @@ export default class Ingredient extends React.Component {
             //console.log("modified");
             this.setState((prevState, props) => ({
               ingredient: emptyIngredient,
+              shelf: "",
               openSnack: true,
               snack: appcopy["ingredient"]["snack"]["edited"]
             }));

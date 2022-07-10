@@ -82,7 +82,7 @@ export default class Shops extends React.Component {
           </AppBar>
           <DialogContent>
             <List dense={true}>
-              {this.props.values.map((shop) => (
+              {this.props.shops.map((shop) => (
                 <ListItem key={`${shop._id}`} id={`${shop._id}`}>
                   <ListItemButton
                     onClick={() => {
