@@ -14,7 +14,7 @@ import {
   FormGroup,
   InputAdornment,
   Autocomplete,
-  Typography
+  Typography,
 } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -33,7 +33,7 @@ let emptyTransaction = {
   amount: undefined,
   by: undefined,
   for: ["Alice", "Pierre"],
-  category: undefined
+  category: undefined,
 };
 
 export default class Transaction extends React.Component {
@@ -50,7 +50,7 @@ export default class Transaction extends React.Component {
       options: [],
       transaction: { ...emptyTransaction },
       openSnack: false,
-      snack: undefined
+      snack: undefined,
     };
     // Handles
     this.handleClose = this.handleClose.bind(this);
@@ -83,7 +83,7 @@ export default class Transaction extends React.Component {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-evenly"
+                justifyContent: "space-evenly",
               }}
             >
               <TextField
@@ -106,12 +106,12 @@ export default class Transaction extends React.Component {
                   value={this.state.transactionDate}
                   onChange={(newValue) => {
                     this.setState((prevState, props) => ({
-                      transactionDate: newValue
+                      transactionDate: newValue,
                     }));
                   }}
                   onAccept={(newValue) => {
                     this.handleChange({
-                      target: { name: "date", value: newValue }
+                      target: { name: "date", value: newValue },
                     });
                   }}
                   renderInput={(params) => <TextField {...params} />}
@@ -129,7 +129,7 @@ export default class Transaction extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">€</InputAdornment>
-                  )
+                  ),
                 }}
                 autoComplete="off"
                 type="number"
@@ -143,7 +143,7 @@ export default class Transaction extends React.Component {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Typography variant="h6">
@@ -176,7 +176,7 @@ export default class Transaction extends React.Component {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Typography variant="h6">
@@ -192,7 +192,7 @@ export default class Transaction extends React.Component {
                       value="Alice"
                       name="for"
                       onChange={this.handleChange}
-                      defaultChecked={true}
+                      checked={this.state.transaction.for.includes("Alice")}
                     />
                   }
                   label="Alice"
@@ -203,7 +203,7 @@ export default class Transaction extends React.Component {
                       value="Pierre"
                       name="for"
                       onChange={this.handleChange}
-                      defaultChecked={true}
+                      checked={this.state.transaction.for.includes("Pierre")}
                     />
                   }
                   label="Pierre"
@@ -232,7 +232,7 @@ export default class Transaction extends React.Component {
                 onChange={(event, newValue) => {
                   event.target = {
                     name: "category",
-                    value: newValue.name
+                    value: newValue.name,
                   };
                   this.handleChange(event, newValue.name);
                 }}
@@ -300,7 +300,7 @@ export default class Transaction extends React.Component {
             case 200:
               this.setState({
                 transaction: res.transaction,
-                transactionDate: res.transaction.date
+                transactionDate: res.transaction.date,
               });
               break;
             case 404:
@@ -310,7 +310,7 @@ export default class Transaction extends React.Component {
                 snack:
                   appcopy["transaction"]["snack"][
                     "404 - issue on find category"
-                  ]
+                  ],
               }));
               this.props.onclose();
               break;
@@ -318,7 +318,7 @@ export default class Transaction extends React.Component {
               this.setState((prevState, props) => ({
                 transaction: emptyTransaction,
                 openSnack: true,
-                snack: appcopy["generic"]["snack"]["errornetwork"]
+                snack: appcopy["generic"]["snack"]["errornetwork"],
               }));
               this.props.onclose();
               break;
@@ -326,7 +326,7 @@ export default class Transaction extends React.Component {
               this.setState((prevState, props) => ({
                 transaction: emptyTransaction,
                 openSnack: true,
-                snack: appcopy["generic"]["snack"]["errorunknown"]
+                snack: appcopy["generic"]["snack"]["errorunknown"],
               }));
               this.props.onclose();
           }
@@ -334,7 +334,7 @@ export default class Transaction extends React.Component {
       } else {
         this.setState((prevState, props) => ({
           transactionDate: Date(),
-          transaction: { ...emptyTransaction }
+          transaction: { ...emptyTransaction },
         }));
       }
     }
@@ -348,7 +348,7 @@ export default class Transaction extends React.Component {
     this.setState((prevState, props) => ({
       transaction: { ...emptyTransaction },
       openSnack: true,
-      snack: appcopy["transaction"]["snack"]["discarded"]
+      snack: appcopy["transaction"]["snack"]["discarded"],
     }));
     this.props.onclose();
   }
@@ -378,7 +378,7 @@ export default class Transaction extends React.Component {
         }
         previousTransaction.date = target.value;
         this.setState((prevState, props) => ({
-          transactionDate: previousTransaction.date
+          transactionDate: previousTransaction.date,
         }));
         break;
       case "amount":
@@ -397,15 +397,12 @@ export default class Transaction extends React.Component {
         if (process.env.REACT_APP_DEBUG === "TRUE") {
           console.log("change for : " + target.value + " " + target.checked);
         }
-        previousTransaction.for = previousTransaction.for.filter(function (
-          value,
-          index,
-          arr
-        ) {
-          return value !== target.value;
-        });
         if (target.checked === true) {
           previousTransaction.for.push(target.value);
+        } else {
+          previousTransaction.for = previousTransaction.for.filter((value) => {
+            return value !== target.value;
+          });
         }
         break;
       case "category":
@@ -425,7 +422,7 @@ export default class Transaction extends React.Component {
       console.log(this.state.transaction);
     }
     this.setState((prevState, props) => ({
-      transaction: previousTransaction
+      transaction: previousTransaction,
     }));
   }
   handleSave() {
@@ -453,7 +450,7 @@ export default class Transaction extends React.Component {
       save = false;
       errors.push(" Payé par vide");
     }
-    if (this.state.transaction.for === []) {
+    if (this.state.transaction.for.length === 0) {
       save = false;
       errors.push(" Payé pour vide");
     }
@@ -477,7 +474,7 @@ export default class Transaction extends React.Component {
             this.setState({
               transaction: emptyTransaction,
               openSnack: true,
-              snack: appcopy["transaction"]["snack"]["saved"]
+              snack: appcopy["transaction"]["snack"]["saved"],
             });
             this.props.onclose();
             this.props.onedit();
@@ -486,7 +483,7 @@ export default class Transaction extends React.Component {
             this.setState((prevState, props) => ({
               transaction: emptyTransaction,
               openSnack: true,
-              snack: appcopy["transaction"]["snack"]["edited"]
+              snack: appcopy["transaction"]["snack"]["edited"],
             }));
             this.props.onclose();
             this.props.onedit();
@@ -495,19 +492,19 @@ export default class Transaction extends React.Component {
             this.setState({
               openSnack: true,
               snack:
-                appcopy["transaction"]["snack"]["206 - category inconsistency"]
+                appcopy["transaction"]["snack"]["206 - category inconsistency"],
             });
             break;
           case 400:
             this.setState({
               openSnack: true,
-              snack: appcopy["generic"]["snack"]["errornetwork"]
+              snack: appcopy["generic"]["snack"]["errornetwork"],
             });
             break;
           default:
             this.setState((prevState, props) => ({
               openSnack: true,
-              snack: appcopy["generic"]["snack"]["errorunknown"]
+              snack: appcopy["generic"]["snack"]["errorunknown"],
             }));
         }
       });
@@ -518,7 +515,7 @@ export default class Transaction extends React.Component {
         appcopy["generic"]["snack"]["error"][this.props.language] + errors;
       this.setState((prevState, props) => ({
         openSnack: true,
-        snack: snack
+        snack: snack,
       }));
     }
   }
@@ -529,7 +526,7 @@ export default class Transaction extends React.Component {
     switch (action) {
       case "close":
         this.setState((prevState, props) => ({
-          openSnack: false
+          openSnack: false,
         }));
         break;
       default:
@@ -541,13 +538,13 @@ export default class Transaction extends React.Component {
     apiGetCategories({ need: "transactiondropdown" }).then((res) => {
       if (res.status === 200) {
         this.setState({
-          options: res.categories
+          options: res.categories,
         });
       } else {
         this.setState((prevState, props) => ({
           options: [],
           openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          snack: appcopy["generic"]["snack"]["errornetwork"],
         }));
       }
     });
