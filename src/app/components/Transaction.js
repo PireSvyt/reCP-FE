@@ -192,9 +192,7 @@ export default class Transaction extends React.Component {
                       value="Alice"
                       name="for"
                       onChange={this.handleChange}
-                      defaultChecked={this.state.transaction.for.includes(
-                        "Alice"
-                      )}
+                      checked={this.state.transaction.for.includes("Alice")}
                     />
                   }
                   label="Alice"
@@ -205,9 +203,7 @@ export default class Transaction extends React.Component {
                       value="Pierre"
                       name="for"
                       onChange={this.handleChange}
-                      defaultChecked={this.state.transaction.for.includes(
-                        "Pierre"
-                      )}
+                      checked={this.state.transaction.for.includes("Pierre")}
                     />
                   }
                   label="Pierre"
