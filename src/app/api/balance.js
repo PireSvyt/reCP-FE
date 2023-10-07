@@ -1,10 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 
-let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
-if (process.env.NODE_ENV === "development") {
-  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
-}
+let apiURL = process.env.REACT_APP_SERVER_URL;
 
 export async function apiBalanceGet() {
   try {
