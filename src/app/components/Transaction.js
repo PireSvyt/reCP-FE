@@ -22,14 +22,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import frLocale from "date-fns/locale/fr";
 
 import appcopy from "../copy";
-import { apiGetTransaction, apiGetCategories } from "../api/gets";
-import { apiSetTransactionSave } from "../api/sets";
+import { apiGetCategories } from "../api/gets";
+import {
+  apiTransactionGetOne,
+  apiTransactionSave,
+} from "../api/transaction.api";
 import Snack from "./Snack";
 
 let emptyTransaction = {
   _id: undefined,
   name: undefined,
-  date: Date(),
+  date: new Date(),
   amount: undefined,
   by: undefined,
   for: ["Alice", "Pierre"],
@@ -46,7 +49,7 @@ export default class Transaction extends React.Component {
       console.log("Transaction language = " + this.props.language);
     }
     this.state = {
-      transactionDate: Date(),
+      transactionDate: new Date(),
       options: [],
       transaction: { ...emptyTransaction },
       openSnack: false,
@@ -237,17 +240,15 @@ export default class Transaction extends React.Component {
                   this.handleChange(event, newValue.name);
                 }}
                 getOptionLabel={(option) => {
-                  var shorlist = this.state.options.filter(function (
-                    value,
-                    index,
-                    arr
-                  ) {
-                    if (typeof option === "string") {
-                      return value.name === option;
-                    } else {
-                      return value.name === option.name;
-                    }
-                  });
+                  var shorlist = this.state.options.filter(
+                    function (value, index, arr) {
+                      if (typeof option === "string") {
+                        return value.name === option;
+                      } else {
+                        return value.name === option.name;
+                      }
+                    },
+                  );
                   if (shorlist.length === 1) {
                     return shorlist[0].name;
                   } else {
@@ -295,7 +296,7 @@ export default class Transaction extends React.Component {
     ) {
       if (this.props.transactionid !== "") {
         // Load
-        apiGetTransaction(this.props.transactionid).then((res) => {
+        apiTransactionGetOne(this.props.transactionid).then((res) => {
           switch (res.status) {
             case 200:
               this.setState({
@@ -468,7 +469,7 @@ export default class Transaction extends React.Component {
         console.log(this.props.transactionid);
         console.log(this.state.transaction);
       }
-      apiSetTransactionSave(this.state.transaction).then((res) => {
+      apiTransactionSave(this.state.transaction).then((res) => {
         switch (res.status) {
           case 201:
             this.setState({

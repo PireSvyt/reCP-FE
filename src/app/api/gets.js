@@ -1,21 +1,18 @@
 const axios = require("axios");
 
-let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
-if (process.env.NODE_ENV === "development") {
-  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
-}
+let apiURL = process.env.REACT_APP_SERVER_URL;
 
 // Ingredients
 export async function apiGetIngredient(id) {
   try {
-    const res = await axios.post(apiURL + "/api/get/ingredient/item/" + id);
+    const res = await axios.post(apiURL + "api/get/ingredient/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetIngredient " + id,
       ingredient: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -23,14 +20,14 @@ export async function apiGetIngredient(id) {
 }
 export async function apiGetIngredients(need) {
   try {
-    const res = await axios.post(apiURL + "/api/get/ingredient/list", need);
+    const res = await axios.post(apiURL + "api/get/ingredient/list", need);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetIngredients " + need,
       ingredients: [],
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -40,14 +37,14 @@ export async function apiGetIngredients(need) {
 // Shelfs
 export async function apiGetShelf(id) {
   try {
-    const res = await axios.post(apiURL + "/api/get/shelf/item/" + id);
+    const res = await axios.post(apiURL + "api/get/shelf/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetShelf " + id,
       shelf: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -55,14 +52,14 @@ export async function apiGetShelf(id) {
 }
 export async function apiGetShelfs(need) {
   try {
-    const res = await axios.post(apiURL + "/api/get/shelf/list", need);
+    const res = await axios.post(apiURL + "api/get/shelf/list", need);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetShelfs " + need,
       shelfs: [],
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -72,14 +69,14 @@ export async function apiGetShelfs(need) {
 // Shops
 export async function apiGetShop(id) {
   try {
-    const res = await axios.post(apiURL + "/api/get/shop/item/" + id);
+    const res = await axios.post(apiURL + "api/get/shop/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetShop " + id,
       shop: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -87,14 +84,14 @@ export async function apiGetShop(id) {
 }
 export async function apiGetShops(need) {
   try {
-    const res = await axios.post(apiURL + "/api/get/shop/list", need);
+    const res = await axios.post(apiURL + "api/get/shop/list", need);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetShops " + need,
       shops: [],
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -104,14 +101,14 @@ export async function apiGetShops(need) {
 // Recipies
 export async function apiGetRecipe(id) {
   try {
-    const res = await axios.post(apiURL + "/api/get/recipe/item/" + id);
+    const res = await axios.post(apiURL + "api/get/recipe/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetRecipe " + id,
       recipe: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -119,46 +116,14 @@ export async function apiGetRecipe(id) {
 }
 export async function apiGetRecipies(need) {
   try {
-    const res = await axios.post(apiURL + "/api/get/recipe/list", need);
+    const res = await axios.post(apiURL + "api/get/recipe/list", need);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetRecipies " + need,
       recipies: [],
-      error: err
-    };
-    console.error(res);
-    return res;
-  }
-}
-
-// Transactions
-export async function apiGetTransaction(id) {
-  try {
-    const res = await axios.post(apiURL + "/api/get/transaction/item/" + id);
-    return res.data;
-  } catch (err) {
-    const res = {
-      status: 400,
-      message: "error on apiGettransaction " + id,
-      transaction: {},
-      error: err
-    };
-    console.error(res);
-    return res;
-  }
-}
-export async function apiGetTransactions(need) {
-  try {
-    const res = await axios.post(apiURL + "/api/get/transaction/list", need);
-    return res.data;
-  } catch (err) {
-    const res = {
-      status: 400,
-      message: "error on apiGettransactions " + need,
-      transactions: [],
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -168,14 +133,14 @@ export async function apiGetTransactions(need) {
 // Categories
 export async function apiGetCategory(id) {
   try {
-    const res = await axios.post(apiURL + "/api/get/category/item/" + id);
+    const res = await axios.post(apiURL + "api/get/category/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetCategory " + id,
       category: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -183,31 +148,14 @@ export async function apiGetCategory(id) {
 }
 export async function apiGetCategories(need) {
   try {
-    const res = await axios.post(apiURL + "/api/get/category/list", need);
+    const res = await axios.post(apiURL + "api/get/category/list", need);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiGetCategories " + need,
       categories: [],
-      error: err
-    };
-    console.error(res);
-    return res;
-  }
-}
-
-// Balance
-export async function apiGetBalance() {
-  try {
-    const res = await axios.post(apiURL + "/api/get/balance");
-    return res.data;
-  } catch (err) {
-    const res = {
-      status: 400,
-      message: "error on apiGetBalance",
-      balance: {},
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
