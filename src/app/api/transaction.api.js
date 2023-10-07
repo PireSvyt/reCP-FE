@@ -1,11 +1,14 @@
 require("dotenv").config();
 const axios = require("axios");
 
-let apiURL = process.env.TESTSUITE_SERVER_URL;
+let apiURL = process.env.REACT_APP_SERVER_URL_PROD;
+if (process.env.NODE_ENV === "development") {
+  apiURL = process.env.REACT_APP_SERVER_URL_DEV;
+}
 
-exports.apiTransactionSave = async function (transaction) {
+export async function apiTransactionSave(transaction) {
   try {
-    const res = await axios.post(apiURL + "/api/transaction/save", transaction);
+    const res = await axios.post(apiURL + "api/transaction/save", transaction);
     return res.data;
   } catch (err) {
     const res = {
@@ -17,10 +20,10 @@ exports.apiTransactionSave = async function (transaction) {
     console.error(res);
     return res;
   }
-};
-exports.apiTransactionDeleteOne = async function (id) {
+}
+export async function apiTransactionDeleteOne(id) {
   try {
-    const res = await axios.post(apiURL + "/api/transaction/delete/one/" + id);
+    const res = await axios.post(apiURL + "api/transaction/delete/one/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -31,10 +34,10 @@ exports.apiTransactionDeleteOne = async function (id) {
     console.error(res);
     return res;
   }
-};
-exports.apiTransactionDeleteAll = async function () {
+}
+export async function apiTransactionDeleteAll() {
   try {
-    const res = await axios.post(apiURL + "/api/transaction/delete/all");
+    const res = await axios.post(apiURL + "api/transaction/delete/all");
     return res.data;
   } catch (err) {
     const res = {
@@ -45,10 +48,10 @@ exports.apiTransactionDeleteAll = async function () {
     console.error(res);
     return res;
   }
-};
-exports.apiTransactionGetOne = async function (id) {
+}
+export async function apiTransactionGetOne(id) {
   try {
-    const res = await axios.post(apiURL + "/api/transaction/item/" + id);
+    const res = await axios.post(apiURL + "api/transaction/item/" + id);
     return res.data;
   } catch (err) {
     const res = {
@@ -60,10 +63,10 @@ exports.apiTransactionGetOne = async function (id) {
     console.error(res);
     return res;
   }
-};
-exports.apiTransactionGetMany = async function (need) {
+}
+export async function apiTransactionGetMany(need) {
   try {
-    const res = await axios.post(apiURL + "/api/transaction/list", need);
+    const res = await axios.post(apiURL + "api/transaction/list", need);
     return res.data;
   } catch (err) {
     const res = {
@@ -75,4 +78,4 @@ exports.apiTransactionGetMany = async function (need) {
     console.error(res);
     return res;
   }
-};
+}

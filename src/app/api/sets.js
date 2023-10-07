@@ -9,8 +9,8 @@ if (process.env.NODE_ENV === "development") {
 export async function apiSetIngredientSave(ingredient) {
   try {
     const res = await axios.post(
-      apiURL + "/api/set/ingredient/save",
-      ingredient
+      apiURL + "api/set/ingredient/save",
+      ingredient,
     );
     return res.data;
   } catch (err) {
@@ -18,7 +18,7 @@ export async function apiSetIngredientSave(ingredient) {
       status: 400,
       message: "error on apiSetIngredientSave",
       error: err,
-      ingredient: ingredient
+      ingredient: ingredient,
     };
     return res;
   }
@@ -27,14 +27,14 @@ export async function apiSetIngredientSave(ingredient) {
 // Shelfs
 export async function apiSetShelfSave(shelf) {
   try {
-    const res = await axios.post(apiURL + "/api/set/shelf/save", shelf);
+    const res = await axios.post(apiURL + "api/set/shelf/save", shelf);
     return res.data;
   } catch (err) {
     let res = {
       status: 400,
       message: "error on apiSetShelfSave",
       error: err,
-      shelf: shelf
+      shelf: shelf,
     };
     return res;
   }
@@ -43,14 +43,14 @@ export async function apiSetShelfSave(shelf) {
 // Shops
 export async function apiSetShopSave(shop) {
   try {
-    const res = await axios.post(apiURL + "/api/set/shop/save", shop);
+    const res = await axios.post(apiURL + "api/set/shop/save", shop);
     return res.data;
   } catch (err) {
     let res = {
       status: 400,
       message: "error on apiSetShopSave",
       error: err,
-      shop: shop
+      shop: shop,
     };
     return res;
   }
@@ -59,27 +59,27 @@ export async function apiSetShopSave(shop) {
 // Recipies
 export async function apiSetRecipeSave(recipe) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/save", recipe);
+    const res = await axios.post(apiURL + "api/set/recipe/save", recipe);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeSave",
       error: err,
-      recipe: recipe
+      recipe: recipe,
     };
     return res;
   }
 }
 export async function apiSetRecipeSelect(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/select/" + id);
+    const res = await axios.post(apiURL + "api/set/recipe/select/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeSelect",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -87,13 +87,13 @@ export async function apiSetRecipeSelect(id) {
 }
 export async function apiSetRecipeDelete(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/delete/" + id);
+    const res = await axios.post(apiURL + "api/set/recipe/delete/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetRecipeDelete",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -103,13 +103,13 @@ export async function apiSetRecipeDelete(id) {
 // Thisweek
 export async function apiSetThisweekEmpty() {
   try {
-    const res = await axios.post(apiURL + "/api/set/thisweek/empty");
+    const res = await axios.post(apiURL + "api/set/thisweek/empty");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekEmpty",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -117,26 +117,26 @@ export async function apiSetThisweekEmpty() {
 }
 export async function apiSetThisweekRecipeAdd() {
   try {
-    const res = await axios.post(apiURL + "/api/set/thisweek/add");
+    const res = await axios.post(apiURL + "api/set/thisweek/add");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRecipeAdd",
-      error: err
+      error: err,
     };
     return res;
   }
 }
 export async function apiSetThisweekRenew() {
   try {
-    const res = await axios.post(apiURL + "/api/set/thisweek/renew");
+    const res = await axios.post(apiURL + "api/set/thisweek/renew");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRenew",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -144,13 +144,13 @@ export async function apiSetThisweekRenew() {
 }
 export async function apiSetThisweekRecipeRemove(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/select/" + id);
+    const res = await axios.post(apiURL + "api/set/recipe/select/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRecipeRemove",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -158,13 +158,13 @@ export async function apiSetThisweekRecipeRemove(id) {
 }
 export async function apiSetThisweekRecipeReplace(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/recplace/" + id);
+    const res = await axios.post(apiURL + "api/set/recipe/recplace/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRecipeReplace",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -173,14 +173,14 @@ export async function apiSetThisweekRecipeReplace(id) {
 export async function apiSetThisweekRecipeScale(id, inc) {
   try {
     let res = await axios.post(
-      apiURL + "/api/set/recipe/scale" + inc + "/" + id
+      apiURL + "api/set/recipe/scale" + inc + "/" + id,
     );
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRecipeScale",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -188,13 +188,13 @@ export async function apiSetThisweekRecipeScale(id, inc) {
 }
 export async function apiSetThisweekRecipePrepare(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/recipe/prepare/" + id);
+    const res = await axios.post(apiURL + "api/set/recipe/prepare/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekRecipePrepare",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -202,13 +202,13 @@ export async function apiSetThisweekRecipePrepare(id) {
 }
 export async function apiSetThisweekNeeds() {
   try {
-    const res = await axios.post(apiURL + "/api/set/thisweek/needs");
+    const res = await axios.post(apiURL + "api/set/thisweek/needs");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetThisweekNeeds",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -218,13 +218,13 @@ export async function apiSetThisweekNeeds() {
 // Fridge
 export async function apiSetFridgeEmpty() {
   try {
-    const res = await axios.post(apiURL + "/api/set/fridge/empty");
+    const res = await axios.post(apiURL + "api/set/fridge/empty");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetFridgeEmpty",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -233,15 +233,15 @@ export async function apiSetFridgeEmpty() {
 export async function apiSetFridgeHave(ingredient) {
   try {
     const res = await axios.post(
-      apiURL + "/api/set/fridge/have/" + ingredient._id,
-      ingredient
+      apiURL + "api/set/fridge/have/" + ingredient._id,
+      ingredient,
     );
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetFridgeHave",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -251,13 +251,13 @@ export async function apiSetFridgeHave(ingredient) {
 // Shopping
 export async function apiSetShoppingEmpty() {
   try {
-    const res = await axios.post(apiURL + "/api/set/shopping/empty");
+    const res = await axios.post(apiURL + "api/set/shopping/empty");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetShoppingEmpty",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -266,15 +266,15 @@ export async function apiSetShoppingEmpty() {
 export async function apiSetShoppingTake(ingredient) {
   try {
     const res = await axios.post(
-      apiURL + "/api/set/shopping/take/" + ingredient._id,
-      ingredient
+      apiURL + "api/set/shopping/take/" + ingredient._id,
+      ingredient,
     );
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetShoppingTake",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -282,13 +282,13 @@ export async function apiSetShoppingTake(ingredient) {
 }
 export async function apiSetShoppingAddtofridge() {
   try {
-    const res = await axios.post(apiURL + "/api/set/shopping/addtofridge");
+    const res = await axios.post(apiURL + "api/set/shopping/addtofridge");
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetShoppingAddtofridge",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -299,8 +299,8 @@ export async function apiSetShoppingAddtofridge() {
 export async function apiSetTransactionSave(transaction) {
   try {
     const res = await axios.post(
-      apiURL + "/api/set/transaction/save",
-      transaction
+      apiURL + "api/set/transaction/save",
+      transaction,
     );
     return res.data;
   } catch (err) {
@@ -308,7 +308,7 @@ export async function apiSetTransactionSave(transaction) {
       status: 400,
       message: "error on apiSetTransactionSave",
       error: err,
-      transaction: transaction
+      transaction: transaction,
     };
     console.error(res);
     return res;
@@ -316,13 +316,13 @@ export async function apiSetTransactionSave(transaction) {
 }
 export async function apiSetTransactionDelete(id) {
   try {
-    const res = await axios.post(apiURL + "/api/set/transaction/delete/" + id);
+    const res = await axios.post(apiURL + "api/set/transaction/delete/" + id);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetTransactionDelete",
-      error: err
+      error: err,
     };
     console.error(res);
     return res;
@@ -332,14 +332,14 @@ export async function apiSetTransactionDelete(id) {
 // Categories
 export async function apiSetCategorySave(category) {
   try {
-    const res = await axios.post(apiURL + "/api/set/category/save", category);
+    const res = await axios.post(apiURL + "api/set/category/save", category);
     return res.data;
   } catch (err) {
     const res = {
       status: 400,
       message: "error on apiSetCategorySave",
       error: err,
-      category: category
+      category: category,
     };
     console.error(res);
     return res;

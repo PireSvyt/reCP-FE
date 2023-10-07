@@ -13,7 +13,7 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,7 +22,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import appcopy from "../copy";
 import Transaction from "./Transaction";
 import Category from "./Category";
-import { apiGetBalance, apiGetTransactions } from "../api/gets";
+import { apiTransactionGetMany } from "../api/transaction.api";
+import { apiBalanceGet } from "../api/balance";
 import Snack from "./Snack";
 
 let emptySummary = { users: { Alice: 0, Pierre: 0 }, categories: [] };
@@ -45,7 +46,7 @@ export default class Balance extends React.Component {
       transactions: [],
       transactionCategoryOpen: false,
       openSnack: false,
-      snack: undefined
+      snack: undefined,
     };
     // Updates
     this.updateTabHeight = this.updateTabHeight.bind(this);
@@ -168,7 +169,7 @@ export default class Balance extends React.Component {
                     sx={{ width: 2 / 7, textAlign: "right", mr: 2 }}
                     primary={`${
                       Math.round(
-                        this.state.summary.categories[value].total * 100
+                        this.state.summary.categories[value].total * 100,
                       ) / 100
                     } €`}
                   />
@@ -198,14 +199,14 @@ export default class Balance extends React.Component {
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "row"
+                      flexDirection: "row",
                     }}
                   >
                     <ListItemButton
                       onClick={() => {
                         if (process.env.REACT_APP_DEBUG === "TRUE") {
                           console.log(
-                            "Balance.transactions.onClick " + value._id
+                            "Balance.transactions.onClick " + value._id,
                           );
                         }
                         this.handleOpenTransaction(value._id);
@@ -216,7 +217,7 @@ export default class Balance extends React.Component {
                     <ListItemText
                       primary={`${value.name}`}
                       secondary={`${value.amount} €, le ${Moment(
-                        value.date
+                        value.date,
                       ).format("DD/MM/YYYY")}`}
                     />
                   </Box>
@@ -268,23 +269,23 @@ export default class Balance extends React.Component {
       console.log("Balance.updateTabHeight");
     }
     this.setState({
-      tabHeight: window.innerHeight - 165
+      tabHeight: window.innerHeight - 165,
     });
   }
   updateSummary() {
     if (process.env.REACT_APP_DEBUG === "TRUE") {
       console.log("Balance.updateSummary");
     }
-    apiGetBalance({ need: "summary" }).then((res) => {
+    apiBalanceGet({ need: "summary" }).then((res) => {
       if (res.status === 200) {
         this.setState({
-          summary: res.summary
+          summary: res.summary,
         });
       } else {
         this.setState((prevState, props) => ({
           summary: emptySummary,
           openSnack: true,
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          snack: appcopy["generic"]["snack"]["errornetwork"],
         }));
       }
     });
@@ -295,18 +296,18 @@ export default class Balance extends React.Component {
     }
     //
     Moment.locale("en");
-    apiGetTransactions({
-      need: "mybalance"
+    apiTransactionGetMany({
+      need: "mybalance",
     }).then((res) => {
       if (res.status === 200) {
         this.setState({
-          transactions: res.transactions
+          transactions: res.transactions,
         });
       } else {
         this.setState((prevState, props) => ({
           transactions: [],
           openSnack: [],
-          snack: appcopy["generic"]["snack"]["errornetwork"]
+          snack: appcopy["generic"]["snack"]["errornetwork"],
         }));
       }
     });
@@ -330,7 +331,7 @@ export default class Balance extends React.Component {
         }
     }
     this.setState({
-      selectedTab: newTabIndex
+      selectedTab: newTabIndex,
     });
   }
   handleOpenTransaction(id) {
@@ -339,7 +340,7 @@ export default class Balance extends React.Component {
     }
     this.setState({
       transactionid: id,
-      transactionOpen: true
+      transactionOpen: true,
     });
   }
   handleCloseTransaction() {
@@ -348,7 +349,7 @@ export default class Balance extends React.Component {
     }
     this.setState({
       transactionid: "",
-      transactionOpen: false
+      transactionOpen: false,
     });
   }
   handleSaveTransaction() {
@@ -362,7 +363,7 @@ export default class Balance extends React.Component {
       console.log("Balance.handleOpenCategory");
     }
     this.setState({
-      transactionCategoryOpen: true
+      transactionCategoryOpen: true,
     });
   }
   handleCloseCategory() {
@@ -370,7 +371,7 @@ export default class Balance extends React.Component {
       console.log("Balance.handleCloseCategory");
     }
     this.setState({
-      transactionCategoryOpen: false
+      transactionCategoryOpen: false,
     });
   }
   handleSaveCategory() {
@@ -386,7 +387,7 @@ export default class Balance extends React.Component {
     switch (action) {
       case "close":
         this.setState((prevState, props) => ({
-          openSnack: false
+          openSnack: false,
         }));
         break;
       default:
